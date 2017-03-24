@@ -7,7 +7,7 @@ using DAL;
 
 namespace DAL.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -23,13 +23,13 @@ namespace DAL.Migrations
 
                     b.Property<string>("AttachmentLocation");
 
-                    b.Property<int?>("TaskId");
+                    b.Property<int?>("TaskProjectTaskId");
 
                     b.Property<DateTime>("TimeUploaded");
 
                     b.HasKey("AttachmentId");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("TaskProjectTaskId");
 
                     b.ToTable("Attachments");
                 });
@@ -57,7 +57,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("Comment");
 
-                    b.Property<int?>("TaskId");
+                    b.Property<int?>("TaskProjectTaskId");
 
                     b.Property<DateTime>("Time");
 
@@ -65,7 +65,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ChangerPersonId");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("TaskProjectTaskId");
 
                     b.ToTable("ChangeSets");
                 });
@@ -130,14 +130,62 @@ namespace DAL.Migrations
                     b.ToTable("CustomFieldValues");
                 });
 
+            modelBuilder.Entity("Domain.Identity.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers");
+                });
+
             modelBuilder.Entity("Domain.Person", b =>
                 {
                     b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
-
-                    b.Property<string>("Email");
 
                     b.Property<string>("FirstName");
 
@@ -171,11 +219,15 @@ namespace DAL.Migrations
                     b.Property<int>("PersonTitleInProjectId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("PersonId");
+
                     b.Property<int>("ProjectId");
 
                     b.Property<int>("TitleId");
 
                     b.HasKey("PersonTitleInProjectId");
+
+                    b.HasIndex("PersonId");
 
                     b.HasIndex("ProjectId");
 
@@ -214,21 +266,9 @@ namespace DAL.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("Domain.Status", b =>
+            modelBuilder.Entity("Domain.ProjectTask", b =>
                 {
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("StatusName");
-
-                    b.HasKey("StatusId");
-
-                    b.ToTable("Statuses");
-                });
-
-            modelBuilder.Entity("Domain.Task", b =>
-                {
-                    b.Property<int>("TaskId")
+                    b.Property<int>("ProjectTaskId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int?>("AssignedToPersonId");
@@ -249,7 +289,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("TaskName");
 
-                    b.HasKey("TaskId");
+                    b.HasKey("ProjectTaskId");
 
                     b.HasIndex("AssignedToPersonId");
 
@@ -259,14 +299,133 @@ namespace DAL.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("ProjectTasks");
+                });
+
+            modelBuilder.Entity("Domain.Status", b =>
+                {
+                    b.Property<int>("StatusId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("StatusName");
+
+                    b.HasKey("StatusId");
+
+                    b.ToTable("Statuses");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("ProviderKey");
+
+                    b.Property<string>("ProviderDisplayName");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("RoleId");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("Domain.Attachment", b =>
                 {
-                    b.HasOne("Domain.Task", "Task")
+                    b.HasOne("Domain.ProjectTask", "Task")
                         .WithMany("Attachments")
-                        .HasForeignKey("TaskId");
+                        .HasForeignKey("TaskProjectTaskId");
                 });
 
             modelBuilder.Entity("Domain.ChangeSet", b =>
@@ -275,9 +434,9 @@ namespace DAL.Migrations
                         .WithMany()
                         .HasForeignKey("ChangerPersonId");
 
-                    b.HasOne("Domain.Task", "Task")
+                    b.HasOne("Domain.ProjectTask", "Task")
                         .WithMany("ChangeSets")
-                        .HasForeignKey("TaskId");
+                        .HasForeignKey("TaskProjectTaskId");
                 });
 
             modelBuilder.Entity("Domain.CustomFieldInProject", b =>
@@ -314,6 +473,10 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.PersonTitleInProject", b =>
                 {
+                    b.HasOne("Domain.Person")
+                        .WithMany("Titles")
+                        .HasForeignKey("PersonId");
+
                     b.HasOne("Domain.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
@@ -325,10 +488,10 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Domain.Task", b =>
+            modelBuilder.Entity("Domain.ProjectTask", b =>
                 {
                     b.HasOne("Domain.Person", "AssignedTo")
-                        .WithMany()
+                        .WithMany("ProjectTasks")
                         .HasForeignKey("AssignedToPersonId");
 
                     b.HasOne("Domain.Person", "Author")
@@ -342,6 +505,43 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
+                        .WithMany("Claims")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("Domain.Identity.ApplicationUser")
+                        .WithMany("Claims")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Domain.Identity.ApplicationUser")
+                        .WithMany("Logins")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Identity.ApplicationUser")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }

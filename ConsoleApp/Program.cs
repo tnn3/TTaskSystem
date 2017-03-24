@@ -9,7 +9,7 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            using (var ctx = new AppDbContext())
+            /*using (var ctx = new AppDbContext())
             {
                 ctx.Persons.Add(new Person
                 {
@@ -25,7 +25,7 @@ namespace ConsoleApp
                 {
                     Console.WriteLine($"Person: {person.FirstName} - {person.LastName}");
                 }
-            }
+            }*/
         }
     }
 }

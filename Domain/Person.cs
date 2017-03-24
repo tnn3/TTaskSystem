@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Domain.Identity;
 
 namespace Domain
 {
@@ -10,9 +12,9 @@ namespace Domain
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<PersonTitleInProject> Titles { get; set; }
-        public string Email { get; set; }
         public bool IsAdmin { get; set; }
         public DateTime CreatedOn { get; set; }
-        public List<Task> PersonTasks { get; set; }
+        [InverseProperty(nameof(ProjectTask.AssignedTo))]
+        public List<ProjectTask> ProjectTasks { get; set; }
     }
 }
