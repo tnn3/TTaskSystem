@@ -15,7 +15,7 @@ namespace DAL
         public DbSet<Domain.CustomField> CustomFields { get; set; }
         public DbSet<Domain.CustomFieldInProject> CustomFieldInProjects { get; set; }
         public DbSet<Domain.CustomFieldValue> CustomFieldValues { get; set; }
-        public DbSet<Domain.Person> Persons { get; set; }
+        public DbSet<Domain.Person> People { get; set; }
         public DbSet<Domain.PersonTitle> PersonTitles { get; set; }
         public DbSet<Domain.PersonTitleInProject> PersonTitleInProjects { get; set; }
         public DbSet<Domain.Priority> Priorities { get; set; }

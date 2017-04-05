@@ -80,13 +80,10 @@ namespace WebApplication
             }
 
             //get the dependency injection engine
-            using (var serviceScope = app.ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
+            using (var serviceScope = 
+                app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var dataContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
-                dataContext.Database.EnsureDeleted();
                 dataContext.Database.Migrate();
             }
 

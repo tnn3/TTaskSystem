@@ -23,7 +23,19 @@ namespace DAL.Helpers
         {
             return new Dictionary<Type, Func<IDataContext, object>>
             {
-                //  {typeof(ICustomRepository), dbContext => new CustomRepository(dbContext)},
+                  {typeof(IAttachmentRepository), dbContext => new AttachmentRepository(dbContext)},
+                  {typeof(IChangeRepository), dbContext => new ChangeRepository(dbContext)},
+                  {typeof(IChangeSetRepository), dbContext => new ChangeSetRepository(dbContext)},
+                  {typeof(ICustomFieldInProjectRepository), dbContext => new CustomFieldInProjectRepository(dbContext)},
+                  {typeof(ICustomFieldRepository), dbContext => new CustomFieldRepository(dbContext)},
+                  {typeof(ICustomFieldValueRepository), dbContext => new CustomFieldValueRepository(dbContext)},
+                  {typeof(IPersonRepository), dbContext => new PersonRepository(dbContext)},
+                  {typeof(IPersonTitleInProjectRepository), dbContext => new PersonTitleInProjectRepository(dbContext)},
+                  {typeof(IPersonTitleRepository), dbContext => new PersonTitleRepository(dbContext)},
+                  {typeof(IPriorityRepository), dbContext => new PriorityRepository(dbContext)},
+                  {typeof(IProjectRepository), dbContext => new ProjectRepository(dbContext)},
+                  {typeof(IProjectTaskRepository), dbContext => new ProjectTaskRepository(dbContext)},
+                  {typeof(IStatusRepository), dbContext => new StatusRepository(dbContext)},
             };
         }
         public Func<IDataContext, object> GetRepositoryFactoryForType<T>() where T : class
@@ -33,14 +45,14 @@ namespace DAL.Helpers
         public Func<IDataContext, object> GetCustomRepositoryFactory<T>() where T : class
         {
             Func<IDataContext, object> factory;
-            _repositoryFactories.TryGetValue(key: typeof(T), value: out factory);
+            _repositoryFactories.TryGetValue(typeof(T), out factory);
             return factory;
         }
         // return factory (function) for creation of standard repositories
         public Func<IDataContext, object> GetStandardRepositoryFactory<TEntity>() where TEntity : class
         {
             // create new instance of EFRepository<TEntity>
-            return dataContext => new EFRepository<TEntity>(dataContext: dataContext);
+            return dataContext => new EFRepository<TEntity>(dataContext);
         }
     }
 }

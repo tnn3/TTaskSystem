@@ -14,10 +14,12 @@ namespace DAL
     {
         private DbContext _context;
         private readonly IRepositoryProvider _repositoryProvider;
+
         public IRepository<Person> People => GetEntityRepository<Person>();
+
         public UOW(TContext context, IRepositoryProvider repositoryProvider)
         {
-            _context = (context as DbContext) ?? throw new NullReferenceException(message: nameof(context));
+            _context = (context as DbContext) ?? throw new NullReferenceException(nameof(context));
             _repositoryProvider = repositoryProvider;
         }
 
@@ -38,21 +40,24 @@ namespace DAL
             CheckDisposed();
             return _context.SaveChanges();
         }
+
         public Task<int> SaveChangesAsync()
         {
             CheckDisposed();
             return _context.SaveChangesAsync();
         }
+
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             CheckDisposed();
-            return _context.SaveChangesAsync(cancellationToken: cancellationToken);
+            return _context.SaveChangesAsync(cancellationToken);
         }
+
         #region IDisposable Implementation
         private bool _isDisposed;
         protected void CheckDisposed()
         {
-            if (_isDisposed) throw new ObjectDisposedException(objectName: "The UnitOfWork is already disposed and cannot be used anymore.");
+            if (_isDisposed) throw new ObjectDisposedException("The UnitOfWork is already disposed and cannot be used anymore.");
         }
         protected virtual void Dispose(bool disposing)
         {
@@ -71,41 +76,13 @@ namespace DAL
         }
         public void Dispose()
         {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(obj: this);
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
         ~UOW()
         {
-            Dispose(disposing: false);
+            Dispose(false);
         }
         #endregion
-
-        /*private readonly IDataContext _dataContext;
-        private readonly IRepositoryProvider _repositoryProvider;
-
-        public Uow(IDataContext dataContext, IRepositoryProvider repositoryProvider)
-        {
-            _repositoryProvider = repositoryProvider;
-            _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
-
-        }
-
-        public int SaveChanges()
-        {
-            return ((AppDbContext) _dataContext).SaveChanges();
-        }
-
-        public IPriorityRepository Priorities => GetCustomRepository<IPriorityRepository>();
-        public IRepository<Status> Statuses => GetStandardRepository<Status>();
-
-        private TaskRepository GetCustomRepository<TRepository>()
-        {
-            return _repositoryProvider.GetCustomRepository<TRepository>();
-        }
-
-        private IRepository<TEntity> GetStandardRepository<TEntity>() where TEntity : class
-        {
-            return _repositoryProvider.GetStandardRepository<IRepository<TEntity>>();
-        }*/
     }
 }

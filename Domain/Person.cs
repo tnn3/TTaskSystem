@@ -12,7 +12,6 @@ namespace Domain
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<PersonTitleInProject> Titles { get; set; }
-        public bool IsAdmin { get; set; }
         public DateTime CreatedOn { get; set; }
         [InverseProperty(nameof(ProjectTask.AssignedTo))]
         public List<ProjectTask> ProjectTasks { get; set; }
