@@ -11,6 +11,7 @@ namespace Domain
         public string ProjectDescription { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }
-        public List<CustomFieldInProject> CustomFields { get; set; }
+        public List<CustomField> CustomFields { get; set; }
+        public List<ProjectTask> ProjectTasks { get; set; }
     }
 }

@@ -8,7 +8,8 @@ namespace Domain
     {
         public int AttachmentId { get; set; }
         public string AttachmentLocation { get; set; }
-        public ProjectTask Task { get; set; }
-        public DateTime TimeUploaded { get; set; }
+        public int ProjectTaskId { get; set; }
+        public ProjectTask ProjectTask { get; set; }
+        public DateTime UploadedOn { get; set; }
     }
 }

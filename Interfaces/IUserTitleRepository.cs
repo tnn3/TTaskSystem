@@ -5,7 +5,7 @@ using Domain;
 
 namespace Interfaces
 {
-    public interface ICustomFieldInProjectRepository : IRepository<CustomFieldInProject>
+    public interface IUserTitleRepository : IRepository<UserTitle>
     {
 
     }

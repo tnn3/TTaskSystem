@@ -54,7 +54,7 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired")] CustomField customField)
+        public async Task<IActionResult> Create([Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired,CustomFieldValueId")] CustomField customField)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired")] CustomField customField)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired,CustomFieldValueId")] CustomField customField)
         {
             if (id != customField.CustomFieldId)
             {

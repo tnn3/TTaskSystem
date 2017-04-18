@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Domain
 {
-    public class PersonTitleInProject
+    public class UserTitleInProject
     {
-        public int PersonTitleInProjectId { get; set; }
+        public int UserTitleInProjectId { get; set; }
 
         public int ProjectId { get; set; }
         public Project Project { get; set; }
 
         public int TitleId { get; set; }
-        public PersonTitle Title { get; set; }
+        public UserTitle Title { get; set; }
     }
 }

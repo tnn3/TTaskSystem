@@ -1,4 +1,4 @@
-@model IEnumerable<Domain.PersonTitle>
+@model IEnumerable<Domain.UserTitle>
 
 @{
     ViewData["Title"] = "Index";
@@ -25,9 +25,9 @@
                 @Html.DisplayFor(modelItem => item.TitleName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PersonTitleId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PersonTitleId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PersonTitleId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.UserTitleId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.UserTitleId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.UserTitleId">Delete</a>
             </td>
         </tr>
 }

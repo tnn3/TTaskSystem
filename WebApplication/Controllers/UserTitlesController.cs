@@ -10,22 +10,22 @@ using Domain;
 
 namespace WebApplication.Controllers
 {
-    public class PersonTitlesController : Controller
+    public class UserTitlesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public PersonTitlesController(ApplicationDbContext context)
+        public UserTitlesController(ApplicationDbContext context)
         {
             _context = context;    
         }
 
-        // GET: PersonTitles
+        // GET: UserTitles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PersonTitles.ToListAsync());
+            return View(await _context.UserTitles.ToListAsync());
         }
 
-        // GET: PersonTitles/Details/5
+        // GET: UserTitles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var personTitle = await _context.PersonTitles
-                .SingleOrDefaultAsync(m => m.PersonTitleId == id);
-            if (personTitle == null)
+            var userTitle = await _context.UserTitles
+                .SingleOrDefaultAsync(m => m.UserTitleId == id);
+            if (userTitle == null)
             {
                 return NotFound();
             }
 
-            return View(personTitle);
+            return View(userTitle);
         }
 
-        // GET: PersonTitles/Create
+        // GET: UserTitles/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PersonTitles/Create
+        // POST: UserTitles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonTitleId,TitleName")] PersonTitle personTitle)
+        public async Task<IActionResult> Create([Bind("UserTitleId,TitleName")] UserTitle userTitle)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(personTitle);
+                _context.Add(userTitle);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(personTitle);
+            return View(userTitle);
         }
 
-        // GET: PersonTitles/Edit/5
+        // GET: UserTitles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var personTitle = await _context.PersonTitles.SingleOrDefaultAsync(m => m.PersonTitleId == id);
-            if (personTitle == null)
+            var userTitle = await _context.UserTitles.SingleOrDefaultAsync(m => m.UserTitleId == id);
+            if (userTitle == null)
             {
                 return NotFound();
             }
-            return View(personTitle);
+            return View(userTitle);
         }
 
-        // POST: PersonTitles/Edit/5
+        // POST: UserTitles/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonTitleId,TitleName")] PersonTitle personTitle)
+        public async Task<IActionResult> Edit(int id, [Bind("UserTitleId,TitleName")] UserTitle userTitle)
         {
-            if (id != personTitle.PersonTitleId)
+            if (id != userTitle.UserTitleId)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(personTitle);
+                    _context.Update(userTitle);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonTitleExists(personTitle.PersonTitleId))
+                    if (!UserTitleExists(userTitle.UserTitleId))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(personTitle);
+            return View(userTitle);
         }
 
-        // GET: PersonTitles/Delete/5
+        // GET: UserTitles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var personTitle = await _context.PersonTitles
-                .SingleOrDefaultAsync(m => m.PersonTitleId == id);
-            if (personTitle == null)
+            var userTitle = await _context.UserTitles
+                .SingleOrDefaultAsync(m => m.UserTitleId == id);
+            if (userTitle == null)
             {
                 return NotFound();
             }
 
-            return View(personTitle);
+            return View(userTitle);
         }
 
-        // POST: PersonTitles/Delete/5
+        // POST: UserTitles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var personTitle = await _context.PersonTitles.SingleOrDefaultAsync(m => m.PersonTitleId == id);
-            _context.PersonTitles.Remove(personTitle);
+            var userTitle = await _context.UserTitles.SingleOrDefaultAsync(m => m.UserTitleId == id);
+            _context.UserTitles.Remove(userTitle);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool PersonTitleExists(int id)
+        private bool UserTitleExists(int id)
         {
-            return _context.PersonTitles.Any(e => e.PersonTitleId == id);
+            return _context.UserTitles.Any(e => e.UserTitleId == id);
         }
     }
 }

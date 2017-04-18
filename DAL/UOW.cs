@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Domain;
+using Domain.Identity;
 using Interfaces;
 using Interfaces.UOW;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +13,7 @@ namespace DAL
         private DbContext _context;
         private readonly IRepositoryProvider _repositoryProvider;
 
-        public IRepository<Person> People => GetEntityRepository<Person>();
+        public IRepository<ApplicationUser> People => GetEntityRepository<ApplicationUser>();
 
         public UOW(TContext context, IRepositoryProvider repositoryProvider)
         {

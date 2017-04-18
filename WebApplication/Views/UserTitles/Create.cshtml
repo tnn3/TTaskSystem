@@ -1,4 +1,4 @@
-@model Domain.CustomFieldValue
+@model Domain.UserTitle
 
 @{
     ViewData["Title"] = "Create";
@@ -8,20 +8,14 @@
 
 <form asp-action="Create">
     <div class="form-horizontal">
-        <h4>CustomFieldValue</h4>
+        <h4>UserTitle</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="FieldValue" class="col-md-2 control-label"></label>
+            <label asp-for="TitleName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="FieldValue" class="form-control" />
-                <span asp-validation-for="FieldValue" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="CustomFieldId" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="CustomFieldId" class ="form-control" asp-items="ViewBag.CustomFieldId"></select>
+                <input asp-for="TitleName" class="form-control" />
+                <span asp-validation-for="TitleName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">

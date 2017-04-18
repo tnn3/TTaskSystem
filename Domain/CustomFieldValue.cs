@@ -11,5 +11,8 @@ namespace Domain
 
         public int CustomFieldId { get; set; }
         public CustomField CustomField { get; set; }
+
+        public int ProjectTaskId { get; set; }
+        public ProjectTask ProjectTask { get; set; }
     }
 }

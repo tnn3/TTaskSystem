@@ -5,7 +5,7 @@ using Domain;
 
 namespace Interfaces
 {
-    public interface IPersonRepository : IRepository<Person>
+    public interface IUserTitleInProjectRepository : IRepository<UserTitleInProject>
     {
 
     }

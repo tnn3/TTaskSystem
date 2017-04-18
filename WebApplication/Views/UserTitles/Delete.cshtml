@@ -1,4 +1,4 @@
-@model Domain.CustomFieldValue
+@model Domain.UserTitle
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,21 +8,15 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>CustomFieldValue</h4>
+    <h4>UserTitle</h4>
     <hr />
     <dl class="dl-horizontal">
-        <input type="hidden" asp-for="CustomFieldValueId" />
+        <input type="hidden" asp-for="UserTitleId" />
         <dt>
-            @Html.DisplayNameFor(model => model.FieldValue)
+            @Html.DisplayNameFor(model => model.TitleName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.FieldValue)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomField)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CustomField.CustomFieldId)
+            @Html.DisplayFor(model => model.TitleName)
         </dd>
     </dl>
     

@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class CustomFieldInProjectRepository : EFRepository<CustomFieldInProject>, ICustomFieldInProjectRepository
+    public class UserTitleRepository : EFRepository<UserTitle>, IUserTitleRepository
     {
-        public CustomFieldInProjectRepository(IDataContext dbContext) : base(dbContext)
+        public UserTitleRepository(IDataContext dbContext) : base(dbContext)
         {
 
         }

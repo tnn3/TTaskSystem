@@ -1,4 +1,4 @@
-@model Domain.PersonTitle
+@model Domain.UserTitleInProject
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,15 +8,21 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>PersonTitle</h4>
+    <h4>UserTitleInProject</h4>
     <hr />
     <dl class="dl-horizontal">
-        <input type="hidden" asp-for="PersonTitleId" />
+        <input type="hidden" asp-for="UserTitleInProjectId" />
         <dt>
-            @Html.DisplayNameFor(model => model.TitleName)
+            @Html.DisplayNameFor(model => model.Project)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.TitleName)
+            @Html.DisplayFor(model => model.Project.ProjectId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title.UserTitleId)
         </dd>
     </dl>
     

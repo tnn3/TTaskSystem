@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using Domain;
+using Domain.Identity;
 
 namespace Interfaces
 {
-    public interface IPersonTitleInProjectRepository : IRepository<PersonTitleInProject>
+    public interface IClientRepository : IRepository<ApplicationUser>
     {
 
     }

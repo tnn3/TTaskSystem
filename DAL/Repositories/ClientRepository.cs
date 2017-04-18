@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using DAL.Repositories;
 using Domain;
+using Domain.Identity;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class PersonTitleRepository : EFRepository<PersonTitle>, IPersonTitleRepository
+    public class ClientRepository : EFRepository<ApplicationUser>, IClientRepository
     {
-        public PersonTitleRepository(IDataContext dbContext) : base(dbContext)
+        public ClientRepository(IDataContext dbContext) : base(dbContext)
         {
 
         }

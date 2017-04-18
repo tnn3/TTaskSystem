@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class PersonRepository : EFRepository<Person>, IPersonRepository
+    public class UserTitleInProjectRepository : EFRepository<UserTitleInProject>, IUserTitleInProjectRepository
     {
-        public PersonRepository(IDataContext dbContext) : base(dbContext)
+        public UserTitleInProjectRepository(IDataContext dbContext) : base(dbContext)
         {
 
         }

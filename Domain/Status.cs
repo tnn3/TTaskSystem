@@ -8,5 +8,6 @@ namespace Domain
     {
         public int StatusId { get; set; }
         public string StatusName { get; set; }
+        public List<ProjectTask> ProjectTasks { get; set; }
     }
 }

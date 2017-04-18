@@ -1,4 +1,4 @@
-@model Domain.PersonTitleInProject
+@model Domain.UserTitleInProject
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>PersonTitleInProject</h4>
+    <h4>UserTitleInProject</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -20,11 +20,11 @@
             @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Title.PersonTitleId)
+            @Html.DisplayFor(model => model.Title.UserTitleId)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.PersonTitleInProjectId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.UserTitleInProjectId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

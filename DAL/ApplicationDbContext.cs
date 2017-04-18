@@ -13,11 +13,10 @@ namespace DAL
         public DbSet<Domain.Change> Changes { get; set; }
         public DbSet<Domain.ChangeSet> ChangeSets { get; set; }
         public DbSet<Domain.CustomField> CustomFields { get; set; }
-        public DbSet<Domain.CustomFieldInProject> CustomFieldInProjects { get; set; }
         public DbSet<Domain.CustomFieldValue> CustomFieldValues { get; set; }
-        public DbSet<Domain.Person> People { get; set; }
-        public DbSet<Domain.PersonTitle> PersonTitles { get; set; }
-        public DbSet<Domain.PersonTitleInProject> PersonTitleInProjects { get; set; }
+        public DbSet<Domain.Identity.ApplicationUser> People { get; set; }
+        public DbSet<Domain.UserTitle> UserTitles { get; set; }
+        public DbSet<Domain.UserTitleInProject> UserTitleInProjects { get; set; }
         public DbSet<Domain.Priority> Priorities { get; set; }
         public DbSet<Domain.Project> Projects { get; set; }
         public DbSet<Domain.Status> Statuses { get; set; }
