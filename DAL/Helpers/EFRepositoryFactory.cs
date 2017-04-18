@@ -28,7 +28,6 @@ namespace DAL.Helpers
                   {typeof(IChangeSetRepository), dbContext => new ChangeSetRepository(dbContext)},
                   {typeof(ICustomFieldRepository), dbContext => new CustomFieldRepository(dbContext)},
                   {typeof(ICustomFieldValueRepository), dbContext => new CustomFieldValueRepository(dbContext)},
-                  {typeof(IClientRepository), dbContext => new ClientRepository(dbContext)},
                   {typeof(IUserTitleInProjectRepository), dbContext => new UserTitleInProjectRepository(dbContext)},
                   {typeof(IUserTitleRepository), dbContext => new UserTitleRepository(dbContext)},
                   {typeof(IPriorityRepository), dbContext => new PriorityRepository(dbContext)},

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Domain
 {
-    //Fields for task price, task location etc
+    //Fields for task price, task location, client information etc
     public class CustomField
     {
         public int CustomFieldId { get; set; }

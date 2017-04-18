@@ -57,9 +57,9 @@ namespace DAL.Migrations
                     b.Property<int>("ChangeSetId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ChangerId");
+                    b.Property<int>("ApplicationUserId");
 
-                    b.Property<string>("ChangerId1");
+                    b.Property<string>("ChangerId");
 
                     b.Property<string>("Comment");
 
@@ -69,7 +69,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ChangeSetId");
 
-                    b.HasIndex("ChangerId1");
+                    b.HasIndex("ChangerId");
 
                     b.HasIndex("ProjectTaskId");
 
@@ -409,28 +409,25 @@ namespace DAL.Migrations
                 {
                     b.HasOne("Domain.ProjectTask", "ProjectTask")
                         .WithMany("Attachments")
-                        .HasForeignKey("ProjectTaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectTaskId");
                 });
 
             modelBuilder.Entity("Domain.Change", b =>
                 {
                     b.HasOne("Domain.ChangeSet", "ChangeSet")
                         .WithMany("Changes")
-                        .HasForeignKey("ChangeSetId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ChangeSetId");
                 });
 
             modelBuilder.Entity("Domain.ChangeSet", b =>
                 {
                     b.HasOne("Domain.Identity.ApplicationUser", "Changer")
-                        .WithMany()
-                        .HasForeignKey("ChangerId1");
+                        .WithMany("ChangeSets")
+                        .HasForeignKey("ChangerId");
 
                     b.HasOne("Domain.ProjectTask", "ProjectTask")
                         .WithMany("ChangeSets")
-                        .HasForeignKey("ProjectTaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectTaskId");
                 });
 
             modelBuilder.Entity("Domain.CustomField", b =>
@@ -444,13 +441,11 @@ namespace DAL.Migrations
                 {
                     b.HasOne("Domain.CustomField", "CustomField")
                         .WithMany("CustomFieldValues")
-                        .HasForeignKey("CustomFieldId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CustomFieldId");
 
                     b.HasOne("Domain.ProjectTask", "ProjectTask")
                         .WithMany("CustomFieldValue")
-                        .HasForeignKey("ProjectTaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectTaskId");
                 });
 
             modelBuilder.Entity("Domain.Identity.ApplicationUser", b =>
@@ -472,18 +467,15 @@ namespace DAL.Migrations
 
                     b.HasOne("Domain.Priority", "Priority")
                         .WithMany("ProjectTasks")
-                        .HasForeignKey("PriorityId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PriorityId");
 
                     b.HasOne("Domain.Project", "Project")
                         .WithMany("ProjectTasks")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectId");
 
                     b.HasOne("Domain.Status", "Status")
                         .WithMany("ProjectTasks")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("StatusId");
                 });
 
             modelBuilder.Entity("Domain.UserTitleInProject", b =>
@@ -494,50 +486,43 @@ namespace DAL.Migrations
 
                     b.HasOne("Domain.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProjectId");
 
                     b.HasOne("Domain.UserTitle", "Title")
                         .WithMany()
-                        .HasForeignKey("TitleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TitleId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
                         .WithMany("Claims")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("Domain.Identity.ApplicationUser")
                         .WithMany("Claims")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
                     b.HasOne("Domain.Identity.ApplicationUser")
                         .WithMany("Logins")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RoleId");
 
                     b.HasOne("Domain.Identity.ApplicationUser")
                         .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
         }
     }
