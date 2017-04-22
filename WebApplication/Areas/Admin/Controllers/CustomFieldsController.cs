@@ -9,24 +9,25 @@ using DAL;
 using Domain;
 using Interfaces.UOW;
 
-namespace WebApplication.Controllers
+namespace WebApplication.Areas.Admin.Controllers
 {
-    public class AttachmentsController : Controller
+    [Area("Admin")]
+    public class CustomFieldsController : Controller
     {
         private readonly IUOW _uow;
 
-        public AttachmentsController(IUOW uow)
+        public CustomFieldsController(IUOW uow)
         {
             _uow = uow;    
         }
 
-        // GET: Attachments
+        // GET: CustomFields
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.Attachments.AllAsync());
+            return View(await _uow.CustomFields.AllAsync());
         }
 
-        // GET: Attachments/Details/5
+        // GET: CustomFields/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,38 +35,38 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var attachment = await _uow.Attachments.FindAsync(id.Value);
-            if (attachment == null)
+            var customField = await _uow.CustomFields.FindAsync(id.Value);
+            if (customField == null)
             {
                 return NotFound();
             }
 
-            return View(attachment);
+            return View(customField);
         }
 
-        // GET: Attachments/Create
+        // GET: CustomFields/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Attachments/Create
+        // POST: CustomFields/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AttachmentId,AttachmentLocation,TimeUploaded")] Attachment attachment)
+        public async Task<IActionResult> Create([Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired,CustomFieldValueId")] CustomField customField)
         {
             if (ModelState.IsValid)
             {
-                _uow.Attachments.Add(attachment);
+                _uow.CustomFields.Add(customField);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(attachment);
+            return View(customField);
         }
 
-        // GET: Attachments/Edit/5
+        // GET: CustomFields/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +74,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var attachment = await _uow.Attachments.FindAsync(id.Value);
-            if (attachment == null)
+            var customField = await _uow.CustomFields.FindAsync(id.Value);
+            if (customField == null)
             {
                 return NotFound();
             }
-            return View(attachment);
+            return View(customField);
         }
 
-        // POST: Attachments/Edit/5
+        // POST: CustomFields/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AttachmentId,AttachmentLocation,TimeUploaded")] Attachment attachment)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired,CustomFieldValueId")] CustomField customField)
         {
-            if (id != attachment.AttachmentId)
+            if (id != customField.CustomFieldId)
             {
                 return NotFound();
             }
@@ -97,12 +98,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _uow.Attachments.Update(attachment);
+                    _uow.CustomFields.Update(customField);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AttachmentExistsAsync(attachment.AttachmentId))
+                    if (!CustomFieldExistsAsync(customField.CustomFieldId))
                     {
                         return NotFound();
                     }
@@ -113,10 +114,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(attachment);
+            return View(customField);
         }
 
-        // GET: Attachments/Delete/5
+        // GET: CustomFields/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,29 +125,29 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var attachment = await _uow.Attachments.FindAsync(id.Value);
-            if (attachment == null)
+            var customField = await _uow.CustomFields.FindAsync(id.Value);
+            if (customField == null)
             {
                 return NotFound();
             }
 
-            return View(attachment);
+            return View(customField);
         }
 
-        // POST: Attachments/Delete/5
+        // POST: CustomFields/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var attachment = await _uow.Attachments.FindAsync(id);
-            _uow.Attachments.Remove(attachment);
+            var customField = await _uow.CustomFields.FindAsync(id);
+            _uow.CustomFields.Remove(customField);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool AttachmentExistsAsync(int id)
+        private bool CustomFieldExistsAsync(int id)
         {
-            return _uow.Attachments.Find(id) != null;
+            return _uow.CustomFields.Find(id) != null;
         }
     }
 }

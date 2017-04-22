@@ -9,24 +9,25 @@ using DAL;
 using Domain;
 using Interfaces.UOW;
 
-namespace WebApplication.Controllers
+namespace WebApplication.Areas.Admin.Controllers
 {
-    public class CustomFieldsController : Controller
+    [Area("Admin")]
+    public class PrioritiesController : Controller
     {
         private readonly IUOW _uow;
 
-        public CustomFieldsController(IUOW uow)
+        public PrioritiesController(IUOW uow)
         {
             _uow = uow;    
         }
 
-        // GET: CustomFields
+        // GET: Priorities
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.CustomFields.AllAsync());
+            return View(await _uow.Priorities.AllAsync());
         }
 
-        // GET: CustomFields/Details/5
+        // GET: Priorities/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,38 +35,38 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var customField = await _uow.CustomFields.FindAsync(id.Value);
-            if (customField == null)
+            var priority = await _uow.Priorities.FindAsync(id.Value);
+            if (priority == null)
             {
                 return NotFound();
             }
 
-            return View(customField);
+            return View(priority);
         }
 
-        // GET: CustomFields/Create
+        // GET: Priorities/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: CustomFields/Create
+        // POST: Priorities/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired,CustomFieldValueId")] CustomField customField)
+        public async Task<IActionResult> Create([Bind("PriorityId,PriorityName")] Priority priority)
         {
             if (ModelState.IsValid)
             {
-                _uow.CustomFields.Add(customField);
+                _uow.Priorities.Add(priority);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(customField);
+            return View(priority);
         }
 
-        // GET: CustomFields/Edit/5
+        // GET: Priorities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +74,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var customField = await _uow.CustomFields.FindAsync(id.Value);
-            if (customField == null)
+            var priority = await _uow.Priorities.FindAsync(id.Value);
+            if (priority == null)
             {
                 return NotFound();
             }
-            return View(customField);
+            return View(priority);
         }
 
-        // POST: CustomFields/Edit/5
+        // POST: Priorities/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired,CustomFieldValueId")] CustomField customField)
+        public async Task<IActionResult> Edit(int id, [Bind("PriorityId,PriorityName")] Priority priority)
         {
-            if (id != customField.CustomFieldId)
+            if (id != priority.PriorityId)
             {
                 return NotFound();
             }
@@ -97,12 +98,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _uow.CustomFields.Update(customField);
+                    _uow.Priorities.Update(priority);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomFieldExistsAsync(customField.CustomFieldId))
+                    if (!PriorityExistsAsync(priority.PriorityId))
                     {
                         return NotFound();
                     }
@@ -113,10 +114,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(customField);
+            return View(priority);
         }
 
-        // GET: CustomFields/Delete/5
+        // GET: Priorities/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,29 +125,29 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var customField = await _uow.CustomFields.FindAsync(id.Value);
-            if (customField == null)
+            var priority = await _uow.Priorities.FindAsync(id.Value);
+            if (priority == null)
             {
                 return NotFound();
             }
 
-            return View(customField);
+            return View(priority);
         }
 
-        // POST: CustomFields/Delete/5
+        // POST: Priorities/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var customField = await _uow.CustomFields.FindAsync(id);
-            _uow.CustomFields.Remove(customField);
+            var priority = await _uow.Priorities.FindAsync(id);
+            _uow.Priorities.Remove(priority);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool CustomFieldExistsAsync(int id)
+        private bool PriorityExistsAsync(int id)
         {
-            return _uow.CustomFields.Find(id) != null;
+            return _uow.Priorities.Find(id) != null;
         }
     }
 }

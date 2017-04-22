@@ -34,11 +34,11 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Admin\" />
+    <Folder Include="Areas\Admin\ViewModels\" />
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Areas\Identity\Controllers\" />
-    <Folder Include="Areas\Regular\" />
+    <Folder Include="Areas\Regular\ViewModels\" />
     <Folder Include="Data\" />
     <Folder Include="Temp\" />
   </ItemGroup>

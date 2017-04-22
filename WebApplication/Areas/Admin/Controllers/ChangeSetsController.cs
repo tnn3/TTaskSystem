@@ -1,32 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DAL;
 using Domain;
 using Interfaces.UOW;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-namespace WebApplication.Controllers
+namespace WebApplication.Areas.Admin.Controllers
 {
-    public class UserTitlesController : Controller
+    [Area("Admin")]
+    public class ChangeSetsController : Controller
     {
         private readonly IUOW _uow;
 
-        public UserTitlesController(IUOW uow)
+        public ChangeSetsController(IUOW uow)
         {
             _uow = uow;    
         }
 
-        // GET: UserTitles
+        // GET: ChangeSets
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.UserTitles.AllAsync());
+            return View(await _uow.ChangeSets.AllAsync());
         }
 
-        // GET: UserTitles/Details/5
+        // GET: ChangeSets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,38 +30,38 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var userTitle = await _uow.UserTitles.FindAsync(id.Value);
-            if (userTitle == null)
+            var changeSet = await _uow.ChangeSets.FindAsync(id.Value);
+            if (changeSet == null)
             {
                 return NotFound();
             }
 
-            return View(userTitle);
+            return View(changeSet);
         }
 
-        // GET: UserTitles/Create
+        // GET: ChangeSets/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: UserTitles/Create
+        // POST: ChangeSets/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserTitleId,TitleName")] UserTitle userTitle)
+        public async Task<IActionResult> Create([Bind("ChangeSetId,Comment,Time")] ChangeSet changeSet)
         {
             if (ModelState.IsValid)
             {
-                _uow.UserTitles.Add(userTitle);
+                _uow.ChangeSets.Add(changeSet);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(userTitle);
+            return View(changeSet);
         }
 
-        // GET: UserTitles/Edit/5
+        // GET: ChangeSets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +69,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var userTitle = await _uow.UserTitles.FindAsync(id.Value);
-            if (userTitle == null)
+            var changeSet = await _uow.ChangeSets.FindAsync(id.Value);
+            if (changeSet == null)
             {
                 return NotFound();
             }
-            return View(userTitle);
+            return View(changeSet);
         }
 
-        // POST: UserTitles/Edit/5
+        // POST: ChangeSets/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserTitleId,TitleName")] UserTitle userTitle)
+        public async Task<IActionResult> Edit(int id, [Bind("ChangeSetId,Comment,Time")] ChangeSet changeSet)
         {
-            if (id != userTitle.UserTitleId)
+            if (id != changeSet.ChangeSetId)
             {
                 return NotFound();
             }
@@ -97,12 +93,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _uow.UserTitles.Update(userTitle);
+                    _uow.ChangeSets.Update(changeSet);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserTitleExistsAsync(userTitle.UserTitleId))
+                    if (!ChangeSetExistsAsync(changeSet.ChangeSetId))
                     {
                         return NotFound();
                     }
@@ -113,10 +109,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(userTitle);
+            return View(changeSet);
         }
 
-        // GET: UserTitles/Delete/5
+        // GET: ChangeSets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,29 +120,29 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var userTitle = await _uow.UserTitles.FindAsync(id.Value);
-            if (userTitle == null)
+            var changeSet = await _uow.ChangeSets.FindAsync(id.Value);
+            if (changeSet == null)
             {
                 return NotFound();
             }
 
-            return View(userTitle);
+            return View(changeSet);
         }
 
-        // POST: UserTitles/Delete/5
+        // POST: ChangeSets/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var userTitle = await _uow.UserTitles.FindAsync(id);
-            _uow.UserTitles.Remove(userTitle);
+            var changeSet = await _uow.ChangeSets.FindAsync(id);
+            _uow.ChangeSets.Remove(changeSet);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool UserTitleExistsAsync(int id)
+        private bool ChangeSetExistsAsync(int id)
         {
-            return _uow.UserTitles.Find(id) != null;
+            return _uow.ChangeSets.Find(id) != null;
         }
     }
 }

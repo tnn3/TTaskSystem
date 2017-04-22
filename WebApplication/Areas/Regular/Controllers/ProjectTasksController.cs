@@ -9,24 +9,25 @@ using DAL;
 using Domain;
 using Interfaces.UOW;
 
-namespace WebApplication.Controllers
+namespace WebApplication.Areas.Regular.Controllers
 {
-    public class ProjectsController : Controller
+    [Area("Regular")]
+    public class ProjectTasksController : Controller
     {
         private readonly IUOW _uow;
 
-        public ProjectsController(IUOW uow)
+        public ProjectTasksController(IUOW uow)
         {
             _uow = uow;    
         }
 
-        // GET: Projects
+        // GET: ProjectTasks
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.Projects.AllAsync());
+            return View(await _uow.ProjectTasks.AllAsync());
         }
 
-        // GET: Projects/Details/5
+        // GET: ProjectTasks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,38 +35,38 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var project = await _uow.Projects.FindAsync(id.Value);
-            if (project == null)
+            var projectTask = await _uow.ProjectTasks.FindAsync(id.Value);
+            if (projectTask == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(projectTask);
         }
 
-        // GET: Projects/Create
+        // GET: ProjectTasks/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Projects/Create
+        // POST: ProjectTasks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,ProjectName,ProjectDescription,CreatedOn,UpdatedOn")] Project project)
+        public async Task<IActionResult> Create([Bind("ProjectTaskId,TaskName,Description,DueDate,Created,Changed")] ProjectTask projectTask)
         {
             if (ModelState.IsValid)
             {
-                _uow.Projects.Add(project);
+                _uow.ProjectTasks.Add(projectTask);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(project);
+            return View(projectTask);
         }
 
-        // GET: Projects/Edit/5
+        // GET: ProjectTasks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +74,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var project = await _uow.Projects.FindAsync(id.Value);
-            if (project == null)
+            var projectTask = await _uow.ProjectTasks.FindAsync(id.Value);
+            if (projectTask == null)
             {
                 return NotFound();
             }
-            return View(project);
+            return View(projectTask);
         }
 
-        // POST: Projects/Edit/5
+        // POST: ProjectTasks/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,ProjectName,ProjectDescription,CreatedOn,UpdatedOn")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjectTaskId,TaskName,Description,DueDate,Created,Changed")] ProjectTask projectTask)
         {
-            if (id != project.ProjectId)
+            if (id != projectTask.ProjectTaskId)
             {
                 return NotFound();
             }
@@ -97,12 +98,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _uow.Projects.Update(project);
+                    _uow.ProjectTasks.Update(projectTask);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExistsAsync(project.ProjectId))
+                    if (!ProjectTaskExistsAsync(projectTask.ProjectTaskId))
                     {
                         return NotFound();
                     }
@@ -113,10 +114,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(project);
+            return View(projectTask);
         }
 
-        // GET: Projects/Delete/5
+        // GET: ProjectTasks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,29 +125,29 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var project = await _uow.Projects.FindAsync(id.Value);
-            if (project == null)
+            var projectTask = await _uow.ProjectTasks.FindAsync(id.Value);
+            if (projectTask == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(projectTask);
         }
 
-        // POST: Projects/Delete/5
+        // POST: ProjectTasks/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var project = await _uow.Projects.FindAsync(id);
-            _uow.Projects.Remove(project);
+            var projectTask = await _uow.ProjectTasks.FindAsync(id);
+            _uow.ProjectTasks.Remove(projectTask);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ProjectExistsAsync(int id)
+        private bool ProjectTaskExistsAsync(int id)
         {
-            return _uow.Projects.Find(id) != null;
+            return _uow.ProjectTasks.Find(id) != null;
         }
     }
 }

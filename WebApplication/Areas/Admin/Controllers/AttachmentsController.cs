@@ -9,24 +9,25 @@ using DAL;
 using Domain;
 using Interfaces.UOW;
 
-namespace WebApplication.Controllers
+namespace WebApplication.Areas.Admin.Controllers
 {
-    public class ChangesController : Controller
+    [Area("Admin")]
+    public class AttachmentsController : Controller
     {
         private readonly IUOW _uow;
 
-        public ChangesController(IUOW uow)
+        public AttachmentsController(IUOW uow)
         {
             _uow = uow;    
         }
 
-        // GET: Changes
+        // GET: Attachments
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.Changes.AllAsync());
+            return View(await _uow.Attachments.AllAsync());
         }
 
-        // GET: Changes/Details/5
+        // GET: Attachments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,38 +35,38 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var change = await _uow.Changes.FindAsync(id.Value);
-            if (change == null)
+            var attachment = await _uow.Attachments.FindAsync(id.Value);
+            if (attachment == null)
             {
                 return NotFound();
             }
 
-            return View(change);
+            return View(attachment);
         }
 
-        // GET: Changes/Create
+        // GET: Attachments/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Changes/Create
+        // POST: Attachments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ChangeId,Before,After")] Change change)
+        public async Task<IActionResult> Create([Bind("AttachmentId,AttachmentLocation,TimeUploaded")] Attachment attachment)
         {
             if (ModelState.IsValid)
             {
-                _uow.Changes.Add(change);
+                _uow.Attachments.Add(attachment);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(change);
+            return View(attachment);
         }
 
-        // GET: Changes/Edit/5
+        // GET: Attachments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +74,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var change = await _uow.Changes.FindAsync(id.Value);
-            if (change == null)
+            var attachment = await _uow.Attachments.FindAsync(id.Value);
+            if (attachment == null)
             {
                 return NotFound();
             }
-            return View(change);
+            return View(attachment);
         }
 
-        // POST: Changes/Edit/5
+        // POST: Attachments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ChangeId,Before,After")] Change change)
+        public async Task<IActionResult> Edit(int id, [Bind("AttachmentId,AttachmentLocation,TimeUploaded")] Attachment attachment)
         {
-            if (id != change.ChangeId)
+            if (id != attachment.AttachmentId)
             {
                 return NotFound();
             }
@@ -97,12 +98,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _uow.Changes.Update(change);
+                    _uow.Attachments.Update(attachment);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ChangeExistsAsync(change.ChangeId))
+                    if (!AttachmentExistsAsync(attachment.AttachmentId))
                     {
                         return NotFound();
                     }
@@ -113,10 +114,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(change);
+            return View(attachment);
         }
 
-        // GET: Changes/Delete/5
+        // GET: Attachments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,29 +125,29 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var change = await _uow.Changes.FindAsync(id.Value);
-            if (change == null)
+            var attachment = await _uow.Attachments.FindAsync(id.Value);
+            if (attachment == null)
             {
                 return NotFound();
             }
 
-            return View(change);
+            return View(attachment);
         }
 
-        // POST: Changes/Delete/5
+        // POST: Attachments/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var change = await _uow.Changes.FindAsync(id);
-            _uow.Changes.Remove(change);
+            var attachment = await _uow.Attachments.FindAsync(id);
+            _uow.Attachments.Remove(attachment);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ChangeExistsAsync(int id)
+        private bool AttachmentExistsAsync(int id)
         {
-            return _uow.Changes.Find(id) != null;
+            return _uow.Attachments.Find(id) != null;
         }
     }
 }

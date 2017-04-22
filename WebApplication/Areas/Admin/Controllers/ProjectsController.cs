@@ -9,24 +9,25 @@ using DAL;
 using Domain;
 using Interfaces.UOW;
 
-namespace WebApplication.Controllers
+namespace WebApplication.Areas.Admin.Controllers
 {
-    public class StatusController : Controller
+    [Area("Admin")]
+    public class ProjectsController : Controller
     {
         private readonly IUOW _uow;
 
-        public StatusController(IUOW uow)
+        public ProjectsController(IUOW uow)
         {
             _uow = uow;    
         }
 
-        // GET: Status
+        // GET: Projects
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.Statuses.AllAsync());
+            return View(await _uow.Projects.AllAsync());
         }
 
-        // GET: Status/Details/5
+        // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,38 +35,38 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var status = await _uow.Statuses.FindAsync(id.Value);
-            if (status == null)
+            var project = await _uow.Projects.FindAsync(id.Value);
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return View(status);
+            return View(project);
         }
 
-        // GET: Status/Create
+        // GET: Projects/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Status/Create
+        // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StatusId,StatusName")] Status status)
+        public async Task<IActionResult> Create([Bind("ProjectId,ProjectName,ProjectDescription,CreatedOn,UpdatedOn")] Project project)
         {
             if (ModelState.IsValid)
             {
-                _uow.Statuses.Add(status);
+                _uow.Projects.Add(project);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(status);
+            return View(project);
         }
 
-        // GET: Status/Edit/5
+        // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +74,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var status = await _uow.Statuses.FindAsync(id.Value);
-            if (status == null)
+            var project = await _uow.Projects.FindAsync(id.Value);
+            if (project == null)
             {
                 return NotFound();
             }
-            return View(status);
+            return View(project);
         }
 
-        // POST: Status/Edit/5
+        // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StatusId,StatusName")] Status status)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,ProjectName,ProjectDescription,CreatedOn,UpdatedOn")] Project project)
         {
-            if (id != status.StatusId)
+            if (id != project.ProjectId)
             {
                 return NotFound();
             }
@@ -97,12 +98,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _uow.Statuses.Update(status);
+                    _uow.Projects.Update(project);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StatusExistsAsync(status.StatusId))
+                    if (!ProjectExistsAsync(project.ProjectId))
                     {
                         return NotFound();
                     }
@@ -113,10 +114,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(status);
+            return View(project);
         }
 
-        // GET: Status/Delete/5
+        // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,29 +125,29 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var status = await _uow.Statuses.FindAsync(id.Value);
-            if (status == null)
+            var project = await _uow.Projects.FindAsync(id.Value);
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return View(status);
+            return View(project);
         }
 
-        // POST: Status/Delete/5
+        // POST: Projects/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var status = await _uow.Statuses.FindAsync(id);
-            _uow.Statuses.Remove(status);
+            var project = await _uow.Projects.FindAsync(id);
+            _uow.Projects.Remove(project);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool StatusExistsAsync(int id)
+        private bool ProjectExistsAsync(int id)
         {
-            return _uow.Statuses.Find(id) != null;
+            return _uow.Projects.Find(id) != null;
         }
     }
 }

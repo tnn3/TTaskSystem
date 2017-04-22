@@ -9,24 +9,25 @@ using DAL;
 using Domain;
 using Interfaces.UOW;
 
-namespace WebApplication.Controllers
+namespace WebApplication.Areas.Admin.Controllers
 {
-    public class PrioritiesController : Controller
+    [Area("Admin")]
+    public class StatusController : Controller
     {
         private readonly IUOW _uow;
 
-        public PrioritiesController(IUOW uow)
+        public StatusController(IUOW uow)
         {
             _uow = uow;    
         }
 
-        // GET: Priorities
+        // GET: Status
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.Priorities.AllAsync());
+            return View(await _uow.Statuses.AllAsync());
         }
 
-        // GET: Priorities/Details/5
+        // GET: Status/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,38 +35,38 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var priority = await _uow.Priorities.FindAsync(id.Value);
-            if (priority == null)
+            var status = await _uow.Statuses.FindAsync(id.Value);
+            if (status == null)
             {
                 return NotFound();
             }
 
-            return View(priority);
+            return View(status);
         }
 
-        // GET: Priorities/Create
+        // GET: Status/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Priorities/Create
+        // POST: Status/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PriorityId,PriorityName")] Priority priority)
+        public async Task<IActionResult> Create([Bind("StatusId,StatusName")] Status status)
         {
             if (ModelState.IsValid)
             {
-                _uow.Priorities.Add(priority);
+                _uow.Statuses.Add(status);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(priority);
+            return View(status);
         }
 
-        // GET: Priorities/Edit/5
+        // GET: Status/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +74,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var priority = await _uow.Priorities.FindAsync(id.Value);
-            if (priority == null)
+            var status = await _uow.Statuses.FindAsync(id.Value);
+            if (status == null)
             {
                 return NotFound();
             }
-            return View(priority);
+            return View(status);
         }
 
-        // POST: Priorities/Edit/5
+        // POST: Status/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PriorityId,PriorityName")] Priority priority)
+        public async Task<IActionResult> Edit(int id, [Bind("StatusId,StatusName")] Status status)
         {
-            if (id != priority.PriorityId)
+            if (id != status.StatusId)
             {
                 return NotFound();
             }
@@ -97,12 +98,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _uow.Priorities.Update(priority);
+                    _uow.Statuses.Update(status);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PriorityExistsAsync(priority.PriorityId))
+                    if (!StatusExistsAsync(status.StatusId))
                     {
                         return NotFound();
                     }
@@ -113,10 +114,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(priority);
+            return View(status);
         }
 
-        // GET: Priorities/Delete/5
+        // GET: Status/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,29 +125,29 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var priority = await _uow.Priorities.FindAsync(id.Value);
-            if (priority == null)
+            var status = await _uow.Statuses.FindAsync(id.Value);
+            if (status == null)
             {
                 return NotFound();
             }
 
-            return View(priority);
+            return View(status);
         }
 
-        // POST: Priorities/Delete/5
+        // POST: Status/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var priority = await _uow.Priorities.FindAsync(id);
-            _uow.Priorities.Remove(priority);
+            var status = await _uow.Statuses.FindAsync(id);
+            _uow.Statuses.Remove(status);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool PriorityExistsAsync(int id)
+        private bool StatusExistsAsync(int id)
         {
-            return _uow.Priorities.Find(id) != null;
+            return _uow.Statuses.Find(id) != null;
         }
     }
 }

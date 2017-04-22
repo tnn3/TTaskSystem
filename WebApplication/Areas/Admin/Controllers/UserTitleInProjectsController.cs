@@ -9,8 +9,9 @@ using DAL;
 using Domain;
 using Interfaces.UOW;
 
-namespace WebApplication.Controllers
+namespace WebApplication.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class UserTitleInProjectsController : Controller
     {
         private readonly IUOW _uow;

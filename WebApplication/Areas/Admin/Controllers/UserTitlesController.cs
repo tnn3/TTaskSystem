@@ -9,24 +9,25 @@ using DAL;
 using Domain;
 using Interfaces.UOW;
 
-namespace WebApplication.Controllers
+namespace WebApplication.Areas.Admin.Controllers
 {
-    public class ChangeSetsController : Controller
+    [Area("Admin")]
+    public class UserTitlesController : Controller
     {
         private readonly IUOW _uow;
 
-        public ChangeSetsController(IUOW uow)
+        public UserTitlesController(IUOW uow)
         {
             _uow = uow;    
         }
 
-        // GET: ChangeSets
+        // GET: UserTitles
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.ChangeSets.AllAsync());
+            return View(await _uow.UserTitles.AllAsync());
         }
 
-        // GET: ChangeSets/Details/5
+        // GET: UserTitles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,38 +35,38 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var changeSet = await _uow.ChangeSets.FindAsync(id.Value);
-            if (changeSet == null)
+            var userTitle = await _uow.UserTitles.FindAsync(id.Value);
+            if (userTitle == null)
             {
                 return NotFound();
             }
 
-            return View(changeSet);
+            return View(userTitle);
         }
 
-        // GET: ChangeSets/Create
+        // GET: UserTitles/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ChangeSets/Create
+        // POST: UserTitles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ChangeSetId,Comment,Time")] ChangeSet changeSet)
+        public async Task<IActionResult> Create([Bind("UserTitleId,TitleName")] UserTitle userTitle)
         {
             if (ModelState.IsValid)
             {
-                _uow.ChangeSets.Add(changeSet);
+                _uow.UserTitles.Add(userTitle);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(changeSet);
+            return View(userTitle);
         }
 
-        // GET: ChangeSets/Edit/5
+        // GET: UserTitles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +74,22 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var changeSet = await _uow.ChangeSets.FindAsync(id.Value);
-            if (changeSet == null)
+            var userTitle = await _uow.UserTitles.FindAsync(id.Value);
+            if (userTitle == null)
             {
                 return NotFound();
             }
-            return View(changeSet);
+            return View(userTitle);
         }
 
-        // POST: ChangeSets/Edit/5
+        // POST: UserTitles/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ChangeSetId,Comment,Time")] ChangeSet changeSet)
+        public async Task<IActionResult> Edit(int id, [Bind("UserTitleId,TitleName")] UserTitle userTitle)
         {
-            if (id != changeSet.ChangeSetId)
+            if (id != userTitle.UserTitleId)
             {
                 return NotFound();
             }
@@ -97,12 +98,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _uow.ChangeSets.Update(changeSet);
+                    _uow.UserTitles.Update(userTitle);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ChangeSetExistsAsync(changeSet.ChangeSetId))
+                    if (!UserTitleExistsAsync(userTitle.UserTitleId))
                     {
                         return NotFound();
                     }
@@ -113,10 +114,10 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(changeSet);
+            return View(userTitle);
         }
 
-        // GET: ChangeSets/Delete/5
+        // GET: UserTitles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,29 +125,29 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var changeSet = await _uow.ChangeSets.FindAsync(id.Value);
-            if (changeSet == null)
+            var userTitle = await _uow.UserTitles.FindAsync(id.Value);
+            if (userTitle == null)
             {
                 return NotFound();
             }
 
-            return View(changeSet);
+            return View(userTitle);
         }
 
-        // POST: ChangeSets/Delete/5
+        // POST: UserTitles/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var changeSet = await _uow.ChangeSets.FindAsync(id);
-            _uow.ChangeSets.Remove(changeSet);
+            var userTitle = await _uow.UserTitles.FindAsync(id);
+            _uow.UserTitles.Remove(userTitle);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ChangeSetExistsAsync(int id)
+        private bool UserTitleExistsAsync(int id)
         {
-            return _uow.ChangeSets.Find(id) != null;
+            return _uow.UserTitles.Find(id) != null;
         }
     }
 }
