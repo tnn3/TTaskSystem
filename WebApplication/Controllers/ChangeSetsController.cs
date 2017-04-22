@@ -7,22 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
 
 namespace WebApplication.Controllers
 {
     public class ChangeSetsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public ChangeSetsController(ApplicationDbContext context)
+        public ChangeSetsController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: ChangeSets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ChangeSets.ToListAsync());
+            return View(await _uow.ChangeSets.AllAsync());
         }
 
         // GET: ChangeSets/Details/5
@@ -33,8 +34,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var changeSet = await _context.ChangeSets
-                .SingleOrDefaultAsync(m => m.ChangeSetId == id);
+            var changeSet = await _uow.ChangeSets.FindAsync(id.Value);
             if (changeSet == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(changeSet);
-                await _context.SaveChangesAsync();
+                _uow.ChangeSets.Add(changeSet);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(changeSet);
@@ -73,7 +73,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var changeSet = await _context.ChangeSets.SingleOrDefaultAsync(m => m.ChangeSetId == id);
+            var changeSet = await _uow.ChangeSets.FindAsync(id.Value);
             if (changeSet == null)
             {
                 return NotFound();
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(changeSet);
-                    await _context.SaveChangesAsync();
+                    _uow.ChangeSets.Update(changeSet);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ChangeSetExists(changeSet.ChangeSetId))
+                    if (!ChangeSetExistsAsync(changeSet.ChangeSetId))
                     {
                         return NotFound();
                     }
@@ -124,8 +124,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var changeSet = await _context.ChangeSets
-                .SingleOrDefaultAsync(m => m.ChangeSetId == id);
+            var changeSet = await _uow.ChangeSets.FindAsync(id.Value);
             if (changeSet == null)
             {
                 return NotFound();
@@ -135,19 +134,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: ChangeSets/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var changeSet = await _context.ChangeSets.SingleOrDefaultAsync(m => m.ChangeSetId == id);
-            _context.ChangeSets.Remove(changeSet);
-            await _context.SaveChangesAsync();
+            var changeSet = await _uow.ChangeSets.FindAsync(id);
+            _uow.ChangeSets.Remove(changeSet);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ChangeSetExists(int id)
+        private bool ChangeSetExistsAsync(int id)
         {
-            return _context.ChangeSets.Any(e => e.ChangeSetId == id);
+            return _uow.ChangeSets.Find(id) != null;
         }
     }
 }

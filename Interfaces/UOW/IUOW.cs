@@ -9,7 +9,19 @@ namespace Interfaces.UOW
     public interface IUOW
     {
         // standard IRepository based repos
-        //IRepository<Person> Persons { get; }
+        IAttachmentRepository Attachments { get; }
+        IChangeRepository Changes { get; }
+        IChangeSetRepository ChangeSets { get; }
+        ICustomFieldRepository CustomFields { get; }
+        ICustomFieldValueRepository CustomFieldValues { get; }
+        IPriorityRepository Priorities { get; }
+        IProjectRepository Projects { get; }
+        IProjectTaskRepository ProjectTasks { get; }
+        IStatusRepository Statuses { get; }
+        IUserTitleRepository UserTitles { get; }
+        IUserTitleInProjectRepository UserTitleInProjects { get; }
+
+
         int SaveChanges();
         Task<int> SaveChangesAsync();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

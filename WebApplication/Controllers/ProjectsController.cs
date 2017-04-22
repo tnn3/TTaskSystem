@@ -7,22 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
 
 namespace WebApplication.Controllers
 {
     public class ProjectsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public ProjectsController(ApplicationDbContext context)
+        public ProjectsController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: Projects
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Projects.ToListAsync());
+            return View(await _uow.Projects.AllAsync());
         }
 
         // GET: Projects/Details/5
@@ -33,8 +34,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .SingleOrDefaultAsync(m => m.ProjectId == id);
+            var project = await _uow.Projects.FindAsync(id.Value);
             if (project == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
+                _uow.Projects.Add(project);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(project);
@@ -73,7 +73,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.ProjectId == id);
+            var project = await _uow.Projects.FindAsync(id.Value);
             if (project == null)
             {
                 return NotFound();
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(project);
-                    await _context.SaveChangesAsync();
+                    _uow.Projects.Update(project);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExists(project.ProjectId))
+                    if (!ProjectExistsAsync(project.ProjectId))
                     {
                         return NotFound();
                     }
@@ -124,8 +124,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .SingleOrDefaultAsync(m => m.ProjectId == id);
+            var project = await _uow.Projects.FindAsync(id.Value);
             if (project == null)
             {
                 return NotFound();
@@ -135,19 +134,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: Projects/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.ProjectId == id);
-            _context.Projects.Remove(project);
-            await _context.SaveChangesAsync();
+            var project = await _uow.Projects.FindAsync(id);
+            _uow.Projects.Remove(project);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ProjectExists(int id)
+        private bool ProjectExistsAsync(int id)
         {
-            return _context.Projects.Any(e => e.ProjectId == id);
+            return _uow.Projects.Find(id) != null;
         }
     }
 }

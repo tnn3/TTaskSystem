@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain;
 using Domain.Identity;
 using Interfaces;
 using Interfaces.UOW;
@@ -14,6 +15,17 @@ namespace DAL
         private readonly IRepositoryProvider _repositoryProvider;
 
         public IRepository<ApplicationUser> People => GetEntityRepository<ApplicationUser>();
+        public IAttachmentRepository Attachments => GetCustomRepository<IAttachmentRepository>();
+        public IChangeRepository Changes => GetCustomRepository<IChangeRepository>();
+        public IChangeSetRepository ChangeSets => GetCustomRepository<IChangeSetRepository>();
+        public ICustomFieldRepository CustomFields => GetCustomRepository<ICustomFieldRepository>();
+        public ICustomFieldValueRepository CustomFieldValues => GetCustomRepository<ICustomFieldValueRepository>();
+        public IPriorityRepository Priorities => GetCustomRepository<IPriorityRepository>();
+        public IProjectRepository Projects => GetCustomRepository<IProjectRepository>();
+        public IProjectTaskRepository ProjectTasks => GetCustomRepository<IProjectTaskRepository>();
+        public IStatusRepository Statuses => GetCustomRepository<IStatusRepository>();
+        public IUserTitleRepository UserTitles => GetCustomRepository<IUserTitleRepository>();
+        public IUserTitleInProjectRepository UserTitleInProjects => GetCustomRepository<IUserTitleInProjectRepository>();
 
         public UOW(TContext context, IRepositoryProvider repositoryProvider)
         {

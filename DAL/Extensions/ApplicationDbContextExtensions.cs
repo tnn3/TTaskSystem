@@ -13,12 +13,14 @@ namespace DAL.Extensions
             //check database migration status, is it latest? is it ok to seed?
             if (context.AllMigrationsApplied())
             {
-                /*if (!context.People.Any())
+                if (!context.Priorities.Any())
                 {
-                    context.People.Add(new Person() {FirstName = "Tõnn", LastName = "Vaher"});
-                    context.People.Add(new Person() {FirstName = "Keegi", LastName = "Teine"});
+                    context.Priorities.Add(new Priority() {PriorityName = "Urgent"});
+                    context.Priorities.Add(new Priority() {PriorityName = "Normal"});
+                    context.Priorities.Add(new Priority() {PriorityName = "Low"});
+                    context.Priorities.Add(new Priority() {PriorityName = "Immediate"});
                     context.SaveChanges();
-                }*/
+                }
             }
         }
     }

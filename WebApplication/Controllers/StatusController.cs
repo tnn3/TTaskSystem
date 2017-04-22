@@ -7,22 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
 
 namespace WebApplication.Controllers
 {
     public class StatusController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public StatusController(ApplicationDbContext context)
+        public StatusController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: Status
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Statuses.ToListAsync());
+            return View(await _uow.Statuses.AllAsync());
         }
 
         // GET: Status/Details/5
@@ -33,8 +34,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Statuses
-                .SingleOrDefaultAsync(m => m.StatusId == id);
+            var status = await _uow.Statuses.FindAsync(id.Value);
             if (status == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(status);
-                await _context.SaveChangesAsync();
+                _uow.Statuses.Add(status);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(status);
@@ -73,7 +73,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Statuses.SingleOrDefaultAsync(m => m.StatusId == id);
+            var status = await _uow.Statuses.FindAsync(id.Value);
             if (status == null)
             {
                 return NotFound();
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(status);
-                    await _context.SaveChangesAsync();
+                    _uow.Statuses.Update(status);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StatusExists(status.StatusId))
+                    if (!StatusExistsAsync(status.StatusId))
                     {
                         return NotFound();
                     }
@@ -124,8 +124,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Statuses
-                .SingleOrDefaultAsync(m => m.StatusId == id);
+            var status = await _uow.Statuses.FindAsync(id.Value);
             if (status == null)
             {
                 return NotFound();
@@ -135,19 +134,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: Status/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var status = await _context.Statuses.SingleOrDefaultAsync(m => m.StatusId == id);
-            _context.Statuses.Remove(status);
-            await _context.SaveChangesAsync();
+            var status = await _uow.Statuses.FindAsync(id);
+            _uow.Statuses.Remove(status);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool StatusExists(int id)
+        private bool StatusExistsAsync(int id)
         {
-            return _context.Statuses.Any(e => e.StatusId == id);
+            return _uow.Statuses.Find(id) != null;
         }
     }
 }

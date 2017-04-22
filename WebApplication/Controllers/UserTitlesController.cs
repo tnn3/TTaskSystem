@@ -7,22 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
 
 namespace WebApplication.Controllers
 {
     public class UserTitlesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public UserTitlesController(ApplicationDbContext context)
+        public UserTitlesController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: UserTitles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.UserTitles.ToListAsync());
+            return View(await _uow.UserTitles.AllAsync());
         }
 
         // GET: UserTitles/Details/5
@@ -33,8 +34,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var userTitle = await _context.UserTitles
-                .SingleOrDefaultAsync(m => m.UserTitleId == id);
+            var userTitle = await _uow.UserTitles.FindAsync(id.Value);
             if (userTitle == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(userTitle);
-                await _context.SaveChangesAsync();
+                _uow.UserTitles.Add(userTitle);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(userTitle);
@@ -73,7 +73,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var userTitle = await _context.UserTitles.SingleOrDefaultAsync(m => m.UserTitleId == id);
+            var userTitle = await _uow.UserTitles.FindAsync(id.Value);
             if (userTitle == null)
             {
                 return NotFound();
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(userTitle);
-                    await _context.SaveChangesAsync();
+                    _uow.UserTitles.Update(userTitle);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserTitleExists(userTitle.UserTitleId))
+                    if (!UserTitleExistsAsync(userTitle.UserTitleId))
                     {
                         return NotFound();
                     }
@@ -124,8 +124,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var userTitle = await _context.UserTitles
-                .SingleOrDefaultAsync(m => m.UserTitleId == id);
+            var userTitle = await _uow.UserTitles.FindAsync(id.Value);
             if (userTitle == null)
             {
                 return NotFound();
@@ -135,19 +134,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: UserTitles/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var userTitle = await _context.UserTitles.SingleOrDefaultAsync(m => m.UserTitleId == id);
-            _context.UserTitles.Remove(userTitle);
-            await _context.SaveChangesAsync();
+            var userTitle = await _uow.UserTitles.FindAsync(id);
+            _uow.UserTitles.Remove(userTitle);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool UserTitleExists(int id)
+        private bool UserTitleExistsAsync(int id)
         {
-            return _context.UserTitles.Any(e => e.UserTitleId == id);
+            return _uow.UserTitles.Find(id) != null;
         }
     }
 }

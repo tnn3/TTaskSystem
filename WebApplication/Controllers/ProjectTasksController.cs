@@ -7,22 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
 
 namespace WebApplication.Controllers
 {
     public class ProjectTasksController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public ProjectTasksController(ApplicationDbContext context)
+        public ProjectTasksController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: ProjectTasks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ProjectTasks.ToListAsync());
+            return View(await _uow.ProjectTasks.AllAsync());
         }
 
         // GET: ProjectTasks/Details/5
@@ -33,8 +34,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var projectTask = await _context.ProjectTasks
-                .SingleOrDefaultAsync(m => m.ProjectTaskId == id);
+            var projectTask = await _uow.ProjectTasks.FindAsync(id.Value);
             if (projectTask == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(projectTask);
-                await _context.SaveChangesAsync();
+                _uow.ProjectTasks.Add(projectTask);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(projectTask);
@@ -73,7 +73,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var projectTask = await _context.ProjectTasks.SingleOrDefaultAsync(m => m.ProjectTaskId == id);
+            var projectTask = await _uow.ProjectTasks.FindAsync(id.Value);
             if (projectTask == null)
             {
                 return NotFound();
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(projectTask);
-                    await _context.SaveChangesAsync();
+                    _uow.ProjectTasks.Update(projectTask);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectTaskExists(projectTask.ProjectTaskId))
+                    if (!ProjectTaskExistsAsync(projectTask.ProjectTaskId))
                     {
                         return NotFound();
                     }
@@ -124,8 +124,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var projectTask = await _context.ProjectTasks
-                .SingleOrDefaultAsync(m => m.ProjectTaskId == id);
+            var projectTask = await _uow.ProjectTasks.FindAsync(id.Value);
             if (projectTask == null)
             {
                 return NotFound();
@@ -135,19 +134,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: ProjectTasks/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var projectTask = await _context.ProjectTasks.SingleOrDefaultAsync(m => m.ProjectTaskId == id);
-            _context.ProjectTasks.Remove(projectTask);
-            await _context.SaveChangesAsync();
+            var projectTask = await _uow.ProjectTasks.FindAsync(id);
+            _uow.ProjectTasks.Remove(projectTask);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ProjectTaskExists(int id)
+        private bool ProjectTaskExistsAsync(int id)
         {
-            return _context.ProjectTasks.Any(e => e.ProjectTaskId == id);
+            return _uow.ProjectTasks.Find(id) != null;
         }
     }
 }

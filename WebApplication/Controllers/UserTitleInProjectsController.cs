@@ -7,23 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
 
 namespace WebApplication.Controllers
 {
     public class UserTitleInProjectsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public UserTitleInProjectsController(ApplicationDbContext context)
+        public UserTitleInProjectsController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: UserTitleInProjects
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.UserTitleInProjects.Include(u => u.Project).Include(u => u.Title);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.UserTitleInProjects.Include(u => u.Project).Include(u => u.Title);
+            return View(await _uow.UserTitleInProjects.AllAsync());
         }
 
         // GET: UserTitleInProjects/Details/5
@@ -34,10 +35,11 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var userTitleInProject = await _context.UserTitleInProjects
+            /*var userTitleInProject = await _context.UserTitleInProjects
                 .Include(u => u.Project)
                 .Include(u => u.Title)
-                .SingleOrDefaultAsync(m => m.UserTitleInProjectId == id);
+                .SingleOrDefaultAsync(m => m.UserTitleInProjectId == id);*/
+            var userTitleInProject = await _uow.UserTitleInProjects.FindAsync(id);
             if (userTitleInProject == null)
             {
                 return NotFound();
@@ -49,8 +51,8 @@ namespace WebApplication.Controllers
         // GET: UserTitleInProjects/Create
         public IActionResult Create()
         {
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId");
-            ViewData["TitleId"] = new SelectList(_context.UserTitles, "UserTitleId", "UserTitleId");
+            //ViewData["ProjectId"] = new SelectList(_uow.Projects., "ProjectId", "ProjectId");
+            //ViewData["TitleId"] = new SelectList(_context.UserTitles, "UserTitleId", "UserTitleId");
             return View();
         }
 
@@ -63,12 +65,12 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(userTitleInProject);
-                await _context.SaveChangesAsync();
+                _uow.UserTitleInProjects.Add(userTitleInProject);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", userTitleInProject.ProjectId);
-            ViewData["TitleId"] = new SelectList(_context.UserTitles, "UserTitleId", "UserTitleId", userTitleInProject.TitleId);
+            //ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", userTitleInProject.ProjectId);
+            //ViewData["TitleId"] = new SelectList(_context.UserTitles, "UserTitleId", "UserTitleId", userTitleInProject.TitleId);
             return View(userTitleInProject);
         }
 
@@ -80,13 +82,13 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var userTitleInProject = await _context.UserTitleInProjects.SingleOrDefaultAsync(m => m.UserTitleInProjectId == id);
+            var userTitleInProject = await _uow.UserTitleInProjects.FindAsync(id.Value);
             if (userTitleInProject == null)
             {
                 return NotFound();
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", userTitleInProject.ProjectId);
-            ViewData["TitleId"] = new SelectList(_context.UserTitles, "UserTitleId", "UserTitleId", userTitleInProject.TitleId);
+            //ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", userTitleInProject.ProjectId);
+            //ViewData["TitleId"] = new SelectList(_context.UserTitles, "UserTitleId", "UserTitleId", userTitleInProject.TitleId);
             return View(userTitleInProject);
         }
 
@@ -106,12 +108,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(userTitleInProject);
-                    await _context.SaveChangesAsync();
+                    _uow.UserTitleInProjects.Update(userTitleInProject);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserTitleInProjectExists(userTitleInProject.UserTitleInProjectId))
+                    if (!UserTitleInProjectExistsAsync(userTitleInProject.UserTitleInProjectId))
                     {
                         return NotFound();
                     }
@@ -122,8 +124,8 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", userTitleInProject.ProjectId);
-            ViewData["TitleId"] = new SelectList(_context.UserTitles, "UserTitleId", "UserTitleId", userTitleInProject.TitleId);
+            //ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", userTitleInProject.ProjectId);
+            //ViewData["TitleId"] = new SelectList(_context.UserTitles, "UserTitleId", "UserTitleId", userTitleInProject.TitleId);
             return View(userTitleInProject);
         }
 
@@ -135,10 +137,12 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var userTitleInProject = await _context.UserTitleInProjects
+            /*var userTitleInProject = await _context.UserTitleInProjects
                 .Include(u => u.Project)
                 .Include(u => u.Title)
-                .SingleOrDefaultAsync(m => m.UserTitleInProjectId == id);
+                .SingleOrDefaultAsync(m => m.UserTitleInProjectId == id);*/
+            var userTitleInProject = await _uow.UserTitleInProjects.FindAsync(id.Value);
+
             if (userTitleInProject == null)
             {
                 return NotFound();
@@ -148,19 +152,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: UserTitleInProjects/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var userTitleInProject = await _context.UserTitleInProjects.SingleOrDefaultAsync(m => m.UserTitleInProjectId == id);
-            _context.UserTitleInProjects.Remove(userTitleInProject);
-            await _context.SaveChangesAsync();
+            var userTitleInProject = await _uow.UserTitleInProjects.FindAsync(id);
+            _uow.UserTitleInProjects.Remove(userTitleInProject);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool UserTitleInProjectExists(int id)
+        private bool UserTitleInProjectExistsAsync(int id)
         {
-            return _context.UserTitleInProjects.Any(e => e.UserTitleInProjectId == id);
+            return _uow.UserTitleInProjects.Find(id) != null;
         }
     }
 }

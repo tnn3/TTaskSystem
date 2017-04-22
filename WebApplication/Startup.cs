@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL;
+using DAL.Extensions;
 using DAL.Helpers;
 using Domain.Identity;
+using Identity;
 using Interfaces;
 using Interfaces.UOW;
 using Microsoft.AspNetCore.Builder;
@@ -51,8 +53,9 @@ namespace WebApplication
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IDataContext, ApplicationDbContext>();
-            //services.AddScoped<IRepositoryProvider, EFRepositoryProvider<IDataContext>>();
+            services.AddScoped<IRepositoryProvider, EFRepositoryProvider<IDataContext>>();
             services.AddSingleton<IRepositoryFactory, EFRepositoryFactory>();
+            services.AddScoped<IUOW, UOW<IDataContext>>();
 
 
             services.AddMvc();
@@ -79,22 +82,40 @@ namespace WebApplication
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            //get the dependency injection engine
-            using (var serviceScope = 
-                app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            var dataContext = app.ApplicationServices.GetService<ApplicationDbContext>();
+            if (dataContext != null)
             {
-                var dataContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                if (Configuration.GetValue<bool>("DropDatabaseAtStartup"))
+                {
+                    dataContext.Database.EnsureDeleted();
+                }
+
                 dataContext.Database.Migrate();
+                dataContext.EnsureSeedData();
             }
 
             app.UseStaticFiles();
 
             app.UseIdentity();
 
+            // create default roles and users
+            app.EnsureDefaultUsersAndRoles();
+
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areaIdentityUserRoutesroute",
+                    template: "Identity/UserRoles/{action=Index}/{userId}/{roleId}",
+                    defaults: new {area = "Identity", controller = "UserRoles"}
+                );
+
+                routes.MapRoute(
+                    name: "arearoute",
+                    template: "{area:exists}/{controller}/{action=Index}/{id?}",
+                    defaults: new {controller = "Home"});
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

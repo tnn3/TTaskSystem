@@ -7,22 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
 
 namespace WebApplication.Controllers
 {
     public class AttachmentsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public AttachmentsController(ApplicationDbContext context)
+        public AttachmentsController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: Attachments
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Attachments.ToListAsync());
+            return View(await _uow.Attachments.AllAsync());
         }
 
         // GET: Attachments/Details/5
@@ -33,8 +34,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var attachment = await _context.Attachments
-                .SingleOrDefaultAsync(m => m.AttachmentId == id);
+            var attachment = await _uow.Attachments.FindAsync(id.Value);
             if (attachment == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(attachment);
-                await _context.SaveChangesAsync();
+                _uow.Attachments.Add(attachment);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(attachment);
@@ -73,7 +73,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var attachment = await _context.Attachments.SingleOrDefaultAsync(m => m.AttachmentId == id);
+            var attachment = await _uow.Attachments.FindAsync(id.Value);
             if (attachment == null)
             {
                 return NotFound();
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(attachment);
-                    await _context.SaveChangesAsync();
+                    _uow.Attachments.Update(attachment);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AttachmentExists(attachment.AttachmentId))
+                    if (!AttachmentExistsAsync(attachment.AttachmentId))
                     {
                         return NotFound();
                     }
@@ -124,8 +124,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var attachment = await _context.Attachments
-                .SingleOrDefaultAsync(m => m.AttachmentId == id);
+            var attachment = await _uow.Attachments.FindAsync(id.Value);
             if (attachment == null)
             {
                 return NotFound();
@@ -135,19 +134,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: Attachments/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var attachment = await _context.Attachments.SingleOrDefaultAsync(m => m.AttachmentId == id);
-            _context.Attachments.Remove(attachment);
-            await _context.SaveChangesAsync();
+            var attachment = await _uow.Attachments.FindAsync(id);
+            _uow.Attachments.Remove(attachment);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool AttachmentExists(int id)
+        private bool AttachmentExistsAsync(int id)
         {
-            return _context.Attachments.Any(e => e.AttachmentId == id);
+            return _uow.Attachments.Find(id) != null;
         }
     }
 }

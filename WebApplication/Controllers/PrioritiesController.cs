@@ -7,22 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
 
 namespace WebApplication.Controllers
 {
     public class PrioritiesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public PrioritiesController(ApplicationDbContext context)
+        public PrioritiesController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: Priorities
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Priorities.ToListAsync());
+            return View(await _uow.Priorities.AllAsync());
         }
 
         // GET: Priorities/Details/5
@@ -33,8 +34,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var priority = await _context.Priorities
-                .SingleOrDefaultAsync(m => m.PriorityId == id);
+            var priority = await _uow.Priorities.FindAsync(id.Value);
             if (priority == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(priority);
-                await _context.SaveChangesAsync();
+                _uow.Priorities.Add(priority);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(priority);
@@ -73,7 +73,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var priority = await _context.Priorities.SingleOrDefaultAsync(m => m.PriorityId == id);
+            var priority = await _uow.Priorities.FindAsync(id.Value);
             if (priority == null)
             {
                 return NotFound();
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(priority);
-                    await _context.SaveChangesAsync();
+                    _uow.Priorities.Update(priority);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PriorityExists(priority.PriorityId))
+                    if (!PriorityExistsAsync(priority.PriorityId))
                     {
                         return NotFound();
                     }
@@ -124,8 +124,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var priority = await _context.Priorities
-                .SingleOrDefaultAsync(m => m.PriorityId == id);
+            var priority = await _uow.Priorities.FindAsync(id.Value);
             if (priority == null)
             {
                 return NotFound();
@@ -135,19 +134,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: Priorities/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var priority = await _context.Priorities.SingleOrDefaultAsync(m => m.PriorityId == id);
-            _context.Priorities.Remove(priority);
-            await _context.SaveChangesAsync();
+            var priority = await _uow.Priorities.FindAsync(id);
+            _uow.Priorities.Remove(priority);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool PriorityExists(int id)
+        private bool PriorityExistsAsync(int id)
         {
-            return _context.Priorities.Any(e => e.PriorityId == id);
+            return _uow.Priorities.Find(id) != null;
         }
     }
 }

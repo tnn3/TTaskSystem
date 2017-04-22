@@ -7,22 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
 
 namespace WebApplication.Controllers
 {
     public class CustomFieldsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public CustomFieldsController(ApplicationDbContext context)
+        public CustomFieldsController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: CustomFields
         public async Task<IActionResult> Index()
         {
-            return View(await _context.CustomFields.ToListAsync());
+            return View(await _uow.CustomFields.AllAsync());
         }
 
         // GET: CustomFields/Details/5
@@ -33,8 +34,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var customField = await _context.CustomFields
-                .SingleOrDefaultAsync(m => m.CustomFieldId == id);
+            var customField = await _uow.CustomFields.FindAsync(id.Value);
             if (customField == null)
             {
                 return NotFound();
@@ -58,8 +58,8 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customField);
-                await _context.SaveChangesAsync();
+                _uow.CustomFields.Add(customField);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(customField);
@@ -73,7 +73,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var customField = await _context.CustomFields.SingleOrDefaultAsync(m => m.CustomFieldId == id);
+            var customField = await _uow.CustomFields.FindAsync(id.Value);
             if (customField == null)
             {
                 return NotFound();
@@ -97,12 +97,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(customField);
-                    await _context.SaveChangesAsync();
+                    _uow.CustomFields.Update(customField);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomFieldExists(customField.CustomFieldId))
+                    if (!CustomFieldExistsAsync(customField.CustomFieldId))
                     {
                         return NotFound();
                     }
@@ -124,8 +124,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var customField = await _context.CustomFields
-                .SingleOrDefaultAsync(m => m.CustomFieldId == id);
+            var customField = await _uow.CustomFields.FindAsync(id.Value);
             if (customField == null)
             {
                 return NotFound();
@@ -135,19 +134,19 @@ namespace WebApplication.Controllers
         }
 
         // POST: CustomFields/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var customField = await _context.CustomFields.SingleOrDefaultAsync(m => m.CustomFieldId == id);
-            _context.CustomFields.Remove(customField);
-            await _context.SaveChangesAsync();
+            var customField = await _uow.CustomFields.FindAsync(id);
+            _uow.CustomFields.Remove(customField);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool CustomFieldExists(int id)
+        private bool CustomFieldExistsAsync(int id)
         {
-            return _context.CustomFields.Any(e => e.CustomFieldId == id);
+            return _uow.CustomFields.Find(id) != null;
         }
     }
 }

@@ -35,11 +35,18 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\" />
+    <Folder Include="Areas\Identity\Controllers\" />
+    <Folder Include="Areas\Identity\Controllers\" />
+    <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Areas\Regular\" />
     <Folder Include="Data\" />
+    <Folder Include="Temp\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Identity\Identity.csproj" />
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

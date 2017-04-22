@@ -16,7 +16,7 @@
                     @Html.DisplayNameFor(model => model.AttachmentLocation)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.TimeUploaded)
+                    @Html.DisplayNameFor(model => model.UploadedOn)
                 </th>
             <th></th>
         </tr>
@@ -28,7 +28,7 @@
                 @Html.DisplayFor(modelItem => item.AttachmentLocation)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TimeUploaded)
+                @Html.DisplayFor(modelItem => item.UploadedOn)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AttachmentId">Edit</a> |
