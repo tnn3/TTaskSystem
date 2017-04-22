@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Domain;
 using Domain.Identity;
 using Interfaces;
 using Interfaces.UOW;
@@ -24,6 +23,7 @@ namespace DAL
         public IProjectRepository Projects => GetCustomRepository<IProjectRepository>();
         public IProjectTaskRepository ProjectTasks => GetCustomRepository<IProjectTaskRepository>();
         public IStatusRepository Statuses => GetCustomRepository<IStatusRepository>();
+        public IUserInProject UserInProjects => GetCustomRepository<IUserInProject>();
         public IUserTitleRepository UserTitles => GetCustomRepository<IUserTitleRepository>();
         public IUserTitleInProjectRepository UserTitleInProjects => GetCustomRepository<IUserTitleInProjectRepository>();
 

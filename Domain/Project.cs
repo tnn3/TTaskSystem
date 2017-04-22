@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Identity;
 
 namespace Domain
 {
@@ -11,7 +12,10 @@ namespace Domain
         public string ProjectDescription { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }
+
         public List<CustomField> CustomFields { get; set; }
         public List<ProjectTask> ProjectTasks { get; set; }
+        public List<UserInProject> UsersInProject { get; set; }
+        public List<UserTitleInProject> TitlesInProject { get; set; }
     }
 }

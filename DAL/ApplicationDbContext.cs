@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Domain;
 using Domain.Identity;
 using Interfaces;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,13 +15,14 @@ namespace DAL
         public DbSet<Domain.ChangeSet> ChangeSets { get; set; }
         public DbSet<Domain.CustomField> CustomFields { get; set; }
         public DbSet<Domain.CustomFieldValue> CustomFieldValues { get; set; }
-        public DbSet<Domain.Identity.ApplicationUser> People { get; set; }
+        public DbSet<ApplicationUser> People { get; set; }
         public DbSet<Domain.UserTitle> UserTitles { get; set; }
         public DbSet<Domain.UserTitleInProject> UserTitleInProjects { get; set; }
         public DbSet<Domain.Priority> Priorities { get; set; }
         public DbSet<Domain.Project> Projects { get; set; }
         public DbSet<Domain.Status> Statuses { get; set; }
         public DbSet<Domain.ProjectTask> ProjectTasks { get; set; }
+        public DbSet<Domain.UserInProject> UserInProjects { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

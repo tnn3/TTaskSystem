@@ -8,6 +8,7 @@ namespace Domain
     {
         public int PriorityId { get; set; }
         public string PriorityName { get; set; }
+
         public List<ProjectTask> ProjectTasks { get; set; }
     }
 }

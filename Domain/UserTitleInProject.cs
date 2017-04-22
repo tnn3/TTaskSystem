@@ -13,5 +13,7 @@ namespace Domain
 
         public int TitleId { get; set; }
         public UserTitle Title { get; set; }
+
+        public List<UserInProject> UsersWithTitleInProject { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Domain
     {
         public int ChangeId { get; set; }
         public string Before { get; set; }
-        public string After { get; set; }
+
         public int ChangeSetId { get; set; }
         public ChangeSet ChangeSet { get; set; }
     }
