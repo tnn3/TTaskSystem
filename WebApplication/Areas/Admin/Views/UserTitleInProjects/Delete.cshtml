@@ -12,18 +12,9 @@
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="UserTitleInProjectId" />
-        <dt>
-            @Html.DisplayNameFor(model => model.Project)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.ProjectId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Title.UserTitleId)
-        </dd>
+        
+        @Html.Partial(partialViewName: "_DetailsDelete", model: Model)
+
     </dl>
     
     <form asp-action="Delete">

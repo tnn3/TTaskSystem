@@ -23,6 +23,7 @@ namespace DAL
         public DbSet<Domain.Status> Statuses { get; set; }
         public DbSet<Domain.ProjectTask> ProjectTasks { get; set; }
         public DbSet<Domain.UserInProject> UserInProjects { get; set; }
+        public DbSet<Domain.StatusInProject> StatusInProjects { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

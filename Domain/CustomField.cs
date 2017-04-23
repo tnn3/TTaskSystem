@@ -16,7 +16,7 @@ namespace Domain
         public int MaxLength { get; set; }
         public bool IsRequired { get; set; }
 
-
+        public int ProjectId { get; set; }
         public Project Project { get; set; }
 
         public List<CustomFieldValue> CustomFieldValues { get; set; }

@@ -34,6 +34,8 @@ namespace DAL.Helpers
                   {typeof(IProjectRepository), dbContext => new ProjectRepository(dbContext)},
                   {typeof(IProjectTaskRepository), dbContext => new ProjectTaskRepository(dbContext)},
                   {typeof(IStatusRepository), dbContext => new StatusRepository(dbContext)},
+                  {typeof(IUserInProjectRepository), dbContext => new UserInProjectRepository(dbContext)},
+                  {typeof(IStatusInProjectRepository), dbContext => new StatusInProjectRepository(dbContext)}
             };
         }
         public Func<IDataContext, object> GetRepositoryFactoryForType<T>() where T : class

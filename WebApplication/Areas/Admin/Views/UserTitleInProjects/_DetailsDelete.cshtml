@@ -1,0 +1,15 @@
+@model Domain.UserTitleInProject
+
+<dt>
+    @Html.DisplayNameFor(model => model.Project)
+</dt>
+<dd>
+    @Html.DisplayFor(model => model.Project.ProjectName)
+</dd>
+<dt>
+    @Html.DisplayNameFor(model => model.Title)
+</dt>
+<dd>
+    @Html.DisplayFor(model => model.Title.TitleName)
+</dd>
+

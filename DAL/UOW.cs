@@ -26,6 +26,7 @@ namespace DAL
         public IUserInProject UserInProjects => GetCustomRepository<IUserInProject>();
         public IUserTitleRepository UserTitles => GetCustomRepository<IUserTitleRepository>();
         public IUserTitleInProjectRepository UserTitleInProjects => GetCustomRepository<IUserTitleInProjectRepository>();
+        public IStatusInProjectRepository StatusInProjects => GetCustomRepository<IStatusInProjectRepository>();
 
         public UOW(TContext context, IRepositoryProvider repositoryProvider)
         {

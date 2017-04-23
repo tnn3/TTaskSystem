@@ -10,18 +10,9 @@
     <h4>UserTitleInProject</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Project)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.ProjectId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Title.UserTitleId)
-        </dd>
+        
+        @Html.Partial(partialViewName: "_DetailsDelete", model: Model)
+
     </dl>
 </div>
 <div>

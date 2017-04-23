@@ -21,6 +21,7 @@ namespace Interfaces.UOW
         IUserInProject UserInProjects { get; }
         IUserTitleRepository UserTitles { get; }
         IUserTitleInProjectRepository UserTitleInProjects { get; }
+        IStatusInProjectRepository StatusInProjects { get; }
 
 
         int SaveChanges();

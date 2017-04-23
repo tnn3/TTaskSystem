@@ -92,7 +92,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("PossibleValues");
 
-                    b.Property<int?>("ProjectId");
+                    b.Property<int>("ProjectId");
 
                     b.HasKey("CustomFieldId");
 
@@ -255,6 +255,24 @@ namespace DAL.Migrations
                     b.HasKey("StatusId");
 
                     b.ToTable("Statuses");
+                });
+
+            modelBuilder.Entity("Domain.StatusInProject", b =>
+                {
+                    b.Property<int>("StatusInProjectId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ProjectId");
+
+                    b.Property<int>("StatusId");
+
+                    b.HasKey("StatusInProjectId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("StatusInProjects");
                 });
 
             modelBuilder.Entity("Domain.UserInProject", b =>
@@ -480,7 +498,18 @@ namespace DAL.Migrations
                         .HasForeignKey("ProjectId");
 
                     b.HasOne("Domain.Status", "Status")
-                        .WithMany("ProjectTasks")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+                });
+
+            modelBuilder.Entity("Domain.StatusInProject", b =>
+                {
+                    b.HasOne("Domain.Project", "Project")
+                        .WithMany("StatusInProjects")
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("Domain.Status", "Status")
+                        .WithMany("StatusInProjects")
                         .HasForeignKey("StatusId");
                 });
 

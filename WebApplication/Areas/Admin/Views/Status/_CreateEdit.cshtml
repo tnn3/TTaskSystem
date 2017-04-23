@@ -1,0 +1,10 @@
+@model Domain.Status
+
+<div class="form-group">
+    <label asp-for="StatusName" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="StatusName" class="form-control" />
+        <span asp-validation-for="StatusName" class="text-danger"></span>
+    </div>
+</div>
+

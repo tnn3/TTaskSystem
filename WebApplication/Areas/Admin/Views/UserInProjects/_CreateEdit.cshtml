@@ -1,0 +1,22 @@
+@model Domain.UserInProject
+
+<div class="form-group">
+    <label asp-for="UserTitleInProjectId" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <select asp-for="UserTitleInProjectId" class ="form-control" asp-items="ViewBag.UserTitleInProjectId"></select>
+    </div>
+</div>
+<div class="form-group">
+    <label asp-for="ApplicationUserId" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="ApplicationUserId" class="form-control" />
+        <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group">
+    <label asp-for="ProjectId" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <select asp-for="ProjectId" class ="form-control" asp-items="ViewBag.ProjectId"></select>
+    </div>
+</div>
+

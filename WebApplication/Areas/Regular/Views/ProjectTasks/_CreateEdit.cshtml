@@ -1,0 +1,24 @@
+@model Domain.ProjectTask
+
+<div class="form-group">
+    <label asp-for="TaskName" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="TaskName" class="form-control" />
+        <span asp-validation-for="TaskName" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group">
+    <label asp-for="Description" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group">
+    <label asp-for="DueDate" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="DueDate" class="form-control" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+</div>
+

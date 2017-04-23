@@ -1,0 +1,10 @@
+@model Domain.UserTitle
+
+<div class="form-group">
+    <label asp-for="TitleName" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="TitleName" class="form-control" />
+        <span asp-validation-for="TitleName" class="text-danger"></span>
+    </div>
+</div>
+

@@ -17,5 +17,6 @@ namespace Domain
         public List<ProjectTask> ProjectTasks { get; set; }
         public List<UserInProject> UsersInProject { get; set; }
         public List<UserTitleInProject> TitlesInProject { get; set; }
+        public List<StatusInProject> StatusInProjects { get; set; }
     }
 }

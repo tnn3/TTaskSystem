@@ -1,0 +1,10 @@
+@model Domain.Priority
+
+<div class="form-group">
+    <label asp-for="PriorityName" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input asp-for="PriorityName" class="form-control" />
+        <span asp-validation-for="PriorityName" class="text-danger"></span>
+    </div>
+</div>
+

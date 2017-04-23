@@ -15,9 +15,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Before)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.After)
-                </th>
             <th></th>
         </tr>
     </thead>
@@ -26,9 +23,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Before)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.After)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ChangeId">Edit</a> |
