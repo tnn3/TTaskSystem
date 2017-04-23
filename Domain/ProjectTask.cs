@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using Domain.Identity;
 
 namespace Domain
@@ -8,12 +8,21 @@ namespace Domain
     public class ProjectTask
     {
         public int ProjectTaskId { get; set; }
-        public string TaskName { get; set; }
-        public string Description { get; set; }
-        public DateTime DueDate { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Changed { get; set; }
 
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; }
+
+        [Required]
+        [MaxLength(300)]
+        public string Description { get; set; }
+
+        public DateTime? DueDate { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? Changed { get; set; }
+
+
+        #region ForeignKeys
 
         public int PriorityId { get; set; }
         public Priority Priority { get; set; }
@@ -34,5 +43,6 @@ namespace Domain
         public List<CustomFieldValue> CustomFieldValue { get; set; }
         public List<Attachment> Attachments { get; set; }
         public List<ChangeSet> ChangeSets { get; set; }
+        #endregion
     }
 }

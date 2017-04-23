@@ -23,7 +23,7 @@ namespace DAL
         public IProjectRepository Projects => GetCustomRepository<IProjectRepository>();
         public IProjectTaskRepository ProjectTasks => GetCustomRepository<IProjectTaskRepository>();
         public IStatusRepository Statuses => GetCustomRepository<IStatusRepository>();
-        public IUserInProject UserInProjects => GetCustomRepository<IUserInProject>();
+        public IUserInProjectRepository UserInProjects => GetCustomRepository<IUserInProjectRepository>();
         public IUserTitleRepository UserTitles => GetCustomRepository<IUserTitleRepository>();
         public IUserTitleInProjectRepository UserTitleInProjects => GetCustomRepository<IUserTitleInProjectRepository>();
         public IStatusInProjectRepository StatusInProjects => GetCustomRepository<IStatusInProjectRepository>();

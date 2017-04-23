@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
 using Interfaces.UOW;
+using WebApplication.Areas.Regular.ViewModels;
 
 namespace WebApplication.Areas.Regular.Controllers
 {
@@ -45,9 +46,24 @@ namespace WebApplication.Areas.Regular.Controllers
         }
 
         // GET: ProjectTasks/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var vm = new ProjectTaskViewModelCreateEdit()
+            {
+                StatusSelectList = new SelectList(
+                    items: await _uow.Statuses.AllAsync(),
+                    dataValueField: nameof(Status.StatusId),
+                    dataTextField: nameof(Status.Name)),
+                AssignedToSelectList = new SelectList(
+                    await _uow.UserInProjects.AllAsync(),
+                    nameof(UserInProject.UserId),
+                    nameof(UserInProject.UserId)),
+                PrioritySelectList = new SelectList(
+                    items: await _uow.Priorities.AllAsync(),
+                    dataValueField: nameof(Priority.PriorityId),
+                    dataTextField: nameof(Priority.Name))
+            };
+            return View(vm);
         }
 
         // POST: ProjectTasks/Create
@@ -55,15 +71,15 @@ namespace WebApplication.Areas.Regular.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectTaskId,TaskName,Description,DueDate,Created,Changed")] ProjectTask projectTask)
+        public async Task<IActionResult> Create(ProjectTaskViewModelCreateEdit vm)
         {
             if (ModelState.IsValid)
             {
-                _uow.ProjectTasks.Add(projectTask);
+                _uow.ProjectTasks.Add(vm.ProjectTask);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(projectTask);
+            return View(vm);
         }
 
         // GET: ProjectTasks/Edit/5
@@ -87,7 +103,7 @@ namespace WebApplication.Areas.Regular.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectTaskId,TaskName,Description,DueDate,Created,Changed")] ProjectTask projectTask)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjectTaskId,TaskName,Description,DueDate,Changed")] ProjectTask projectTask)
         {
             if (id != projectTask.ProjectTaskId)
             {

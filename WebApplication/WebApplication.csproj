@@ -37,7 +37,6 @@
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Areas\Identity\Controllers\" />
-    <Folder Include="Areas\Regular\ViewModels\" />
     <Folder Include="Data\" />
     <Folder Include="Temp\" />
   </ItemGroup>

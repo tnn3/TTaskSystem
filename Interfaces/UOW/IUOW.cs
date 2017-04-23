@@ -18,7 +18,7 @@ namespace Interfaces.UOW
         IProjectRepository Projects { get; }
         IProjectTaskRepository ProjectTasks { get; }
         IStatusRepository Statuses { get; }
-        IUserInProject UserInProjects { get; }
+        IUserInProjectRepository UserInProjects { get; }
         IUserTitleRepository UserTitles { get; }
         IUserTitleInProjectRepository UserTitleInProjects { get; }
         IStatusInProjectRepository StatusInProjects { get; }

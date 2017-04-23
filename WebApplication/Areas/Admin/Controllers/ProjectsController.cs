@@ -55,10 +55,11 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,ProjectName,ProjectDescription,CreatedOn,UpdatedOn")] Project project)
+        public async Task<IActionResult> Create([Bind("ProjectId,Name,Description")] Project project)
         {
             if (ModelState.IsValid)
             {
+                project.CreatedOn = DateTime.Now;
                 _uow.Projects.Add(project);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -87,7 +88,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,ProjectName,ProjectDescription,CreatedOn,UpdatedOn")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,Name,Description")] Project project)
         {
             if (id != project.ProjectId)
             {
@@ -98,6 +99,7 @@ namespace WebApplication.Areas.Admin.Controllers
             {
                 try
                 {
+                    project.UpdatedOn = DateTime.Now;
                     _uow.Projects.Update(project);
                     await _uow.SaveChangesAsync();
                 }

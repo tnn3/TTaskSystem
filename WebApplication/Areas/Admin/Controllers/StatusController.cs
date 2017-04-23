@@ -55,7 +55,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StatusId,StatusName")] Status status)
+        public async Task<IActionResult> Create([Bind("StatusId,Name")] Status status)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StatusId,StatusName")] Status status)
+        public async Task<IActionResult> Edit(int id, [Bind("StatusId,Name")] Status status)
         {
             if (id != status.StatusId)
             {

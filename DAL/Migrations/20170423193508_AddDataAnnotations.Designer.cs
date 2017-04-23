@@ -9,9 +9,10 @@ using Domain.Enums;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170423193508_AddDataAnnotations")]
+    partial class AddDataAnnotations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

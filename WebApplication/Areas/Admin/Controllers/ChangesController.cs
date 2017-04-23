@@ -50,7 +50,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ChangeId,Before,After")] Change change)
+        public async Task<IActionResult> Create([Bind("ChangeId,Before")] Change change)
         {
             if (ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ChangeId,Before,After")] Change change)
+        public async Task<IActionResult> Edit(int id, [Bind("ChangeId,Before")] Change change)
         {
             if (id != change.ChangeId)
             {

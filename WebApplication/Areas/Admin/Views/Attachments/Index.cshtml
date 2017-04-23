@@ -13,7 +13,7 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.AttachmentLocation)
+                    @Html.DisplayNameFor(model => model.Location)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.UploadedOn)
@@ -25,7 +25,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.AttachmentLocation)
+                @Html.DisplayFor(modelItem => item.Location)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UploadedOn)

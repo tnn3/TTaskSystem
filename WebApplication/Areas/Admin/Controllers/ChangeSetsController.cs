@@ -50,7 +50,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ChangeSetId,Comment,Time")] ChangeSet changeSet)
+        public async Task<IActionResult> Create([Bind("ChangeSetId,Comment")] ChangeSet changeSet)
         {
             if (ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ChangeSetId,Comment,Time")] ChangeSet changeSet)
+        public async Task<IActionResult> Edit(int id, [Bind("ChangeSetId,Comment")] ChangeSet changeSet)
         {
             if (id != changeSet.ChangeSetId)
             {

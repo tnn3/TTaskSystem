@@ -55,7 +55,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AttachmentId,AttachmentLocation,TimeUploaded")] Attachment attachment)
+        public async Task<IActionResult> Create([Bind("AttachmentId,Location")] Attachment attachment)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AttachmentId,AttachmentLocation,TimeUploaded")] Attachment attachment)
+        public async Task<IActionResult> Edit(int id, [Bind("AttachmentId,Location")] Attachment attachment)
         {
             if (id != attachment.AttachmentId)
             {

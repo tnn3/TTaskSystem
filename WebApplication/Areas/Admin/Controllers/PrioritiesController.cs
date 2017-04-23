@@ -55,7 +55,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PriorityId,PriorityName")] Priority priority)
+        public async Task<IActionResult> Create([Bind("PriorityId,Name")] Priority priority)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PriorityId,PriorityName")] Priority priority)
+        public async Task<IActionResult> Edit(int id, [Bind("PriorityId,Name")] Priority priority)
         {
             if (id != priority.PriorityId)
             {
