@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Identity;
 
 namespace Domain
@@ -18,12 +19,12 @@ namespace Domain
         public Priority Priority { get; set; }
 
         public int StatusId { get; set; }
-        public Status Status { get; set; }
+        public StatusInProject Status { get; set; }
 
-        public int AuthorId { get; set; }
+        public string AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
 
-        public int AssignedToId { get; set; }
+        public string AssignedToId { get; set; }
         public ApplicationUser AssignedTo { get; set; }
 
         public int ProjectId { get; set; }

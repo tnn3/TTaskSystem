@@ -10,8 +10,11 @@ namespace Domain.Identity
         //public string Firstname { get; set; }
         //public string Lastname { get; set; }
 
+        [InverseProperty(nameof(ProjectTask.Author))]
+        public List<ProjectTask> AuthorOfTasks { get; set; }
+
         [InverseProperty(nameof(ProjectTask.AssignedTo))]
-        public List<ProjectTask> ProjectTasks { get; set; }
+        public List<ProjectTask> AssignedTasks { get; set; }
 
         public List<ChangeSet> ChangeSets { get; set; }
 

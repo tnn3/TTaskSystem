@@ -8,7 +8,7 @@ namespace Domain
     public class UserTitle
     {
         public int UserTitleId { get; set; }
-        public string TitleName { get; set; }
+        public string Title { get; set; }
 
         public List<UserTitleInProject> TitlesInProjects { get; set; }
     }

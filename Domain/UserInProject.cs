@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Domain.Identity;
 
@@ -12,7 +13,7 @@ namespace Domain
         public int UserTitleInProjectId { get; set; }
         public UserTitleInProject TitleInProject { get; set; }
 
-        public int ApplicationUserId { get; set; }
+        public string UserId { get; set; }
         public ApplicationUser User { get; set; }
 
         public int ProjectId { get; set; }

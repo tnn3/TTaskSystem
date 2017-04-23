@@ -9,9 +9,10 @@ using Domain.Enums;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170423135753_DomainChanges")]
+    partial class DomainChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -56,7 +57,9 @@ namespace DAL.Migrations
                     b.Property<int>("ChangeSetId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ChangerId");
+                    b.Property<int>("ChangerId");
+
+                    b.Property<string>("ChangerId1");
 
                     b.Property<string>("Comment");
 
@@ -66,7 +69,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ChangeSetId");
 
-                    b.HasIndex("ChangerId");
+                    b.HasIndex("ChangerId1");
 
                     b.HasIndex("ProjectTaskId");
 
@@ -204,9 +207,13 @@ namespace DAL.Migrations
                     b.Property<int>("ProjectTaskId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AssignedToId");
+                    b.Property<int>("AssignedToId");
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AssignedToId1");
+
+                    b.Property<int>("AuthorId");
+
+                    b.Property<string>("AuthorId1");
 
                     b.Property<DateTime>("Changed");
 
@@ -226,9 +233,9 @@ namespace DAL.Migrations
 
                     b.HasKey("ProjectTaskId");
 
-                    b.HasIndex("AssignedToId");
+                    b.HasIndex("AssignedToId1");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AuthorId1");
 
                     b.HasIndex("PriorityId");
 
@@ -276,7 +283,9 @@ namespace DAL.Migrations
 
                     b.Property<int>("ProjectId");
 
-                    b.Property<string>("UserId");
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
 
                     b.Property<int>("UserTitleInProjectId");
 
@@ -284,7 +293,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.HasIndex("UserTitleInProjectId");
 
@@ -446,7 +455,7 @@ namespace DAL.Migrations
                 {
                     b.HasOne("Domain.Identity.ApplicationUser", "Changer")
                         .WithMany("ChangeSets")
-                        .HasForeignKey("ChangerId");
+                        .HasForeignKey("ChangerId1");
 
                     b.HasOne("Domain.ProjectTask", "ProjectTask")
                         .WithMany("ChangeSets")
@@ -475,11 +484,11 @@ namespace DAL.Migrations
                 {
                     b.HasOne("Domain.Identity.ApplicationUser", "AssignedTo")
                         .WithMany("AssignedTasks")
-                        .HasForeignKey("AssignedToId");
+                        .HasForeignKey("AssignedToId1");
 
                     b.HasOne("Domain.Identity.ApplicationUser", "Author")
                         .WithMany("AuthorOfTasks")
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId1");
 
                     b.HasOne("Domain.Priority", "Priority")
                         .WithMany("ProjectTasks")
@@ -513,7 +522,7 @@ namespace DAL.Migrations
 
                     b.HasOne("Domain.Identity.ApplicationUser", "User")
                         .WithMany("UserInProjects")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
 
                     b.HasOne("Domain.UserTitleInProject", "TitleInProject")
                         .WithMany("UsersWithTitleInProject")

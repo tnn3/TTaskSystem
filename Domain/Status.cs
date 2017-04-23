@@ -7,7 +7,7 @@ namespace Domain
     public class Status
     {
         public int StatusId { get; set; }
-        public string StatusName { get; set; }
+        public string Name { get; set; }
 
         public List<StatusInProject> StatusInProjects { get; set; }
     }

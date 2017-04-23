@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Domain.Identity;
 
@@ -14,7 +15,7 @@ namespace Domain
         public int ProjectTaskId { get; set; }
         public ProjectTask ProjectTask { get; set; }
 
-        public int ApplicationUserId { get; set; }
+        public string ChangerId { get; set; }
         public ApplicationUser Changer { get; set; }
 
         public List<Change> Changes { get; set; }

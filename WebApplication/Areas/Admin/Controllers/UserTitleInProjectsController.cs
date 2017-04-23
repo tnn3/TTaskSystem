@@ -53,11 +53,11 @@ namespace WebApplication.Areas.Admin.Controllers
                 ProjectSelectList = new SelectList(
                     items: await _uow.Projects.AllAsync(),
                     dataValueField: nameof(Project.ProjectId),
-                    dataTextField: nameof(Project.ProjectName)),
+                    dataTextField: nameof(Project.Name)),
                 TitleSelectList = new SelectList(
                     items: await _uow.UserTitles.AllAsync(),
                     dataValueField: nameof(UserTitle.UserTitleId),
-                    dataTextField: nameof(UserTitle.TitleName))
+                    dataTextField: nameof(UserTitle.Title))
             };
 
             return View(vm);
@@ -80,12 +80,12 @@ namespace WebApplication.Areas.Admin.Controllers
             vm.ProjectSelectList = new SelectList(
                 items: await _uow.Projects.AllAsync(),
                 dataValueField: nameof(Project.ProjectId),
-                dataTextField: nameof(Project.ProjectName),
+                dataTextField: nameof(Project.Name),
                 selectedValue: vm.UserTitleInProject.ProjectId);
             vm.TitleSelectList = new SelectList(
                 items: await _uow.UserTitles.AllAsync(),
                 dataValueField: nameof(UserTitle.UserTitleId),
-                dataTextField: nameof(UserTitle.TitleName),
+                dataTextField: nameof(UserTitle.Title),
                 selectedValue: vm.UserTitleInProject.TitleId);
             return View(vm);
         }
@@ -111,12 +111,12 @@ namespace WebApplication.Areas.Admin.Controllers
                 ProjectSelectList = new SelectList(
                     items: await _uow.Projects.AllAsync(),
                     dataValueField: nameof(Project.ProjectId),
-                    dataTextField: nameof(Project.ProjectName)),
+                    dataTextField: nameof(Project.Name)),
 
                 TitleSelectList = new SelectList(
                     items: await _uow.UserTitles.AllAsync(),
                     dataValueField: nameof(UserTitle.UserTitleId),
-                    dataTextField: nameof(UserTitle.TitleName))
+                    dataTextField: nameof(UserTitle.Title))
             };
 
             return View(vm);
@@ -158,12 +158,12 @@ namespace WebApplication.Areas.Admin.Controllers
             vm.ProjectSelectList = new SelectList(
                 items: await _uow.Projects.AllAsync(),
                 dataValueField: nameof(Project.ProjectId),
-                dataTextField: nameof(Project.ProjectName),
+                dataTextField: nameof(Project.Name),
                 selectedValue: vm.UserTitleInProject.ProjectId);
             vm.TitleSelectList = new SelectList(
                 items: await _uow.UserTitles.AllAsync(),
                 dataValueField: nameof(UserTitle.UserTitleId),
-                dataTextField: nameof(UserTitle.TitleName),
+                dataTextField: nameof(UserTitle.Title),
                 selectedValue: vm.UserTitleInProject.TitleId);
 
             return View(vm);

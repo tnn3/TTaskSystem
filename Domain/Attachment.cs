@@ -7,7 +7,7 @@ namespace Domain
     public class Attachment
     {
         public int AttachmentId { get; set; }
-        public string AttachmentLocation { get; set; }
+        public string Location { get; set; }
         public DateTime UploadedOn { get; set; }
 
         public int ProjectTaskId { get; set; }
