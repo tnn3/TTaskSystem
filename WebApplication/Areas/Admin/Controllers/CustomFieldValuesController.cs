@@ -7,24 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
+using Interfaces.UOW;
+using WebApplication.Areas.Admin.ViewModels;
 
 namespace WebApplication.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class CustomFieldValuesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUOW _uow;
 
-        public CustomFieldValuesController(ApplicationDbContext context)
+        public CustomFieldValuesController(IUOW uow)
         {
-            _context = context;    
+            _uow = uow;    
         }
 
         // GET: Admin/CustomFieldValues
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.CustomFieldValues.Include(c => c.CustomField).Include(c => c.ProjectTask);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _uow.CustomFieldValues.AllAsyncWithIncludes());
         }
 
         // GET: Admin/CustomFieldValues/Details/5
@@ -34,11 +35,7 @@ namespace WebApplication.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            var customFieldValue = await _context.CustomFieldValues
-                .Include(c => c.CustomField)
-                .Include(c => c.ProjectTask)
-                .SingleOrDefaultAsync(m => m.CustomFieldValueId == id);
+            var customFieldValue = await _uow.CustomFieldValues.FindAsyncWithIncludes(id.Value);
             if (customFieldValue == null)
             {
                 return NotFound();
@@ -48,11 +45,20 @@ namespace WebApplication.Areas.Admin.Controllers
         }
 
         // GET: Admin/CustomFieldValues/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CustomFieldId"] = new SelectList(_context.CustomFields, "CustomFieldId", "CustomFieldId");
-            ViewData["ProjectTaskId"] = new SelectList(_context.ProjectTasks, "ProjectTaskId", "ProjectTaskId");
-            return View();
+            var vm = new CustomFieldValuesCreateEditViewModel()
+            {
+                ProjectTaskSelectList = new SelectList(
+                    items: await _uow.ProjectTasks.AllAsync(),
+                    dataValueField: nameof(ProjectTask.ProjectTaskId),
+                    dataTextField: nameof(ProjectTask.Name)),
+                CustomFieldSelectList = new SelectList(
+                    items: await _uow.CustomFields.AllAsync(),
+                    dataValueField: nameof(CustomField.CustomFieldId),
+                    dataTextField: nameof(CustomField.FieldName))
+            };
+            return View(vm);
         }
 
         // POST: Admin/CustomFieldValues/Create
@@ -60,17 +66,25 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomFieldValueId,FieldValue,CustomFieldId,ProjectTaskId")] CustomFieldValue customFieldValue)
+        public async Task<IActionResult> Create(CustomFieldValuesCreateEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customFieldValue);
-                await _context.SaveChangesAsync();
+                _uow.CustomFieldValues.Add(vm.CustomFieldValue);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["CustomFieldId"] = new SelectList(_context.CustomFields, "CustomFieldId", "CustomFieldId", customFieldValue.CustomFieldId);
-            ViewData["ProjectTaskId"] = new SelectList(_context.ProjectTasks, "ProjectTaskId", "ProjectTaskId", customFieldValue.ProjectTaskId);
-            return View(customFieldValue);
+
+            vm.ProjectTaskSelectList = new SelectList(
+                items: await _uow.ProjectTasks.AllAsync(),
+                dataValueField: nameof(ProjectTask.ProjectTaskId),
+                dataTextField: nameof(ProjectTask.Name));
+
+            vm.CustomFieldSelectList = new SelectList(
+                items: await _uow.CustomFields.AllAsync(),
+                dataValueField: nameof(CustomField.CustomFieldId),
+                dataTextField: nameof(CustomField.FieldName));
+            return View(vm);
         }
 
         // GET: Admin/CustomFieldValues/Edit/5
@@ -81,14 +95,25 @@ namespace WebApplication.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var customFieldValue = await _context.CustomFieldValues.SingleOrDefaultAsync(m => m.CustomFieldValueId == id);
+            var customFieldValue = await _uow.CustomFieldValues.FindAsyncWithIncludes(id.Value);
             if (customFieldValue == null)
             {
                 return NotFound();
             }
-            ViewData["CustomFieldId"] = new SelectList(_context.CustomFields, "CustomFieldId", "CustomFieldId", customFieldValue.CustomFieldId);
-            ViewData["ProjectTaskId"] = new SelectList(_context.ProjectTasks, "ProjectTaskId", "ProjectTaskId", customFieldValue.ProjectTaskId);
-            return View(customFieldValue);
+
+            var vm = new CustomFieldValuesCreateEditViewModel()
+            {
+                CustomFieldValue = customFieldValue,
+                ProjectTaskSelectList = new SelectList(
+                    items: await _uow.ProjectTasks.AllAsync(),
+                    dataValueField: nameof(ProjectTask.ProjectTaskId),
+                    dataTextField: nameof(ProjectTask.Name)),
+                CustomFieldSelectList = new SelectList(
+                    items: await _uow.CustomFields.AllAsync(),
+                    dataValueField: nameof(CustomField.CustomFieldId),
+                    dataTextField: nameof(CustomField.FieldName))
+            };
+            return View(vm);
         }
 
         // POST: Admin/CustomFieldValues/Edit/5
@@ -96,9 +121,9 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomFieldValueId,FieldValue,CustomFieldId,ProjectTaskId")] CustomFieldValue customFieldValue)
+        public async Task<IActionResult> Edit(int id, CustomFieldValuesCreateEditViewModel vm)
         {
-            if (id != customFieldValue.CustomFieldValueId)
+            if (id != vm.CustomFieldValue.CustomFieldValueId)
             {
                 return NotFound();
             }
@@ -107,12 +132,12 @@ namespace WebApplication.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(customFieldValue);
-                    await _context.SaveChangesAsync();
+                    _uow.CustomFieldValues.Update(vm.CustomFieldValue);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomFieldValueExists(customFieldValue.CustomFieldValueId))
+                    if (!CustomFieldValueExistsAsync(vm.CustomFieldValue.CustomFieldValueId))
                     {
                         return NotFound();
                     }
@@ -123,9 +148,18 @@ namespace WebApplication.Areas.Admin.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["CustomFieldId"] = new SelectList(_context.CustomFields, "CustomFieldId", "CustomFieldId", customFieldValue.CustomFieldId);
-            ViewData["ProjectTaskId"] = new SelectList(_context.ProjectTasks, "ProjectTaskId", "ProjectTaskId", customFieldValue.ProjectTaskId);
-            return View(customFieldValue);
+
+            vm.ProjectTaskSelectList = new SelectList(
+                items: await _uow.ProjectTasks.AllAsync(),
+                dataValueField: nameof(ProjectTask.ProjectTaskId),
+                dataTextField: nameof(ProjectTask.Name));
+
+            vm.CustomFieldSelectList = new SelectList(
+                items: await _uow.CustomFields.AllAsync(),
+                dataValueField: nameof(CustomField.CustomFieldId),
+                dataTextField: nameof(CustomField.FieldName));
+
+            return View(vm);
         }
 
         // GET: Admin/CustomFieldValues/Delete/5
@@ -135,11 +169,7 @@ namespace WebApplication.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            var customFieldValue = await _context.CustomFieldValues
-                .Include(c => c.CustomField)
-                .Include(c => c.ProjectTask)
-                .SingleOrDefaultAsync(m => m.CustomFieldValueId == id);
+            var customFieldValue = await _uow.CustomFieldValues.FindAsyncWithIncludes(id.Value);
             if (customFieldValue == null)
             {
                 return NotFound();
@@ -149,19 +179,19 @@ namespace WebApplication.Areas.Admin.Controllers
         }
 
         // POST: Admin/CustomFieldValues/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var customFieldValue = await _context.CustomFieldValues.SingleOrDefaultAsync(m => m.CustomFieldValueId == id);
-            _context.CustomFieldValues.Remove(customFieldValue);
-            await _context.SaveChangesAsync();
+            var customFieldValue = await _uow.CustomFieldValues.FindAsyncWithIncludes(id);
+            _uow.CustomFieldValues.Remove(customFieldValue);
+            await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool CustomFieldValueExists(int id)
+        private bool CustomFieldValueExistsAsync(int id)
         {
-            return _context.CustomFieldValues.Any(e => e.CustomFieldValueId == id);
+            return _uow.CustomFieldValues.FindAsync(id) != null;
         }
     }
 }

@@ -1,4 +1,4 @@
-@model Domain.CustomFieldValue
+@model WebApplication.Areas.Admin.ViewModels.CustomFieldValuesCreateEditViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -12,22 +12,22 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="FieldValue" class="col-md-2 control-label"></label>
+            <label asp-for="CustomFieldValue.FieldValue" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="FieldValue" class="form-control" />
-                <span asp-validation-for="FieldValue" class="text-danger"></span>
+                <span asp-validation-for="CustomFieldValue.FieldValue" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="CustomFieldId" class="col-md-2 control-label"></label>
+            <label asp-for="CustomFieldValue.CustomFieldId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="CustomFieldId" class ="form-control" asp-items="ViewBag.CustomFieldId"></select>
+                <select asp-for="CustomFieldValue.CustomFieldId" class ="form-control" asp-items="CustomFieldSelectList"></select>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="ProjectTaskId" class="col-md-2 control-label"></label>
+            <label asp-for="CustomFieldValue.ProjectTaskId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="ProjectTaskId" class ="form-control" asp-items="ViewBag.ProjectTaskId"></select>
+                <select asp-for="CustomFieldValue.ProjectTaskId" class ="form-control" asp-items="ProjectTaskSelectList"></select>
             </div>
         </div>
         <div class="form-group">
