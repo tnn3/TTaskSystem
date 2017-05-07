@@ -1,0 +1,246 @@
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData[index: "Title"] - WebApplication</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <environment names="Development">
+        @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />*@
+        
+        <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="~/admin/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- jvectormap -->
+        <link rel="stylesheet" href="~/admin/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="~/admin/dist/css/AdminLTE.min.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+        folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    @Html.Raw(value: JavaScriptSnippet.FullScript)
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <header class="main-header">
+
+        <!-- Logo -->
+        <a href="index2.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>TT</b>S</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>TTask</b>System</span>
+        </a>
+
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    @await Html.PartialAsync("_LoginPartial")
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span>User name</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">Settings</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class="active treeview">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i> <span>Projects</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="active"><a asp-area="Admin" asp-controller="Projects" asp-action="Index"><i class="fa fa-circle-o"></i>Projects</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-files-o"></i>
+                    <span>Changes</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
+                </ul>
+            </li>
+            <li>
+                <a asp-area="Regular" asp-controller="ProjectTasks" asp-action="Index">
+                    <i class="fa fa-th"></i> <span>Tasks</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-pie-chart"></i>
+                    <span>Priorities</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a asp-area="Admin" asp-controller="Attachments" asp-action="Index"><i class="fa fa-circle-o"></i> Attachments</a></li>
+                    <li><a asp-area="Admin" asp-controller="Changes" asp-action="Index"><i class="fa fa-circle-o"></i> Changes</a></li>
+                    <li><a asp-area="Admin" asp-controller="ChangeSets" asp-action="Index"><i class="fa fa-circle-o"></i> ChangeSets</a></li>
+                    <li><a asp-area="Admin" asp-controller="CustomFields" asp-action="Index"><i class="fa fa-circle-o"></i> CustomFields</a></li>
+                    <li><a asp-area="Admin" asp-controller="Priorities" asp-action="Index"><i class="fa fa-circle-o"></i> Priorities</a></li>
+                    <li><a asp-area="Admin" asp-controller="Status" asp-action="Index"><i class="fa fa-circle-o"></i> Statuses</a></li>
+                    <li><a asp-area="Admin" asp-controller="StatusInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> StatusInProjects</a></li>
+                    <li><a asp-area="Admin" asp-controller="UserTitleInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> UserTitleInProjects</a></li>
+                    <li><a asp-area="Admin" asp-controller="UserTitles" asp-action="Index"><i class="fa fa-circle-o"></i> UserTitles</a></li>
+                    <li><a asp-area="Admin" asp-controller="UserInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> UserInProjects</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-laptop"></i>
+                    <span>Statuses</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href=""><i class="fa fa-circle-o"></i> General</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-edit"></i> <span>User titles</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href=""><i class="fa fa-circle-o"></i> General Elements</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-table"></i> <span>Identity</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a asp-area="Identity" asp-controller="IdentityUsers" asp-action="Index"><i class="fa fa-circle-o"></i> Users</a></li>
+                    <li><a asp-area="Identity" asp-controller="IdentityRoles" asp-action="Index"><i class="fa fa-circle-o"></i> Roles</a></li>
+                    <li><a asp-area="Identity" asp-controller="IdentityUserRoles" asp-action="Index"><i class="fa fa-circle-o"></i> User roles</a></li>
+
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Dashboard
+            <small>Version 2.0</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        @RenderBody()
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+    
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2017 <a href="#">TTaskSystem</a>.</strong> All rights
+        reserved.
+    </footer>
+<div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+    <environment names="Development">
+        @*<script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>*@
+        
+        <!-- jQuery 2.2.3 -->
+        <script src="~/admin/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <!-- Bootstrap 3.3.7 -->
+        <script src="~/admin/bootstrap/js/bootstrap.min.js"></script>
+        <!-- FastClick -->
+        <script src="~/admin/plugins/fastclick/fastclick.js"></script>
+        <!-- AdminLTE App -->
+        <script src="~/admin/dist/js/app.min.js"></script>
+        <!-- Sparkline -->
+        <script src="~/admin/plugins/sparkline/jquery.sparkline.min.js"></script>
+        <!-- jvectormap -->
+        <script src="~/admin/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+        <script src="~/admin/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+        <!-- SlimScroll 1.3.0 -->
+        <script src="~/admin/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- ChartJS 1.0.1 -->
+        <script src="~/admin/plugins/chartjs/Chart.min.js"></script>
+        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+        <script src="~/admin/dist/js/pages/dashboard2.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="~/admin/dist/js/demo.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+        @RenderSection(name: "Scripts", required: false)
+</body>
+</html>

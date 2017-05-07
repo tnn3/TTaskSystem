@@ -46,6 +46,7 @@
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Data\" />
     <Folder Include="Resources\" />
+    <Folder Include="wwwroot\admin\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
