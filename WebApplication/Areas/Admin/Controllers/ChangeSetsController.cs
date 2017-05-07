@@ -1,19 +1,21 @@
 using System.Threading.Tasks;
 using Domain;
-using Interfaces.UOW;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ChangeSetsController : Controller
     {
-        private readonly IUOW _uow;
+        private readonly IApplicationUnitOfWork _uow;
 
-        public ChangeSetsController(IUOW uow)
+        public ChangeSetsController(IApplicationUnitOfWork uow)
         {
-            _uow = uow;    
+            _uow = uow;
         }
 
         // GET: ChangeSets
@@ -145,4 +147,5 @@ namespace WebApplication.Areas.Admin.Controllers
             return _uow.ChangeSets.Find(id) != null;
         }
     }
+
 }

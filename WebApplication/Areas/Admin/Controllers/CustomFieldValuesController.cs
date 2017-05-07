@@ -5,21 +5,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
+using Interfaces;
 using Domain;
-using Interfaces.UOW;
+using Microsoft.AspNetCore.Authorization;
 using WebApplication.Areas.Admin.ViewModels;
 
 namespace WebApplication.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize (Roles = "Admin")]
     public class CustomFieldValuesController : Controller
     {
-        private readonly IUOW _uow;
+        private readonly IApplicationUnitOfWork _uow;
 
-        public CustomFieldValuesController(IUOW uow)
+        public CustomFieldValuesController(IApplicationUnitOfWork uow)
         {
-            _uow = uow;    
+            _uow = uow;
         }
 
         // GET: Admin/CustomFieldValues
@@ -194,4 +195,5 @@ namespace WebApplication.Areas.Admin.Controllers
             return _uow.CustomFieldValues.FindAsync(id) != null;
         }
     }
+
 }

@@ -1,22 +1,22 @@
-@model Domain.UserInProject
+@model WebApplication.Areas.Admin.ViewModels.UserInProjectCreateEditViewModel
 
 <div class="form-group">
-    <label asp-for="UserTitleInProjectId" class="col-md-2 control-label"></label>
+    <label asp-for="UserInProject.UserTitleInProjectId" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <select asp-for="UserTitleInProjectId" class ="form-control" asp-items="ViewBag.UserTitleInProjectId"></select>
+        <select asp-for="UserInProject.UserTitleInProjectId" class ="form-control" asp-items="TitleSelectList"></select>
     </div>
 </div>
 <div class="form-group">
-    <label asp-for="UserId" class="col-md-2 control-label"></label>
+    <label asp-for="UserInProject.UserId" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <input asp-for="UserId" class="form-control" />
-        <span asp-validation-for="UserId" class="text-danger"></span>
+        <input asp-for="UserInProject.UserId" class="form-control" />
+        <span asp-validation-for="UserInProject.UserId" class="text-danger"></span>
     </div>
 </div>
 <div class="form-group">
-    <label asp-for="ProjectId" class="col-md-2 control-label"></label>
+    <label asp-for="UserInProject.ProjectId" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <select asp-for="ProjectId" class ="form-control" asp-items="ViewBag.ProjectId"></select>
+        <select asp-for="UserInProject.ProjectId" class ="form-control" asp-items="ProjectSelectList"></select>
     </div>
 </div>
 

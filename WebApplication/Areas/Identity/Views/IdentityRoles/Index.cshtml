@@ -1,0 +1,53 @@
+@model IEnumerable<AspNetCore.Identity.Uow.Models.IdentityRole>
+
+@{
+    ViewData[index: "Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(expression: model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(expression: model => model.NormalizedName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(expression: model => model.Users)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(expression: modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(expression: modelItem => item.NormalizedName)
+                </td>
+                <td>
+                    @item.Users.Count
+                    @if (item.Users.Count > 0)
+                    {
+                        var users = item.Users.Take(count: 3).Select(selector: r => r.User.Email);
+                        <text>(</text>@string.Join(separator: ", ", values: users)<text>)</text>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdentityRoleId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdentityRoleId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdentityRoleId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

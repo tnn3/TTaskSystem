@@ -6,19 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
+using Interfaces;
 using Domain;
-using Interfaces.UOW;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class UserTitlesController : Controller
     {
-        private readonly IUOW _uow;
+        private readonly IApplicationUnitOfWork _uow;
 
-        public UserTitlesController(IUOW uow)
+        public UserTitlesController(IApplicationUnitOfWork uow)
         {
-            _uow = uow;    
+            _uow = uow;
         }
 
         // GET: UserTitles
@@ -150,4 +152,5 @@ namespace WebApplication.Areas.Admin.Controllers
             return _uow.UserTitles.Find(id) != null;
         }
     }
+
 }

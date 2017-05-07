@@ -5,20 +5,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
+using Interfaces;
 using Domain;
-using Interfaces.UOW;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProjectsController : Controller
     {
-        private readonly IUOW _uow;
+        private readonly IApplicationUnitOfWork _uow;
 
-        public ProjectsController(IUOW uow)
+        public ProjectsController(IApplicationUnitOfWork uow)
         {
-            _uow = uow;    
+            _uow = uow;
         }
 
         // GET: Projects
@@ -152,4 +153,5 @@ namespace WebApplication.Areas.Admin.Controllers
             return _uow.Projects.Find(id) != null;
         }
     }
+
 }

@@ -11,6 +11,13 @@
   <PropertyGroup>
     <UserSecretsId>aspnet-WebApplication-c15e2dde-8084-41fd-bf35-1526d5ebd40d</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Temp\**" />
+    <Content Remove="Temp\**" />
+    <EmbeddedResource Remove="Temp\**" />
+    <None Remove="Temp\**" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
@@ -38,12 +45,13 @@
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Data\" />
-    <Folder Include="Temp\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
-    <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\Identity\Identity.csproj" />
+    <ProjectReference Include="..\DAL.EntityFrameworkCore\DAL.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\AspNetCore.Identity.Extensions\AspNetCore.Identity.Extensions.csproj" />
+    <ProjectReference Include="..\AspNetCore.Identity.Uow\AspNetCore.Identity.Uow.csproj" />
     <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
   </ItemGroup>
 

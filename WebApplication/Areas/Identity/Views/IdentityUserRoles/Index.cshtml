@@ -1,0 +1,49 @@
+@model IEnumerable<AspNetCore.Identity.Uow.Models.IdentityUserRole>
+
+@{
+    ViewData[index: "Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(expression: model => model.Role)
+            </th>
+            <th>
+                @Html.DisplayNameFor(expression: model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var prevrolename = "";
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (prevrolename != item.Role.Name)
+                    {
+                        @Html.DisplayFor(expression: modelItem => item.Role.Name)
+                        prevrolename = item.Role.Name;
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(expression: modelItem => item.User.Email)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdentityUserRoleId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdentityUserRoleId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdentityUserRoleId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

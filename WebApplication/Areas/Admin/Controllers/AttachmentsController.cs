@@ -7,18 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
-using Interfaces.UOW;
+using Microsoft.AspNetCore.Authorization;
+using Interfaces;
 
 namespace WebApplication.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class AttachmentsController : Controller
     {
-        private readonly IUOW _uow;
+        private readonly IApplicationUnitOfWork _uow;
 
-        public AttachmentsController(IUOW uow)
+        public AttachmentsController(IApplicationUnitOfWork uow)
         {
-            _uow = uow;    
+            _uow = uow;
         }
 
         // GET: Attachments

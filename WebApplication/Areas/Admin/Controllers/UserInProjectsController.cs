@@ -2,24 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
 using Domain;
-using Interfaces.UOW;
+using Microsoft.AspNetCore.Authorization;
 using WebApplication.Areas.Admin.ViewModels;
 
 namespace WebApplication.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class UserInProjectsController : Controller
     {
-        private readonly IUOW _uow;
+        private readonly IApplicationUnitOfWork _uow;
 
-        public UserInProjectsController(IUOW uow)
+        public UserInProjectsController(IApplicationUnitOfWork uow)
         {
-            _uow = uow;    
+            _uow = uow;
         }
 
         // GET: UserInProjects
@@ -192,4 +193,5 @@ namespace WebApplication.Areas.Admin.Controllers
             return _uow.UserInProjects.FindAsync(id) != null;
         }
     }
+
 }

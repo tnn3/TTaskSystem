@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApplication</title>
+    <title>@ViewData[index: "Title"] - WebApplication</title>
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -16,58 +16,58 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    @Html.Raw(JavaScriptSnippet.FullScript)
+    @Html.Raw(value: JavaScriptSnippet.FullScript)
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">WebApplication</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="Admin" asp-controller="Projects" asp-action="Index">Projects</a></li>
-                    <li><a asp-area="Regular" asp-controller="ProjectTasks" asp-action="Index">Tasks</a></li>
-                    
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Others <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-area="Admin" asp-controller="Attachments" asp-action="Index">Attachments</a></li>
-                            <li><a asp-area="Admin" asp-controller="Changes" asp-action="Index">Changes</a></li>
-                            <li><a asp-area="Admin" asp-controller="ChangeSets" asp-action="Index">ChangeSets</a></li>
-                            <li><a asp-area="Admin" asp-controller="CustomFields" asp-action="Index">CustomFields</a></li>
-                            <li><a asp-area="Admin" asp-controller="Priorities" asp-action="Index">Priorities</a></li>
-                            <li><a asp-area="Admin" asp-controller="Status" asp-action="Index">Statuses</a></li>
-                            <li><a asp-area="Admin" asp-controller="StatusInProjects" asp-action="Index">StatusInProjects</a></li>
-                            <li><a asp-area="Admin" asp-controller="UserTitleInProjects" asp-action="Index">UserTitleInProjects</a></li>
-                            <li><a asp-area="Admin" asp-controller="UserTitles" asp-action="Index">UserTitles</a></li>
-                            <li><a asp-area="Admin" asp-controller="UserInProjects" asp-action="Index">UserInProjects</a></li>
-                            <li role="separator" class="divider"></li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Identity <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-area="Identity" asp-controller="Users" asp-action="Index">Users</a></li>
-                            <li><a asp-area="Identity" asp-controller="Roles" asp-action="Index">Roles</a></li>
-                            <li><a asp-area="Identity" asp-controller="UserRoles" asp-action="Index">User roles</a></li>
-                            <li role="separator" class="divider"></li>
-                        </ul>
-                    </li>
-
-                </ul>
-                
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">WebApplication</a>
         </div>
-    </nav>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-area="Admin" asp-controller="Projects" asp-action="Index">Projects</a></li>
+                <li><a asp-area="Regular" asp-controller="ProjectTasks" asp-action="Index">Tasks</a></li>
+                    
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Others <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-area="Admin" asp-controller="Attachments" asp-action="Index">Attachments</a></li>
+                        <li><a asp-area="Admin" asp-controller="Changes" asp-action="Index">Changes</a></li>
+                        <li><a asp-area="Admin" asp-controller="ChangeSets" asp-action="Index">ChangeSets</a></li>
+                        <li><a asp-area="Admin" asp-controller="CustomFields" asp-action="Index">CustomFields</a></li>
+                        <li><a asp-area="Admin" asp-controller="Priorities" asp-action="Index">Priorities</a></li>
+                        <li><a asp-area="Admin" asp-controller="Status" asp-action="Index">Statuses</a></li>
+                        <li><a asp-area="Admin" asp-controller="StatusInProjects" asp-action="Index">StatusInProjects</a></li>
+                        <li><a asp-area="Admin" asp-controller="UserTitleInProjects" asp-action="Index">UserTitleInProjects</a></li>
+                        <li><a asp-area="Admin" asp-controller="UserTitles" asp-action="Index">UserTitles</a></li>
+                        <li><a asp-area="Admin" asp-controller="UserInProjects" asp-action="Index">UserInProjects</a></li>
+                        <li role="separator" class="divider"></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Identity <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-area="Identity" asp-controller="IdentityUsers" asp-action="Index">Users</a></li>
+                        <li><a asp-area="Identity" asp-controller="IdentityRoles" asp-action="Index">Roles</a></li>
+                        <li><a asp-area="Identity" asp-controller="IdentityUserRoles" asp-action="Index">User roles</a></li>
+                        <li role="separator" class="divider"></li>
+                    </ul>
+                </li>
+
+            </ul>
+                
+            @await Html.PartialAsync("_LoginPartial")
+        </div>
+    </div>
+</nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -97,6 +97,6 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
-    @RenderSection("Scripts", required: false)
+    @RenderSection(name: "Scripts", required: false)
 </body>
 </html>

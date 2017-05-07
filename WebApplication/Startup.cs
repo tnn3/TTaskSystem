@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore.Identity.Extensions;
+using AspNetCore.Identity.Uow;
+using AspNetCore.Identity.Uow.Interfaces;
+using AspNetCore.Identity.Uow.Models;
 using DAL;
-using DAL.Extensions;
-using DAL.Helpers;
-using Domain.Identity;
-using Identity;
 using Interfaces;
-using Interfaces.UOW;
+using DAL.EntityFrameworkCore;
+using DAL.EntityFrameworkCore.Extensions;
+using DAL.EntityFrameworkCore.Helpers;
+using DAL.Helpers;
+using Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,9 +32,9 @@ namespace WebApplication
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .SetBasePath(basePath: env.ContentRootPath)
+                .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile(path: $"appsettings.{env.EnvironmentName}.json", optional: true);
 
             if (env.IsDevelopment())
             {
@@ -45,30 +52,60 @@ namespace WebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(optionsAction: options =>
+                options.UseSqlServer(connectionString: Configuration.GetConnectionString(name: "AppDbConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddScoped<IDataContext, ApplicationDbContext>();
             services.AddScoped<IRepositoryProvider, EFRepositoryProvider<IDataContext>>();
             services.AddSingleton<IRepositoryFactory, EFRepositoryFactory>();
-            services.AddScoped<IUOW, UOW<IDataContext>>();
 
+            services.AddScoped<IDataContext, ApplicationDbContext>();
+            services.AddScoped<IApplicationUnitOfWork, ApplicationUnitOfWork<IDataContext>>();
+            services.AddScoped<IIdentityUnitOfWork<ApplicationUser>, ApplicationUnitOfWork<IDataContext>>();
 
-            services.AddMvc();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddUnitOfWork<
+                    IIdentityUserRepository<ApplicationUser>,
+                    IIdentityRoleRepository,
+                    IIdentityUserRoleRepository,
+                    IIdentityUserLoginRepository,
+                    IIdentityUserClaimRepository,
+                    IIdentityUserTokenRepository,
+                    IIdentityRoleClaimRepository>()
+                .AddDefaultTokenProviders();
+
+            // Add the localization services to the services container
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            // Add framework services.
+            services.AddMvc()
+                .AddViewLocalization(format: LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.Configure<RequestLocalizationOptions>(options => {
+                var supportedCultures = new[]{
+                    new CultureInfo(name: "en"),
+                    new CultureInfo(name: "et")
+                };
+
+                // State what the default culture for your application is. 
+                options.DefaultRequestCulture = new RequestCulture(culture: "en", uiCulture: "en");
+
+                // You must explicitly state which cultures your application supports.
+                options.SupportedCultures = supportedCultures;
+
+                // These are the cultures the app supports for UI strings
+                options.SupportedUICultures = supportedCultures;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(configuration: Configuration.GetSection(key: "Logging"));
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
@@ -79,20 +116,25 @@ namespace WebApplication
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler(errorHandlingPath: "/Home/Error");
             }
+
 
             var dataContext = app.ApplicationServices.GetService<ApplicationDbContext>();
             if (dataContext != null)
             {
-                if (Configuration.GetValue<bool>("DropDatabaseAtStartup"))
+                // key in appsettings.Development.json
+                if (Configuration.GetValue<bool>(key: "DropDatabaseAtStartup"))
                 {
                     dataContext.Database.EnsureDeleted();
                 }
 
+                //dataContext.Database.EnsureCreated();
+
                 dataContext.Database.Migrate();
                 dataContext.EnsureSeedData();
             }
+
 
             app.UseStaticFiles();
 
@@ -103,7 +145,7 @@ namespace WebApplication
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
-            app.UseMvc(routes =>
+            app.UseMvc(configureRoutes: routes =>
             {
                 routes.MapRoute(
                     name: "areaIdentityUserRoutesroute",

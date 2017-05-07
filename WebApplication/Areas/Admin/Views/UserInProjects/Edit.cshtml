@@ -11,7 +11,7 @@
         <h4>UserInProject</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="UserInProjectId" />
+        <input type="hidden" asp-for="UserInProject.UserInProjectId" />
         
         @Html.Partial(partialViewName: "_CreateEdit", model: Model)
 

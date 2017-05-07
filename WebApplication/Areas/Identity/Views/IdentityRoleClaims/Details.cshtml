@@ -1,0 +1,19 @@
+@model AspNetCore.Identity.Uow.Models.IdentityRoleClaim
+
+@{
+    ViewData[index: "Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RoleClaim</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        @Html.Partial(partialViewName: "_Info", model: Model)
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.IdentityRoleClaimId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

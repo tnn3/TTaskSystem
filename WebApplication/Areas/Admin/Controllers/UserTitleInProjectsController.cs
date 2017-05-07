@@ -6,18 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
+using Interfaces;
 using Domain;
-using Interfaces.UOW;
+using Microsoft.AspNetCore.Authorization;
 using WebApplication.Areas.Admin.ViewModels;
 
 namespace WebApplication.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class UserTitleInProjectsController : Controller
     {
-        private readonly IUOW _uow;
+        private readonly IApplicationUnitOfWork _uow;
 
-        public UserTitleInProjectsController(IUOW uow)
+        public UserTitleInProjectsController(IApplicationUnitOfWork uow)
         {
             _uow = uow;    
         }
@@ -35,7 +37,6 @@ namespace WebApplication.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
             var userTitleInProject = await _uow.UserTitleInProjects.FindAsyncWithIncludes(id.Value);
             if (userTitleInProject == null)
             {
@@ -177,7 +178,7 @@ namespace WebApplication.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var userTitleInProject = await _uow.UserTitleInProjects.FindAsyncWithIncludes(id.Value);
+            var userTitleInProject = await _uow.UserTitleInProjects.FindAsync(id.Value);
 
             if (userTitleInProject == null)
             {

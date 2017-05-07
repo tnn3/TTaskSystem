@@ -7,17 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain;
-using Interfaces.UOW;
+using Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using WebApplication.Areas.Regular.ViewModels;
 
 namespace WebApplication.Areas.Regular.Controllers
 {
     [Area("Regular")]
+    [Authorize]
     public class ProjectTasksController : Controller
     {
-        private readonly IUOW _uow;
+        private readonly IApplicationUnitOfWork _uow;
 
-        public ProjectTasksController(IUOW uow)
+        public ProjectTasksController(IApplicationUnitOfWork uow)
         {
             _uow = uow;    
         }
