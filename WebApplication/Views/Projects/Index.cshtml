@@ -19,9 +19,6 @@
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CreatedOn)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.UpdatedOn)
                 </th>
             <th></th>
@@ -31,16 +28,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                <a asp-controller="ProjectTasks" asp-action="Index" asp-route-projectId="@item.ProjectId">@Html.DisplayFor(modelItem => item.Name)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedOn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedOn)
+                @(item.UpdatedOn == null ? Html.DisplayFor(modelItem => item.CreatedOn) : Html.DisplayFor(modelItem => item.UpdatedOn))
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a> |

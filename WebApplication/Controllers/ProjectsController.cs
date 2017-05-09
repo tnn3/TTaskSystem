@@ -9,10 +9,9 @@ using Interfaces;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 
-namespace WebApplication.Areas.Admin.Controllers
+namespace WebApplication.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class ProjectsController : Controller
     {
         private readonly IApplicationUnitOfWork _uow;
@@ -45,12 +44,14 @@ namespace WebApplication.Areas.Admin.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Projects/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -68,6 +69,7 @@ namespace WebApplication.Areas.Admin.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -84,6 +86,7 @@ namespace WebApplication.Areas.Admin.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -120,6 +123,7 @@ namespace WebApplication.Areas.Admin.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -137,6 +141,7 @@ namespace WebApplication.Areas.Admin.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Projects/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

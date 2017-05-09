@@ -29,10 +29,10 @@ namespace Domain
         public int StatusId { get; set; }
         public StatusInProject Status { get; set; }
 
-        public string AuthorId { get; set; }
+        public int AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
 
-        public string AssignedToId { get; set; }
+        public int? AssignedToId { get; set; }
         public ApplicationUser AssignedTo { get; set; }
 
         public int ProjectId { get; set; }

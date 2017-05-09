@@ -9,9 +9,10 @@ using Domain.Enums;
 namespace DAL.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170508165154_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -329,7 +330,7 @@ namespace DAL.EntityFrameworkCore.Migrations
                     b.Property<int>("ProjectTaskId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AssignedToId");
+                    b.Property<int>("AssignedToId");
 
                     b.Property<int>("AuthorId");
 

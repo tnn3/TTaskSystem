@@ -12,7 +12,7 @@ namespace Domain
         public int UserTitleInProjectId { get; set; }
         public UserTitleInProject TitleInProject { get; set; }
 
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public ApplicationUser User { get; set; }
 
         public int ProjectId { get; set; }

@@ -49,6 +49,32 @@ namespace DAL.EntityFrameworkCore.Extensions
                     context.UserTitles.Add(new UserTitle { Title = "Ülemus" });
                     context.UserTitles.Add(new UserTitle { Title = "Noorliige" });
                     context.UserTitles.Add(new UserTitle { Title = "Vanemliige" });
+                    context.SaveChanges();
+                }
+
+                if (!context.StatusInProjects.Any())
+                {
+                    context.StatusInProjects.Add(new StatusInProject
+                    {
+                        Project = context.Projects.First(),
+                        Status = context.Statuses.First()
+                    });
+                    context.SaveChanges();
+                }
+
+                if (!context.ProjectTasks.Any())
+                {
+                    context.ProjectTasks.Add(new ProjectTask
+                    {
+                        Created = DateTime.Now,
+                        Description = "Mingisugune suits ja imelik lõhn on üleval",
+                        Name = "Midagi on katki",
+                        Priority = context.Priorities.First(p => p.Name == "Urgent"),
+                        Project = context.Projects.First(),
+                        Status = context.StatusInProjects.First(),
+                        Author = context.ApplicationUsers.First()
+                    });
+                    context.SaveChanges();
                 }
             }
         }

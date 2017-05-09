@@ -9,11 +9,10 @@ using DAL;
 using Domain;
 using Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using WebApplication.Areas.Regular.ViewModels;
+using WebApplication.ViewModels.ProjectTaskViewModel;
 
-namespace WebApplication.Areas.Regular.Controllers
+namespace WebApplication.Controllers
 {
-    [Area("Regular")]
     [Authorize]
     public class ProjectTasksController : Controller
     {
@@ -27,7 +26,7 @@ namespace WebApplication.Areas.Regular.Controllers
         // GET: ProjectTasks
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.ProjectTasks.AllAsync());
+            return View(await _uow.ProjectTasks.AllAsyncWithIncludes());
         }
 
         // GET: ProjectTasks/Details/5
@@ -50,7 +49,7 @@ namespace WebApplication.Areas.Regular.Controllers
         // GET: ProjectTasks/Create
         public async Task<IActionResult> Create()
         {
-            var vm = new ProjectTaskViewModelCreateEdit()
+            var vm = new ProjectTaskViewModel()
             {
                 StatusSelectList = new SelectList(
                     items: await _uow.Statuses.AllAsync(),
@@ -73,7 +72,7 @@ namespace WebApplication.Areas.Regular.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProjectTaskViewModelCreateEdit vm)
+        public async Task<IActionResult> Create(ProjectTaskViewModel vm)
         {
             if (ModelState.IsValid)
             {

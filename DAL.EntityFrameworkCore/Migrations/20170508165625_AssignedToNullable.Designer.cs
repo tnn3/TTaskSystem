@@ -9,8 +9,8 @@ using Domain.Enums;
 namespace DAL.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170507101409_Initial")]
-    partial class Initial
+    [Migration("20170508165625_AssignedToNullable")]
+    partial class AssignedToNullable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -227,9 +227,7 @@ namespace DAL.EntityFrameworkCore.Migrations
                     b.Property<int>("ChangeSetId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ChangerId");
-
-                    b.Property<int?>("ChangerIdentityUserId");
+                    b.Property<int>("ChangerId");
 
                     b.Property<string>("Comment");
 
@@ -239,7 +237,7 @@ namespace DAL.EntityFrameworkCore.Migrations
 
                     b.HasKey("ChangeSetId");
 
-                    b.HasIndex("ChangerIdentityUserId");
+                    b.HasIndex("ChangerId");
 
                     b.HasIndex("ProjectTaskId");
 
@@ -332,13 +330,9 @@ namespace DAL.EntityFrameworkCore.Migrations
                     b.Property<int>("ProjectTaskId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AssignedToId");
+                    b.Property<int?>("AssignedToId");
 
-                    b.Property<int?>("AssignedToIdentityUserId");
-
-                    b.Property<string>("AuthorId");
-
-                    b.Property<int?>("AuthorIdentityUserId");
+                    b.Property<int>("AuthorId");
 
                     b.Property<DateTime?>("Changed");
 
@@ -362,9 +356,9 @@ namespace DAL.EntityFrameworkCore.Migrations
 
                     b.HasKey("ProjectTaskId");
 
-                    b.HasIndex("AssignedToIdentityUserId");
+                    b.HasIndex("AssignedToId");
 
-                    b.HasIndex("AuthorIdentityUserId");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("PriorityId");
 
@@ -414,9 +408,7 @@ namespace DAL.EntityFrameworkCore.Migrations
 
                     b.Property<int>("ProjectId");
 
-                    b.Property<string>("UserId");
-
-                    b.Property<int?>("UserIdentityUserId1");
+                    b.Property<int>("UserId");
 
                     b.Property<int>("UserTitleInProjectId");
 
@@ -424,7 +416,7 @@ namespace DAL.EntityFrameworkCore.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("UserIdentityUserId1");
+                    b.HasIndex("UserId");
 
                     b.HasIndex("UserTitleInProjectId");
 
@@ -537,7 +529,7 @@ namespace DAL.EntityFrameworkCore.Migrations
                 {
                     b.HasOne("Domain.ApplicationUser", "Changer")
                         .WithMany("ChangeSets")
-                        .HasForeignKey("ChangerIdentityUserId");
+                        .HasForeignKey("ChangerId");
 
                     b.HasOne("Domain.ProjectTask", "ProjectTask")
                         .WithMany("ChangeSets")
@@ -566,11 +558,11 @@ namespace DAL.EntityFrameworkCore.Migrations
                 {
                     b.HasOne("Domain.ApplicationUser", "AssignedTo")
                         .WithMany("AssignedTasks")
-                        .HasForeignKey("AssignedToIdentityUserId");
+                        .HasForeignKey("AssignedToId");
 
                     b.HasOne("Domain.ApplicationUser", "Author")
                         .WithMany("AuthorOfTasks")
-                        .HasForeignKey("AuthorIdentityUserId");
+                        .HasForeignKey("AuthorId");
 
                     b.HasOne("Domain.Priority", "Priority")
                         .WithMany("ProjectTasks")
@@ -604,7 +596,7 @@ namespace DAL.EntityFrameworkCore.Migrations
 
                     b.HasOne("Domain.ApplicationUser", "User")
                         .WithMany("UserInProjects")
-                        .HasForeignKey("UserIdentityUserId1");
+                        .HasForeignKey("UserId");
 
                     b.HasOne("Domain.UserTitleInProject", "TitleInProject")
                         .WithMany("UsersWithTitleInProject")

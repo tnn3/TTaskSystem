@@ -301,10 +301,8 @@ namespace DAL.EntityFrameworkCore.Migrations
                 {
                     ProjectTaskId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AssignedToId = table.Column<string>(nullable: true),
-                    AssignedToIdentityUserId = table.Column<int>(nullable: true),
-                    AuthorId = table.Column<string>(nullable: true),
-                    AuthorIdentityUserId = table.Column<int>(nullable: true),
+                    AssignedToId = table.Column<int>(nullable: false),
+                    AuthorId = table.Column<int>(nullable: false),
                     Changed = table.Column<DateTime>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(maxLength: 300, nullable: false),
@@ -318,14 +316,14 @@ namespace DAL.EntityFrameworkCore.Migrations
                 {
                     table.PrimaryKey("PK_ProjectTasks", x => x.ProjectTaskId);
                     table.ForeignKey(
-                        name: "FK_ProjectTasks_IdentityUser_AssignedToIdentityUserId",
-                        column: x => x.AssignedToIdentityUserId,
+                        name: "FK_ProjectTasks_IdentityUser_AssignedToId",
+                        column: x => x.AssignedToId,
                         principalTable: "IdentityUser",
                         principalColumn: "IdentityUserId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ProjectTasks_IdentityUser_AuthorIdentityUserId",
-                        column: x => x.AuthorIdentityUserId,
+                        name: "FK_ProjectTasks_IdentityUser_AuthorId",
+                        column: x => x.AuthorId,
                         principalTable: "IdentityUser",
                         principalColumn: "IdentityUserId",
                         onDelete: ReferentialAction.Restrict);
@@ -356,8 +354,7 @@ namespace DAL.EntityFrameworkCore.Migrations
                     UserInProjectId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ProjectId = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    UserIdentityUserId1 = table.Column<int>(nullable: true),
+                    UserId = table.Column<int>(nullable: false),
                     UserTitleInProjectId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -370,8 +367,8 @@ namespace DAL.EntityFrameworkCore.Migrations
                         principalColumn: "ProjectId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UserInProjects_IdentityUser_UserIdentityUserId1",
-                        column: x => x.UserIdentityUserId1,
+                        name: "FK_UserInProjects_IdentityUser_UserId",
+                        column: x => x.UserId,
                         principalTable: "IdentityUser",
                         principalColumn: "IdentityUserId",
                         onDelete: ReferentialAction.Restrict);
@@ -410,8 +407,7 @@ namespace DAL.EntityFrameworkCore.Migrations
                 {
                     ChangeSetId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ChangerId = table.Column<string>(nullable: true),
-                    ChangerIdentityUserId = table.Column<int>(nullable: true),
+                    ChangerId = table.Column<int>(nullable: false),
                     Comment = table.Column<string>(nullable: true),
                     ProjectTaskId = table.Column<int>(nullable: false),
                     Time = table.Column<DateTime>(nullable: false)
@@ -420,8 +416,8 @@ namespace DAL.EntityFrameworkCore.Migrations
                 {
                     table.PrimaryKey("PK_ChangeSets", x => x.ChangeSetId);
                     table.ForeignKey(
-                        name: "FK_ChangeSets_IdentityUser_ChangerIdentityUserId",
-                        column: x => x.ChangerIdentityUserId,
+                        name: "FK_ChangeSets_IdentityUser_ChangerId",
+                        column: x => x.ChangerId,
                         principalTable: "IdentityUser",
                         principalColumn: "IdentityUserId",
                         onDelete: ReferentialAction.Restrict);
@@ -546,9 +542,9 @@ namespace DAL.EntityFrameworkCore.Migrations
                 column: "ChangeSetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChangeSets_ChangerIdentityUserId",
+                name: "IX_ChangeSets_ChangerId",
                 table: "ChangeSets",
-                column: "ChangerIdentityUserId");
+                column: "ChangerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChangeSets_ProjectTaskId",
@@ -571,14 +567,14 @@ namespace DAL.EntityFrameworkCore.Migrations
                 column: "ProjectTaskId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectTasks_AssignedToIdentityUserId",
+                name: "IX_ProjectTasks_AssignedToId",
                 table: "ProjectTasks",
-                column: "AssignedToIdentityUserId");
+                column: "AssignedToId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectTasks_AuthorIdentityUserId",
+                name: "IX_ProjectTasks_AuthorId",
                 table: "ProjectTasks",
-                column: "AuthorIdentityUserId");
+                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectTasks_PriorityId",
@@ -611,9 +607,9 @@ namespace DAL.EntityFrameworkCore.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserInProjects_UserIdentityUserId1",
+                name: "IX_UserInProjects_UserId",
                 table: "UserInProjects",
-                column: "UserIdentityUserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserInProjects_UserTitleInProjectId",

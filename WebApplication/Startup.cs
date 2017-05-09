@@ -119,7 +119,6 @@ namespace WebApplication
                 app.UseExceptionHandler(errorHandlingPath: "/Home/Error");
             }
 
-
             var dataContext = app.ApplicationServices.GetService<ApplicationDbContext>();
             if (dataContext != null)
             {
@@ -132,6 +131,10 @@ namespace WebApplication
                 //dataContext.Database.EnsureCreated();
 
                 dataContext.Database.Migrate();
+
+                // create default roles and users
+                app.EnsureDefaultUsersAndRoles();
+
                 dataContext.EnsureSeedData();
             }
 
@@ -139,14 +142,17 @@ namespace WebApplication
             app.UseStaticFiles();
 
             app.UseIdentity();
-
-            // create default roles and users
-            app.EnsureDefaultUsersAndRoles();
+            
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(configureRoutes: routes =>
             {
+                routes.MapRoute(
+                    name: "ProjectTaskRouteroute", 
+                    template: "Projects/{projectId:int}/Tasks/", 
+                    defaults: new {controller = "ProjectTasks", action = "Index"});
+
                 routes.MapRoute(
                     name: "areaIdentityUserRoutesroute",
                     template: "Identity/UserRoles/{action=Index}/{userId}/{roleId}",
