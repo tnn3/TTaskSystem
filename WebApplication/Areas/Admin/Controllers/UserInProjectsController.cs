@@ -49,16 +49,20 @@ namespace WebApplication.Areas.Admin.Controllers
         // GET: UserInProjects/Create
         public async Task<IActionResult> Create()
         {
-            var vm = new UserInProjectCreateEditViewModel()
+            var vm = new UserInProjectsViewModel()
             {
+                UserSelectList = new SelectList(
+                    items: await _uow.ApplicationUsers.AllAsync(),
+                    dataValueField: nameof(ApplicationUser.IdentityUserId),
+                    dataTextField: nameof(ApplicationUser.UserName)),
                 ProjectSelectList = new SelectList(
                     items: await _uow.Projects.AllAsync(),
                     dataValueField: nameof(Project.ProjectId),
                     dataTextField: nameof(Project.Name)),
-                ProjectTitleSelectList = new SelectList(
-                    items: await _uow.ProjectTasks.AllAsync(),
-                    dataValueField: nameof(ProjectTask.ProjectTaskId),
-                    dataTextField: nameof(ProjectTask.Name))
+                TitleSelectList = new SelectList(
+                    items: await _uow.UserTitleInProjects.AllAsync(),
+                    dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
+                    dataTextField: nameof(UserTitleInProject.UserTitleInProjectId))
             };
             return View(vm);
         }
@@ -68,7 +72,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserInProjectCreateEditViewModel vm)
+        public async Task<IActionResult> Create(UserInProjectsViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -76,14 +80,18 @@ namespace WebApplication.Areas.Admin.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            vm.UserSelectList = new SelectList(
+                items: await _uow.ApplicationUsers.AllAsync(),
+                dataValueField: nameof(ApplicationUser.IdentityUserId),
+                dataTextField: nameof(ApplicationUser.UserName));
             vm.ProjectSelectList = new SelectList(
                 items: await _uow.Projects.AllAsync(),
                 dataValueField: nameof(Project.ProjectId),
                 dataTextField: nameof(Project.Name));
-            vm.ProjectTitleSelectList = new SelectList(
-                items: await _uow.ProjectTasks.AllAsync(),
-                dataValueField: nameof(ProjectTask.ProjectTaskId),
-                dataTextField: nameof(ProjectTask.Name));
+            vm.TitleSelectList = new SelectList(
+                items: await _uow.UserTitleInProjects.AllAsync(),
+                dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
+                dataTextField: nameof(UserTitleInProject.UserTitleInProjectId));
 
             return View(vm);
         }
@@ -102,14 +110,14 @@ namespace WebApplication.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var vm = new UserInProjectCreateEditViewModel()
+            var vm = new UserInProjectsViewModel()
             {
                 UserInProject = userInProject,
                 ProjectSelectList = new SelectList(
                     items: await _uow.Projects.AllAsync(),
                     dataValueField: nameof(Project.ProjectId),
                     dataTextField: nameof(Project.Name)),
-                ProjectTitleSelectList = new SelectList(
+                TitleSelectList = new SelectList(
                     items: await _uow.ProjectTasks.AllAsync(),
                     dataValueField: nameof(ProjectTask.ProjectTaskId),
                     dataTextField: nameof(ProjectTask.Name))
@@ -122,7 +130,7 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UserInProjectCreateEditViewModel vm)
+        public async Task<IActionResult> Edit(int id, UserInProjectsViewModel vm)
         {
             if (id != vm.UserInProject.UserInProjectId)
             {
@@ -153,7 +161,7 @@ namespace WebApplication.Areas.Admin.Controllers
                 items: await _uow.Projects.AllAsync(),
                 dataValueField: nameof(Project.ProjectId),
                 dataTextField: nameof(Project.Name));
-            vm.ProjectTitleSelectList = new SelectList(
+            vm.TitleSelectList = new SelectList(
                 items: await _uow.ProjectTasks.AllAsync(),
                 dataValueField: nameof(ProjectTask.ProjectTaskId),
                 dataTextField: nameof(ProjectTask.Name));

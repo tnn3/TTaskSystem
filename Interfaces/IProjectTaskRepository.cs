@@ -10,5 +10,6 @@ namespace Interfaces
     public interface IProjectTaskRepository : IRepository<ProjectTask>
     {
         Task<List<ProjectTask>> AllAsyncWithIncludes();
+        Task<List<ProjectTask>> AllInProject(int projectId);
     }
 }

@@ -10,12 +10,14 @@ namespace Domain
 
         [Required]
         [MaxLength(100)]
+        [Display(Name = "Title")]
         public string Name { get; set; }
 
         [Required]
         [MaxLength(300)]
         public string Description { get; set; }
 
+        [Display(Name = "Due date")]
         public DateTime? DueDate { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Changed { get; set; }
@@ -33,6 +35,7 @@ namespace Domain
         public ApplicationUser Author { get; set; }
 
         public int? AssignedToId { get; set; }
+        [Display(Name = "Assigned to")]
         public ApplicationUser AssignedTo { get; set; }
 
         public int ProjectId { get; set; }

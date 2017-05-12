@@ -41,6 +41,7 @@ namespace DAL.EntityFrameworkCore.Helpers
                 {typeof(IIdentityUserRoleRepository), dbContext => new IdentityUserRoleRepository(dataContext: dbContext)},
                 {typeof(IIdentityUserTokenRepository), dbContext => new IdentityUserTokenRepository(dataContext: dbContext)},
 
+                {typeof(IApplicationUserRepository), dbContext => new ApplicationUserRepository(dbContext)},
                 {typeof(IAttachmentRepository), dbContext => new AttachmentRepository(dbContext)},
                 {typeof(IChangeRepository), dbContext => new ChangeRepository(dbContext)},
                 {typeof(IChangeSetRepository), dbContext => new ChangeSetRepository(dbContext)},

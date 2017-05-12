@@ -17,12 +17,20 @@ namespace DAL.EntityFrameworkCore.Repositories
 
         public Task<List<UserInProject>> AllAsyncWithIncludes()
         {
-            return RepositoryDbSet.Include(u => u.Project).Include(u => u.TitleInProject).ToListAsync();
+            return RepositoryDbSet
+                .Include(u => u.Project)
+                .Include(u => u.TitleInProject.Title)
+                .Include(u => u.User)
+                .ToListAsync();
         }
 
         public Task<UserInProject> FindAsyncWithIncludes(int id)
         {
-            return RepositoryDbSet.Include(u => u.Project).Include(u => u.TitleInProject).SingleOrDefaultAsync(m => m.UserInProjectId == id);
+            return RepositoryDbSet
+                .Include(u => u.Project)
+                .Include(u => u.TitleInProject.Title)
+                .Include(u => u.User)
+                .SingleOrDefaultAsync(m => m.UserInProjectId == id);
         }
     }
 }

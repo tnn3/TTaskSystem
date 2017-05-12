@@ -1,4 +1,4 @@
-@model ProjectTask
+@model WebApplication.ViewModels.ProjectTaskViewModel.ProjectTaskViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -11,7 +11,7 @@
         <h4>ProjectTask</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="ProjectTaskId" />
+        <input type="hidden" asp-for="ProjectTask.ProjectTaskId" />
         
         @Html.Partial(partialViewName: "_CreateEdit", model: Model)
 

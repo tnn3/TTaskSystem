@@ -10,6 +10,7 @@ namespace Domain
         public int PriorityId { get; set; }
         [Required]
         [MaxLength(20)]
+        [Display(Name = "Priority")]
         public string Name { get; set; }
 
         public List<ProjectTask> ProjectTasks { get; set; }

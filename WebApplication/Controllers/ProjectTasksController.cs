@@ -1,15 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
 using Domain;
 using Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using WebApplication.ViewModels.ProjectTaskViewModel;
+using AspNetCore.Identity.Extensions;
 
 namespace WebApplication.Controllers
 {
@@ -20,13 +18,13 @@ namespace WebApplication.Controllers
 
         public ProjectTasksController(IApplicationUnitOfWork uow)
         {
-            _uow = uow;    
+            _uow = uow;
         }
 
         // GET: ProjectTasks
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int projectId)
         {
-            return View(await _uow.ProjectTasks.AllAsyncWithIncludes());
+            return View(await _uow.ProjectTasks.AllInProject(projectId));
         }
 
         // GET: ProjectTasks/Details/5
@@ -46,15 +44,25 @@ namespace WebApplication.Controllers
             return View(projectTask);
         }
 
-        // GET: ProjectTasks/Create
-        public async Task<IActionResult> Create()
+        // GET: Projects/5/Tasks/Create
+        public async Task<IActionResult> Create(int? projectId)
         {
-            var vm = new ProjectTaskViewModel()
+            if (projectId == null)
+            {
+                return NotFound();
+            }
+            var projectStatuses = await _uow.StatusInProjects.GetProjectStatuses(projectId.Value);
+            if (projectStatuses == null)
+            {
+                return NotFound();
+            }
+            var vm = new ProjectTaskViewModel
             {
                 StatusSelectList = new SelectList(
-                    items: await _uow.Statuses.AllAsync(),
-                    dataValueField: nameof(Status.StatusId),
-                    dataTextField: nameof(Status.Name)),
+                    items: projectStatuses,
+                    dataValueField: nameof(StatusInProject.StatusId),
+                    //TODO fix display
+                    dataTextField: nameof(StatusInProject.StatusId)),
                 AssignedToSelectList = new SelectList(
                     await _uow.UserInProjects.AllAsync(),
                     nameof(UserInProject.UserId),
@@ -62,7 +70,7 @@ namespace WebApplication.Controllers
                 PrioritySelectList = new SelectList(
                     items: await _uow.Priorities.AllAsync(),
                     dataValueField: nameof(Priority.PriorityId),
-                    dataTextField: nameof(Priority.Name))
+                    dataTextField: nameof(Priority.Name)),
             };
             return View(vm);
         }
@@ -72,14 +80,36 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProjectTaskViewModel vm)
+        public async Task<IActionResult> Create(int? projectId, ProjectTaskViewModel vm)
         {
+            if (projectId == null)
+            {
+                return NotFound();
+            }
+            //TODO check projectId valid
             if (ModelState.IsValid)
             {
+                vm.ProjectTask.AuthorId = int.Parse(User.GetUserId());
+                vm.ProjectTask.Created = DateTime.Now;
+                vm.ProjectTask.ProjectId = projectId.Value;
+                
                 _uow.ProjectTasks.Add(vm.ProjectTask);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            vm.StatusSelectList = new SelectList(
+                items: await _uow.StatusInProjects.GetProjectStatuses(vm.ProjectTask.ProjectId),
+                dataValueField: nameof(StatusInProject.StatusId),
+                //TODO fix display
+                dataTextField: nameof(StatusInProject.StatusId));
+            vm.AssignedToSelectList = new SelectList(
+                await _uow.UserInProjects.AllAsync(),
+                nameof(UserInProject.UserId),
+                nameof(UserInProject.UserId));
+            vm.PrioritySelectList = new SelectList(
+                items: await _uow.Priorities.AllAsync(),
+                dataValueField: nameof(Priority.PriorityId),
+                dataTextField: nameof(Priority.Name));
             return View(vm);
         }
 
@@ -96,7 +126,25 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
-            return View(projectTask);
+
+            var vm = new ProjectTaskViewModel
+            {
+                ProjectTask = projectTask,
+                StatusSelectList = new SelectList(
+                    items: await _uow.StatusInProjects.GetProjectStatuses(projectTask.ProjectId),
+                    dataValueField: nameof(StatusInProject.StatusId),
+                    //TODO fix display
+                    dataTextField: nameof(StatusInProject.StatusId)),
+                AssignedToSelectList = new SelectList(
+                    await _uow.UserInProjects.AllAsync(),
+                    nameof(UserInProject.UserId),
+                    nameof(UserInProject.UserId)),
+                PrioritySelectList = new SelectList(
+                    items: await _uow.Priorities.AllAsync(),
+                    dataValueField: nameof(Priority.PriorityId),
+                    dataTextField: nameof(Priority.Name)),
+            };
+            return View(vm);
         }
 
         // POST: ProjectTasks/Edit/5
@@ -104,23 +152,32 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectTaskId,TaskName,Description,DueDate,Changed")] ProjectTask projectTask)
+        public async Task<IActionResult> Edit(int id, ProjectTaskViewModel vm)
         {
-            if (id != projectTask.ProjectTaskId)
+            if (id != vm.ProjectTask.ProjectTaskId)
             {
                 return NotFound();
             }
+
+            var prevTask = _uow.ProjectTasks.Find(id);
+            prevTask.AssignedToId = vm.ProjectTask.AssignedToId;
+            prevTask.Description = vm.ProjectTask.Description;
+            prevTask.Name = vm.ProjectTask.Name;
+            prevTask.DueDate = vm.ProjectTask.DueDate;
+            prevTask.PriorityId = vm.ProjectTask.PriorityId;
+            prevTask.StatusId = vm.ProjectTask.StatusId;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _uow.ProjectTasks.Update(projectTask);
+                    prevTask.Changed = DateTime.Now;
+                    _uow.ProjectTasks.Update(prevTask);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectTaskExistsAsync(projectTask.ProjectTaskId))
+                    if (!ProjectTaskExistsAsync(vm.ProjectTask.ProjectTaskId))
                     {
                         return NotFound();
                     }
@@ -131,7 +188,22 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(projectTask);
+
+            vm.StatusSelectList = new SelectList(
+                items: await _uow.StatusInProjects.GetProjectStatuses(vm.ProjectTask.ProjectId),
+                dataValueField: nameof(StatusInProject.StatusId),
+                //TODO fix display
+                dataTextField: nameof(StatusInProject.StatusId));
+            vm.AssignedToSelectList = new SelectList(
+                await _uow.UserInProjects.AllAsync(),
+                nameof(UserInProject.UserId),
+                nameof(UserInProject.UserId));
+            vm.PrioritySelectList = new SelectList(
+                items: await _uow.Priorities.AllAsync(),
+                dataValueField: nameof(Priority.PriorityId),
+                dataTextField: nameof(Priority.Name));
+
+            return View(vm);
         }
 
         // GET: ProjectTasks/Delete/5

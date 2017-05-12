@@ -150,7 +150,7 @@ namespace WebApplication
             {
                 routes.MapRoute(
                     name: "ProjectTaskRouteroute", 
-                    template: "Projects/{projectId:int}/Tasks/", 
+                    template: "Projects/{projectId:int}/Tasks/{action}/{id?}", 
                     defaults: new {controller = "ProjectTasks", action = "Index"});
 
                 routes.MapRoute(

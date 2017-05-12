@@ -1,42 +1,48 @@
-@model Domain.ProjectTask
+@model WebApplication.ViewModels.ProjectTaskViewModel.ProjectTaskViewModel
 
 <div class="form-group">
-    <label asp-for="Name" class="col-md-2 control-label"></label>
+    <label asp-for="ProjectTask.Name" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <input asp-for="ProjectTask.Name" class="form-control" />
+        <span asp-validation-for="ProjectTask.Name" class="text-danger"></span>
     </div>
 </div>
 <div class="form-group">
-    <label asp-for="Description" class="col-md-2 control-label"></label>
+    <label asp-for="ProjectTask.Description" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
+        <textarea asp-for="ProjectTask.Description" class="form-control"></textarea>
+        <span asp-validation-for="ProjectTask.Description" class="text-danger"></span>
     </div>
 </div>
 <div class="form-group">
-    <label asp-for="DueDate" class="col-md-2 control-label"></label>
+    <label asp-for="ProjectTask.DueDate" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <input type="datetime-local" asp-for="DueDate" class="form-control" />
-        <span asp-validation-for="DueDate" class="text-danger"></span>
+        <input type="datetime-local" asp-for="ProjectTask.DueDate" class="form-control" />
+        <span asp-validation-for="ProjectTask.DueDate" class="text-danger"></span>
     </div>
 </div>
 <div class="form-group">
-    <label asp-for="Priority" class="col-md-2 control-label"></label>
+    <label asp-for="ProjectTask.Priority.Name" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <select asp-for="Priority" class="form-control" asp-items="Model.PrioritySelectList"></select>
+        <select asp-for="ProjectTask.PriorityId" class="form-control" asp-items="Model.PrioritySelectList"></select>
     </div>
 </div>
 <div class="form-group">
-    <label asp-for="Status" class="col-md-2 control-label"></label>
+    <label asp-for="ProjectTask.Status.Status.Name" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <select asp-for="Status" class="form-control" asp-items="Model.StatusSelectList"></select>
+        <select asp-for="ProjectTask.StatusId" class="form-control" asp-items="Model.StatusSelectList"></select>
     </div>
 </div>
 <div class="form-group">
-    <label asp-for="AssignedTo" class="col-md-2 control-label"></label>
+    <label asp-for="ProjectTask.AssignedTo" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <select asp-for="AssignedTo" class="form-control" asp-items="Model.AssignedToSelectList"></select>
+        <select asp-for="ProjectTask.AssignedTo" class="form-control" asp-items="Model.AssignedToSelectList"></select>
+    </div>
+</div>
+<div class="form-group">
+    <label asp-for="ProjectTask.Attachments" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <input type="file" name="files" multiple/>
     </div>
 </div>
 
