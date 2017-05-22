@@ -23,6 +23,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using WebApplication.Filters;
 using WebApplication.Services;
 
 namespace WebApplication
@@ -79,7 +81,10 @@ namespace WebApplication
             // Add framework services.
             services.AddMvc()
                 .AddViewLocalization(format: LanguageViewLocationExpanderFormat.Suffix)
-                .AddDataAnnotationsLocalization();
+                .AddDataAnnotationsLocalization().AddMvcOptions(setupAction: options =>
+                {
+                    options.Filters.Add(item: new AddCultureCookieFromQueryFilter());
+                });
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -107,6 +112,9 @@ namespace WebApplication
         {
             loggerFactory.AddConsole(configuration: Configuration.GetSection(key: "Logging"));
             loggerFactory.AddDebug();
+
+            app.UseRequestLocalization(
+                app.ApplicationServices.GetService <IOptions<RequestLocalizationOptions>>().Value);
 
             if (env.IsDevelopment())
             {
@@ -149,9 +157,14 @@ namespace WebApplication
             app.UseMvc(configureRoutes: routes =>
             {
                 routes.MapRoute(
-                    name: "ProjectTaskRouteroute", 
+                    name: "ProjectTaskroute", 
                     template: "Projects/{projectId:int}/Tasks/{action}/{id?}", 
                     defaults: new {controller = "ProjectTasks", action = "Index"});
+
+                routes.MapRoute(
+                    name: "areaAdminCustomFieldsroute",
+                    template: "Admin/Projects/{projectId:int}/Fields/{action}/{id?}",
+                    defaults: new { area = "Admin", controller = "CustomFields", action = "Index" });
 
                 routes.MapRoute(
                     name: "areaIdentityUserRoutesroute",

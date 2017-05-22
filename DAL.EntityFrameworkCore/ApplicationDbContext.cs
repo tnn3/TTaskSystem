@@ -33,6 +33,9 @@ namespace DAL.EntityFrameworkCore
         public DbSet<Domain.ProjectTask> ProjectTasks { get; set; }
         public DbSet<Domain.UserInProject> UserInProjects { get; set; }
         public DbSet<Domain.StatusInProject> StatusInProjects { get; set; }
+
+        public DbSet<Domain.MultiLangString> MultiLangStrings { get; set; }
+        public DbSet<Domain.Translation> Translations { get; set; }
         #endregion
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

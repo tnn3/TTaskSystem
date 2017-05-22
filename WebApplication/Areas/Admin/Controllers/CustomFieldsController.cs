@@ -23,9 +23,13 @@ namespace WebApplication.Areas.Admin.Controllers
         }
 
         // GET: CustomFields
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? projectId)
         {
-            return View(await _uow.CustomFields.AllAsync());
+            if (projectId == null)
+            {
+                return NotFound();
+            }
+            return View(await _uow.CustomFields.AllInProject(projectId.Value));
         }
 
         // GET: CustomFields/Details/5
@@ -46,8 +50,12 @@ namespace WebApplication.Areas.Admin.Controllers
         }
 
         // GET: CustomFields/Create
-        public IActionResult Create()
+        public IActionResult Create(int? projectId)
         {
+            if (projectId == null)
+            {
+                return NotFound();
+            }
             return View();
         }
 
@@ -56,10 +64,15 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired,CustomFieldValueId")] CustomField customField)
+        public async Task<IActionResult> Create(int? projectId, CustomField customField)
         {
+            if (projectId == null)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
+                customField.ProjectId = projectId.Value;
                 _uow.CustomFields.Add(customField);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -88,18 +101,25 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomFieldId,FieldName,FieldType,PossibleValues,MinLength,MaxLength,IsRequired,CustomFieldValueId")] CustomField customField)
+        public async Task<IActionResult> Edit(int id, CustomField customField)
         {
             if (id != customField.CustomFieldId)
             {
                 return NotFound();
             }
+            var prevField = _uow.CustomFields.Find(id);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _uow.CustomFields.Update(customField);
+                    prevField.FieldName = customField.FieldName;
+                    prevField.FieldType = customField.FieldType;
+                    prevField.IsRequired = customField.IsRequired;
+                    prevField.MaxLength = customField.MaxLength;
+                    prevField.MinLength = customField.MinLength;
+                    prevField.PossibleValues = customField.PossibleValues;
+                    _uow.CustomFields.Update(prevField);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

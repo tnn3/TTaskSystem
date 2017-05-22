@@ -5,7 +5,7 @@ using DAL.Repositories;
 
 namespace DAL
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         int SaveChanges();
 

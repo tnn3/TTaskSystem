@@ -289,6 +289,20 @@ namespace DAL.EntityFrameworkCore.Migrations
                     b.ToTable("CustomFieldValues");
                 });
 
+            modelBuilder.Entity("Domain.MultiLangString", b =>
+                {
+                    b.Property<int>("MultiLangStringId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Owner");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("MultiLangStringId");
+
+                    b.ToTable("MultiLangStrings");
+                });
+
             modelBuilder.Entity("Domain.Priority", b =>
                 {
                     b.Property<int>("PriorityId")
@@ -398,6 +412,25 @@ namespace DAL.EntityFrameworkCore.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("StatusInProjects");
+                });
+
+            modelBuilder.Entity("Domain.Translation", b =>
+                {
+                    b.Property<int>("TranslationId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Culture")
+                        .HasMaxLength(12);
+
+                    b.Property<int?>("MultiLangStringId");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("TranslationId");
+
+                    b.HasIndex("MultiLangStringId");
+
+                    b.ToTable("Translations");
                 });
 
             modelBuilder.Entity("Domain.UserInProject", b =>
@@ -585,6 +618,13 @@ namespace DAL.EntityFrameworkCore.Migrations
                     b.HasOne("Domain.Status", "Status")
                         .WithMany("StatusInProjects")
                         .HasForeignKey("StatusId");
+                });
+
+            modelBuilder.Entity("Domain.Translation", b =>
+                {
+                    b.HasOne("Domain.MultiLangString")
+                        .WithMany("Translations")
+                        .HasForeignKey("MultiLangStringId");
                 });
 
             modelBuilder.Entity("Domain.UserInProject", b =>

@@ -13,5 +13,6 @@ namespace WebApplication.ViewModels.ProjectTaskViewModel
         public SelectList PrioritySelectList { get; set; }
         public SelectList StatusSelectList { get; set; }
         public SelectList AssignedToSelectList { get; set; }
+        public List<CustomField> CustomFields { get; set; }
     }
 }

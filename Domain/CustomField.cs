@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Domain.Enums;
 
 namespace Domain
 {
-    //Fields for task price, task location, client information etc
     public class CustomField
     {
         public int CustomFieldId { get; set; }

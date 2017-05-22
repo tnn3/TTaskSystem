@@ -52,6 +52,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
             var projectStatuses = await _uow.StatusInProjects.GetProjectStatuses(projectId.Value);
+            var project = await _uow.Projects.FindAsyncWithIncludes(projectId.Value);
             if (projectStatuses == null)
             {
                 return NotFound();
@@ -60,17 +61,17 @@ namespace WebApplication.Controllers
             {
                 StatusSelectList = new SelectList(
                     items: projectStatuses,
-                    dataValueField: nameof(StatusInProject.StatusId),
-                    //TODO fix display
-                    dataTextField: nameof(StatusInProject.StatusId)),
+                    dataValueField: nameof(StatusInProject.StatusInProjectId),
+                    dataTextField: nameof(StatusInProject.Status) + "." + nameof(Status.Name)),
                 AssignedToSelectList = new SelectList(
-                    await _uow.UserInProjects.AllAsync(),
+                    await _uow.UserInProjects.AllAsyncWithIncludes(),
                     nameof(UserInProject.UserId),
-                    nameof(UserInProject.UserId)),
+                    nameof(UserInProject.User) + "." + nameof(ApplicationUser.UserName)),
                 PrioritySelectList = new SelectList(
                     items: await _uow.Priorities.AllAsync(),
                     dataValueField: nameof(Priority.PriorityId),
                     dataTextField: nameof(Priority.Name)),
+                CustomFields = project.CustomFields
             };
             return View(vm);
         }
@@ -97,19 +98,21 @@ namespace WebApplication.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            var project = await _uow.Projects.FindAsyncWithIncludes(projectId.Value);
             vm.StatusSelectList = new SelectList(
                 items: await _uow.StatusInProjects.GetProjectStatuses(vm.ProjectTask.ProjectId),
                 dataValueField: nameof(StatusInProject.StatusId),
-                //TODO fix display
-                dataTextField: nameof(StatusInProject.StatusId));
+                dataTextField: nameof(StatusInProject.Status) + "." + nameof(Status.Name));
             vm.AssignedToSelectList = new SelectList(
-                await _uow.UserInProjects.AllAsync(),
+                await _uow.UserInProjects.AllAsyncWithIncludes(),
                 nameof(UserInProject.UserId),
-                nameof(UserInProject.UserId));
+                nameof(UserInProject.User) + "." + nameof(ApplicationUser.UserName));
             vm.PrioritySelectList = new SelectList(
                 items: await _uow.Priorities.AllAsync(),
                 dataValueField: nameof(Priority.PriorityId),
                 dataTextField: nameof(Priority.Name));
+            vm.CustomFields = project.CustomFields;
+
             return View(vm);
         }
 
@@ -126,23 +129,23 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
-
+            var project = await _uow.Projects.FindAsyncWithIncludes(projectTask.ProjectId);
             var vm = new ProjectTaskViewModel
             {
                 ProjectTask = projectTask,
                 StatusSelectList = new SelectList(
                     items: await _uow.StatusInProjects.GetProjectStatuses(projectTask.ProjectId),
                     dataValueField: nameof(StatusInProject.StatusId),
-                    //TODO fix display
-                    dataTextField: nameof(StatusInProject.StatusId)),
+                    dataTextField: nameof(StatusInProject.Status) + "." + nameof(Status.Name)),
                 AssignedToSelectList = new SelectList(
-                    await _uow.UserInProjects.AllAsync(),
+                    await _uow.UserInProjects.AllAsyncWithIncludes(),
                     nameof(UserInProject.UserId),
-                    nameof(UserInProject.UserId)),
+                    nameof(UserInProject.User) + "." + nameof(ApplicationUser.UserName)),
                 PrioritySelectList = new SelectList(
                     items: await _uow.Priorities.AllAsync(),
                     dataValueField: nameof(Priority.PriorityId),
                     dataTextField: nameof(Priority.Name)),
+                CustomFields = project.CustomFields
             };
             return View(vm);
         }
@@ -188,20 +191,20 @@ namespace WebApplication.Controllers
                 }
                 return RedirectToAction("Index");
             }
-
+            var project = await _uow.Projects.FindAsyncWithIncludes(prevTask.ProjectId);
             vm.StatusSelectList = new SelectList(
                 items: await _uow.StatusInProjects.GetProjectStatuses(vm.ProjectTask.ProjectId),
                 dataValueField: nameof(StatusInProject.StatusId),
-                //TODO fix display
-                dataTextField: nameof(StatusInProject.StatusId));
+                dataTextField: nameof(StatusInProject.Status) + "." + nameof(Status.Name));
             vm.AssignedToSelectList = new SelectList(
-                await _uow.UserInProjects.AllAsync(),
+                await _uow.UserInProjects.AllAsyncWithIncludes(),
                 nameof(UserInProject.UserId),
-                nameof(UserInProject.UserId));
+                nameof(UserInProject.User) + "." + nameof(ApplicationUser.UserName));
             vm.PrioritySelectList = new SelectList(
                 items: await _uow.Priorities.AllAsync(),
                 dataValueField: nameof(Priority.PriorityId),
                 dataTextField: nameof(Priority.Name));
+            vm.CustomFields = project.CustomFields;
 
             return View(vm);
         }

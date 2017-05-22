@@ -39,10 +39,26 @@
         <select asp-for="ProjectTask.AssignedTo" class="form-control" asp-items="Model.AssignedToSelectList"></select>
     </div>
 </div>
+
+@foreach(var field in Model.CustomFields)
+{
+    switch (field.FieldType.ToString())
+    {
+        case "Text":
+            <div class="form-group">
+                <label asp-for="ProjectTask.CustomFieldValue" class="col-md-2 control-label">@field.FieldName</label>
+                <div class="col-md-10">
+                    <input type="text" required="@field.IsRequired" maxlength="@field.MaxLength" asp-for="ProjectTask.CustomFieldValue" class="form-control" />
+                </div>
+            </div>
+            break;
+    }
+}
+
 <div class="form-group">
     <label asp-for="ProjectTask.Attachments" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <input type="file" name="files" multiple/>
+        <input type="file" name="files" multiple />
     </div>
 </div>
 
