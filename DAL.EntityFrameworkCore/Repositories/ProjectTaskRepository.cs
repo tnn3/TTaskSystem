@@ -22,6 +22,7 @@ namespace DAL.EntityFrameworkCore.Repositories
                 .Include(p => p.Project)
                 .Include(p => p.Status.Status)
                 .Include(p => p.Priority)
+                .Include(p => p.AssignedTo)
                 .ToListAsync();
         }
 
@@ -31,6 +32,7 @@ namespace DAL.EntityFrameworkCore.Repositories
                 .Include(p => p.Project)
                 .Include(p => p.Status.Status)
                 .Include(p => p.Priority)
+                .Include(p => p.AssignedTo)
                 .Where(p => p.Project.ProjectId == projectId)
                 .ToListAsync();
         }

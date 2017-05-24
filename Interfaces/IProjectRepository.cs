@@ -10,5 +10,7 @@ namespace Interfaces
     public interface IProjectRepository : IRepository<Project>
     {
         Task<Project> FindAsyncWithIncludes(int id);
+        Task<List<Project>> AllUserProjectsAsync(int userId);
+        Task<Project> FindUserProjectAsync(int id, int userId);
     }
 }

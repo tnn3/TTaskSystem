@@ -17,7 +17,7 @@
 <div class="form-group">
     <label asp-for="ProjectTask.DueDate" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <input type="datetime-local" asp-for="ProjectTask.DueDate" class="form-control" />
+        <input type="datetime" asp-for="ProjectTask.DueDate" class="form-control" />
         <span asp-validation-for="ProjectTask.DueDate" class="text-danger"></span>
     </div>
 </div>
@@ -36,7 +36,7 @@
 <div class="form-group">
     <label asp-for="ProjectTask.AssignedTo" class="col-md-2 control-label"></label>
     <div class="col-md-10">
-        <select asp-for="ProjectTask.AssignedTo" class="form-control" asp-items="Model.AssignedToSelectList"></select>
+        <select asp-for="ProjectTask.AssignedToId" class="form-control" asp-items="Model.AssignedToSelectList"></select>
     </div>
 </div>
 
