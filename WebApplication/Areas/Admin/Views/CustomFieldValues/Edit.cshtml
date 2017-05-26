@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    ViewData["Site"] = "Custom field values";
 }
 
 <h2>Edit</h2>
@@ -11,26 +12,26 @@
         <h4>CustomFieldValue</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="CustomFieldValueId" />
+    <input type="hidden" asp-for="CustomFieldValue.CustomFieldValueId" />
         <div class="form-group">
-            <label asp-for="FieldValue" class="col-md-2 control-label"></label>
+            <label asp-for="CustomFieldValue.FieldValue" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="FieldValue" class="form-control" />
-                <span asp-validation-for="FieldValue" class="text-danger"></span>
+                <input asp-for="CustomFieldValue.FieldValue" class="form-control" />
+                <span asp-validation-for="CustomFieldValue.FieldValue" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="CustomFieldId" class="control-label col-md-2"></label>
+            <label asp-for="CustomFieldValue.CustomFieldId" class="control-label col-md-2"></label>
             <div class="col-md-10">
-                <select asp-for="CustomFieldId" class="form-control" asp-items="ViewBag.CustomFieldId"></select>
-                <span asp-validation-for="CustomFieldId" class="text-danger"></span>
+                <select asp-for="CustomFieldValue.CustomFieldId" class="form-control" asp-items="ViewBag.CustomFieldId"></select>
+                <span asp-validation-for="CustomFieldValue.CustomFieldId" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="ProjectTaskId" class="control-label col-md-2"></label>
+            <label asp-for="CustomFieldValue.ProjectTaskId" class="control-label col-md-2"></label>
             <div class="col-md-10">
-                <select asp-for="ProjectTaskId" class="form-control" asp-items="ViewBag.ProjectTaskId"></select>
-                <span asp-validation-for="ProjectTaskId" class="text-danger"></span>
+                <select asp-for="CustomFieldValue.ProjectTaskId" class="form-control" asp-items="ViewBag.ProjectTaskId"></select>
+                <span asp-validation-for="CustomFieldValue.ProjectTaskId" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">

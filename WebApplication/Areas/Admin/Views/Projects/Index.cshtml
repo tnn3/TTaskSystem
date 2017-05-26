@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    ViewData["Site"] = "Projects";
 }
 
 <h2>Index</h2>
@@ -39,6 +40,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a> |
                 <a asp-controller="CustomFields" asp-action="Index" asp-route-projectId="@item.ProjectId">Edit CustomFields</a> |
+                <a asp-controller="UserInProjects" asp-action="Index" asp-route-projectId="@item.ProjectId">Change project users</a> |
                 <a asp-action="Details" asp-route-id="@item.ProjectId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
             </td>

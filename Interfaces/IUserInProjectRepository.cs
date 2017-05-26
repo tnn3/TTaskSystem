@@ -11,5 +11,6 @@ namespace Interfaces
     {
         Task<List<UserInProject>> AllAsyncWithIncludes();
         Task<UserInProject> FindAsyncWithIncludes(int id);
+        Task<List<UserInProject>> AllInProject(int projectId);
     }
 }

@@ -24,9 +24,13 @@ namespace WebApplication.Areas.Admin.Controllers
         }
 
         // GET: UserInProjects
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? projectId)
         {
-            return View(await _uow.UserInProjects.AllAsyncWithIncludes());
+            if (projectId == null)
+            {
+                return NotFound();
+            }
+            return View(await _uow.UserInProjects.AllInProject(projectId.Value));
         }
 
         // GET: UserInProjects/Details/5
@@ -47,7 +51,7 @@ namespace WebApplication.Areas.Admin.Controllers
         }
 
         // GET: UserInProjects/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? projectId)
         {
             var vm = new UserInProjectsViewModel()
             {
@@ -55,10 +59,6 @@ namespace WebApplication.Areas.Admin.Controllers
                     items: await _uow.ApplicationUsers.AllAsync(),
                     dataValueField: nameof(ApplicationUser.IdentityUserId),
                     dataTextField: nameof(ApplicationUser.UserName)),
-                ProjectSelectList = new SelectList(
-                    items: await _uow.Projects.AllAsync(),
-                    dataValueField: nameof(Project.ProjectId),
-                    dataTextField: nameof(Project.Name)),
                 TitleSelectList = new SelectList(
                     items: await _uow.UserTitleInProjects.AllAsyncWithIncludes(),
                     dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
@@ -72,10 +72,15 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserInProjectsViewModel vm)
+        public async Task<IActionResult> Create(UserInProjectsViewModel vm, int? projectId)
         {
+            if (projectId == null)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
+                vm.UserInProject.ProjectId = projectId.Value;
                 _uow.UserInProjects.Add(vm.UserInProject);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -84,10 +89,6 @@ namespace WebApplication.Areas.Admin.Controllers
                 items: await _uow.ApplicationUsers.AllAsync(),
                 dataValueField: nameof(ApplicationUser.IdentityUserId),
                 dataTextField: nameof(ApplicationUser.UserName));
-            vm.ProjectSelectList = new SelectList(
-                items: await _uow.Projects.AllAsync(),
-                dataValueField: nameof(Project.ProjectId),
-                dataTextField: nameof(Project.Name));
             vm.TitleSelectList = new SelectList(
                 items: await _uow.UserTitleInProjects.AllAsyncWithIncludes(),
                 dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
@@ -113,10 +114,6 @@ namespace WebApplication.Areas.Admin.Controllers
             var vm = new UserInProjectsViewModel()
             {
                 UserInProject = userInProject,
-                ProjectSelectList = new SelectList(
-                    items: await _uow.Projects.AllAsync(),
-                    dataValueField: nameof(Project.ProjectId),
-                    dataTextField: nameof(Project.Name)),
                 TitleSelectList = new SelectList(
                     items: await _uow.UserTitleInProjects.AllAsyncWithIncludes(),
                     dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
@@ -157,10 +154,6 @@ namespace WebApplication.Areas.Admin.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            vm.ProjectSelectList = new SelectList(
-                items: await _uow.Projects.AllAsync(),
-                dataValueField: nameof(Project.ProjectId),
-                dataTextField: nameof(Project.Name));
             vm.TitleSelectList = new SelectList(
                 items: await _uow.UserTitleInProjects.AllAsyncWithIncludes(),
                 dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),

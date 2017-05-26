@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="~/admin/dist/css/AdminLTE.min.css">
         <!-- AdminLTE Skins. -->
         <link rel="stylesheet" href="~/admin/dist/css/skins/_all-skins.min.css">
+        <link rel="stylesheet" href="~/admin/dist/css/admin.css">
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -46,7 +47,7 @@
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        @await Html.PartialAsync("_LoginPartial")
+                        @await Html.PartialAsync("_AdminLoginPartial")
                     </ul>
                 </div>
             </nav>
@@ -79,7 +80,6 @@
                         <ul class="treeview-menu">
                             <li><a asp-area="Admin" asp-controller="Attachments" asp-action="Index"><i class="fa fa-circle-o"></i> Attachments</a></li>
                             <li><a asp-area="Admin" asp-controller="Priorities" asp-action="Index"><i class="fa fa-circle-o"></i> Priorities</a></li>
-                            <li><a asp-area="Admin" asp-controller="UserInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> UserInProjects</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -129,17 +129,15 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                    Dashboard<small>Version 2.0</small>
+                    @ViewData[index: "Site"]
                 </h1>
-                <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li class="active">Dashboard</li>
-                </ol>
             </section>
 
             <!-- Main content -->
             <section class="content">
-                @RenderBody()
+                <div class="container">
+                    @RenderBody()
+                </div>
             </section>
             <!-- /.content -->
         </div>

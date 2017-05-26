@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\admin\dist\css\admin.css" />
     <Content Include="wwwroot\js\jquery.validate.globalize.datetime.js" />
   </ItemGroup>
   <ItemGroup>
@@ -49,7 +50,6 @@
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Data\" />
-    <Folder Include="wwwroot\admin\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />

@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Index";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "_AdminLayout";
+    }
 }
 
 <h2>Index</h2>
