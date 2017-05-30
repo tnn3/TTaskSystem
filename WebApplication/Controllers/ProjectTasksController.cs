@@ -19,7 +19,7 @@ namespace WebApplication.Controllers
     public class ProjectTasksController : Controller
     {
         private readonly IApplicationUnitOfWork _uow;
-        private IHostingEnvironment _environment;
+        private readonly IHostingEnvironment _environment;
 
         public ProjectTasksController(IApplicationUnitOfWork uow, IHostingEnvironment environment)
         {
@@ -151,7 +151,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var projectTask = await _uow.ProjectTasks.FindAsync(id.Value);
+            var projectTask = await _uow.ProjectTasks.FindAsyncWithIncludes(id.Value);
             if (projectTask == null)
             {
                 return NotFound();
@@ -189,13 +189,19 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var prevTask = _uow.ProjectTasks.Find(id);
+            var prevTask = await _uow.ProjectTasks.FindAsyncWithIncludes(id);
             prevTask.AssignedToId = vm.ProjectTask.AssignedToId;
             prevTask.Description = vm.ProjectTask.Description;
             prevTask.Name = vm.ProjectTask.Name;
             prevTask.DueDate = vm.ProjectTask.DueDate;
             prevTask.PriorityId = vm.ProjectTask.PriorityId;
             prevTask.StatusId = vm.ProjectTask.StatusId;
+
+            for (var i = 0; i < prevTask.CustomFieldValue.Count; i++)
+            {
+                //TODO logic when position changes
+                prevTask.CustomFieldValue[i].FieldValue = vm.ProjectTask.CustomFieldValue[i].FieldValue;
+            }
 
             var same = true;
             for (var i = 0; i < prevTask.Attachments.Count; i++)

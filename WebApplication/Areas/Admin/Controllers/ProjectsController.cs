@@ -102,10 +102,13 @@ namespace WebApplication.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var prevProject = await _uow.Projects.FindAsync(id);
                 try
                 {
-                    project.UpdatedOn = DateTime.Now;
-                    _uow.Projects.Update(project);
+                    prevProject.Name = project.Name;
+                    prevProject.Description = project.Description;
+                    prevProject.UpdatedOn = DateTime.Now;
+                    _uow.Projects.Update(prevProject);
                     await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

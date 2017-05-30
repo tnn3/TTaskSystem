@@ -36,6 +36,14 @@ namespace DAL.EntityFrameworkCore.Repositories
                 .Where(p => p.Project.ProjectId == projectId)
                 .ToListAsync();
         }
+
+        public Task<ProjectTask> FindAsyncWithIncludes(int id)
+        {
+            return RepositoryDbSet
+                .Include(p => p.CustomFieldValue)
+                .Include(p => p.Attachments)
+                .SingleOrDefaultAsync(m => m.ProjectTaskId == id);
+        }
     }
 }
 
