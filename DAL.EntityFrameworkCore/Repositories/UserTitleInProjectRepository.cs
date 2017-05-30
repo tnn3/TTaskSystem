@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Interfaces;
@@ -23,6 +24,14 @@ namespace DAL.EntityFrameworkCore.Repositories
         public Task<UserTitleInProject> FindAsyncWithIncludes(int id)
         {
             return RepositoryDbSet.Include(u => u.Project).Include(u => u.Title).SingleOrDefaultAsync(m => m.UserTitleInProjectId == id);
+        }
+
+        public Task<List<UserTitleInProject>> AllProjectsAsync(int projectId)
+        {
+            return RepositoryDbSet.Include(u => u.Project)
+                .Include(u => u.Title)
+                .Where(u => u.ProjectId == projectId)
+                .ToListAsync();
         }
     }
 }

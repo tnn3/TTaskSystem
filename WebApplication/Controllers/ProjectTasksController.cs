@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +10,8 @@ using Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using WebApplication.ViewModels.ProjectTaskViewModel;
 using AspNetCore.Identity.Extensions;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication.Controllers
 {
@@ -15,10 +19,12 @@ namespace WebApplication.Controllers
     public class ProjectTasksController : Controller
     {
         private readonly IApplicationUnitOfWork _uow;
+        private IHostingEnvironment _environment;
 
-        public ProjectTasksController(IApplicationUnitOfWork uow)
+        public ProjectTasksController(IApplicationUnitOfWork uow, IHostingEnvironment environment)
         {
             _uow = uow;
+            _environment = environment;
         }
 
         // GET: ProjectTasks
@@ -81,12 +87,13 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? projectId, ProjectTaskViewModel vm)
+        public async Task<IActionResult> Create(int? projectId, ProjectTaskViewModel vm, ICollection<IFormFile> files)
         {
             if (projectId == null)
             {
                 return NotFound();
             }
+            
             //TODO check projectId valid
             if (ModelState.IsValid)
             {
@@ -95,6 +102,26 @@ namespace WebApplication.Controllers
                 vm.ProjectTask.ProjectId = projectId.Value;
                 
                 _uow.ProjectTasks.Add(vm.ProjectTask);
+
+                //TODO fix for existing filename
+                var uploads = Path.Combine(_environment.WebRootPath, "uploads");
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                        }
+                        _uow.Attachments.Add(new Attachment
+                        {
+                            ProjectTaskId = vm.ProjectTask.ProjectTaskId,
+                            Location = file.FileName,
+                            UploadedOn = DateTime.Now,
+                        });
+                    }
+                }
+                
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -155,7 +182,7 @@ namespace WebApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProjectTaskViewModel vm)
+        public async Task<IActionResult> Edit(int id, ProjectTaskViewModel vm, List<IFormFile> files)
         {
             if (id != vm.ProjectTask.ProjectTaskId)
             {
@@ -169,6 +196,25 @@ namespace WebApplication.Controllers
             prevTask.DueDate = vm.ProjectTask.DueDate;
             prevTask.PriorityId = vm.ProjectTask.PriorityId;
             prevTask.StatusId = vm.ProjectTask.StatusId;
+
+            var same = true;
+            for (var i = 0; i < prevTask.Attachments.Count; i++)
+            {
+                if (!prevTask.Attachments[i].Location.Equals(files[i].FileName))
+                {
+                    same = false;
+                    break;
+                }
+            }
+
+            if (same)
+            {
+                prevTask.Attachments = vm.ProjectTask.Attachments;
+            }
+            else
+            {
+                //TODO attachment logic
+            }
 
             if (ModelState.IsValid)
             {

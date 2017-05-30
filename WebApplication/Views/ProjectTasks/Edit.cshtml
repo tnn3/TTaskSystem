@@ -5,12 +5,13 @@
     if (User.IsInRole("Admin"))
     {
         Layout = "_AdminLayout";
+        ViewData["Site"] = "Project";
     }
 }
 
 <h2>Edit</h2>
 
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">
     <div class="form-horizontal">
         <h4>ProjectTask</h4>
         <hr />

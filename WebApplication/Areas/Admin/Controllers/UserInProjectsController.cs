@@ -53,6 +53,10 @@ namespace WebApplication.Areas.Admin.Controllers
         // GET: UserInProjects/Create
         public async Task<IActionResult> Create(int? projectId)
         {
+            if (projectId == null)
+            {
+                return NotFound();
+            }
             var vm = new UserInProjectsViewModel()
             {
                 UserSelectList = new SelectList(
@@ -60,7 +64,7 @@ namespace WebApplication.Areas.Admin.Controllers
                     dataValueField: nameof(ApplicationUser.IdentityUserId),
                     dataTextField: nameof(ApplicationUser.UserName)),
                 TitleSelectList = new SelectList(
-                    items: await _uow.UserTitleInProjects.AllAsyncWithIncludes(),
+                    items: await _uow.UserTitleInProjects.AllProjectsAsync(projectId.Value),
                     dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
                     dataTextField: nameof(UserTitleInProject.Title) + "." + nameof(UserTitle.Title))
             };
@@ -90,7 +94,7 @@ namespace WebApplication.Areas.Admin.Controllers
                 dataValueField: nameof(ApplicationUser.IdentityUserId),
                 dataTextField: nameof(ApplicationUser.UserName));
             vm.TitleSelectList = new SelectList(
-                items: await _uow.UserTitleInProjects.AllAsyncWithIncludes(),
+                items: await _uow.UserTitleInProjects.AllProjectsAsync(projectId.Value),
                 dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
                 dataTextField: nameof(UserTitleInProject.Title) + "." + nameof(UserTitle.Title));
 
@@ -115,7 +119,7 @@ namespace WebApplication.Areas.Admin.Controllers
             {
                 UserInProject = userInProject,
                 TitleSelectList = new SelectList(
-                    items: await _uow.UserTitleInProjects.AllAsyncWithIncludes(),
+                    items: await _uow.UserTitleInProjects.AllProjectsAsync(userInProject.ProjectId),
                     dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
                     dataTextField: nameof(UserTitleInProject.Title) + "." + nameof(UserTitle.Title))
             };
@@ -155,7 +159,7 @@ namespace WebApplication.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
             vm.TitleSelectList = new SelectList(
-                items: await _uow.UserTitleInProjects.AllAsyncWithIncludes(),
+                items: await _uow.UserTitleInProjects.AllProjectsAsync(vm.UserInProject.ProjectId),
                 dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
                 dataTextField: nameof(UserTitleInProject) + "." + nameof(UserTitle.Title));
             return View(vm);

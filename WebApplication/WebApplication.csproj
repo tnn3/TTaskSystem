@@ -50,6 +50,7 @@
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Areas\Identity\Controllers\" />
     <Folder Include="Data\" />
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />

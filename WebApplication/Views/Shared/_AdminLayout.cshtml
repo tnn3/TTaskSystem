@@ -58,56 +58,34 @@
             <section class="sidebar">
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
-                    <li class="treeview">
+                    <li class="treeview @(ViewData["Site"].Equals("Changes") || ViewData["Site"].Equals("ChangeSets") ? "active" : "")">
                         <a href="#">
                             <i class="fa fa-files-o"></i>
                             <span>Changes</span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a asp-area="Admin" asp-controller="Changes" asp-action="Index"><i class="fa fa-circle-o"></i> Changes</a></li>
-                            <li><a asp-area="Admin" asp-controller="ChangeSets" asp-action="Index"><i class="fa fa-circle-o"></i> ChangeSets</a></li>
+                            <li class=@(ViewData["Site"].Equals("Changes") ? "active" : "")><a asp-area="Admin" asp-controller="Changes" asp-action="Index"><i class="fa fa-circle-o"></i> Changes</a></li>
+                            <li class=@(ViewData["Site"].Equals("ChangeSets") ? "active" : "")><a asp-area="Admin" asp-controller="ChangeSets" asp-action="Index"><i class="fa fa-circle-o"></i> ChangeSets</a></li>
                         </ul>
                     </li>
-                    <li><a asp-area="Admin" asp-controller="Projects" asp-action="Index"><i class="fa fa-circle-o"></i>Projects</a></li>
-                    <li class="treeview">
+                    <li class=@(ViewData["Site"].Equals("Priorities") ? "active" : "")><a asp-area="Admin" asp-controller="Priorities" asp-action="Index"><i class="fa fa-circle-o"></i> <span>Priorities</span></a></li>
+                    <li class="treeview @(ViewData["Site"].Equals("Projects") || ViewData["Site"].Equals("Project statuses") || ViewData["Site"].Equals("Titles in project") ? "active" : "")">
                         <a href="#">
                             <i class="fa fa-pie-chart"></i>
-                            <span>Others</span>
+                            <span>Project</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
-                        <ul class="treeview-menu">
-                            <li><a asp-area="Admin" asp-controller="Attachments" asp-action="Index"><i class="fa fa-circle-o"></i> Attachments</a></li>
-                            <li><a asp-area="Admin" asp-controller="Priorities" asp-action="Index"><i class="fa fa-circle-o"></i> Priorities</a></li>
+                        <ul class="treeview-menu" >
+                            <li class=@(ViewData["Site"].Equals("Projects") ? "active" : "")><a asp-area="Admin" asp-controller="Projects" asp-action="Index"><i class="fa fa-circle-o"></i> Projects</a></li>
+                            <li class=@(ViewData["Site"].Equals("Project statuses") ? "active" : "")><a asp-area="Admin" asp-controller="StatusInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> Statuses</a></li>
+                            <li class=@(ViewData["Site"].Equals("Titles in project") ? "active" : "")><a asp-area="Admin" asp-controller="UserTitleInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> User titles</a></li>
                         </ul>
                     </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-laptop"></i>
-                            <span>Statuses</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a asp-area="Admin" asp-controller="Status" asp-action="Index"><i class="fa fa-circle-o"></i> Statuses</a></li>
-                            <li><a asp-area="Admin" asp-controller="StatusInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> StatusInProjects</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-edit"></i> <span>User titles</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a asp-area="Admin" asp-controller="UserTitleInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> UserTitleInProjects</a></li>
-                            <li><a asp-area="Admin" asp-controller="UserTitles" asp-action="Index"><i class="fa fa-circle-o"></i> UserTitles</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
+                    <li class=@(ViewData["Site"].Equals("Statuses") ? "active" : "")><a asp-area="Admin" asp-controller="Status" asp-action="Index"><i class="fa fa-circle-o"></i><span> Statuses</span></a></li>
+                    <li class="@(ViewData["Site"].Equals("User titles") ? "active" : "")"><a asp-area="Admin" asp-controller="UserTitles" asp-action="Index"><i class="fa fa-circle-o"></i> <span>User titles</span></a></li>
+                    <li class="treeview @(ViewData["Site"].Equals("Users") || ViewData["Site"].Equals("Roles") || ViewData["Site"].Equals("User roles") ? "active" : "")">
                         <a href="#">
                             <i class="fa fa-table"></i> <span>Identity</span>
                             <span class="pull-right-container">
@@ -115,9 +93,9 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a asp-area="Identity" asp-controller="IdentityUsers" asp-action="Index"><i class="fa fa-circle-o"></i> Users</a></li>
-                            <li><a asp-area="Identity" asp-controller="IdentityRoles" asp-action="Index"><i class="fa fa-circle-o"></i> Roles</a></li>
-                            <li><a asp-area="Identity" asp-controller="IdentityUserRoles" asp-action="Index"><i class="fa fa-circle-o"></i> User roles</a></li>
+                            <li class="@(ViewData["Site"].Equals("Users") ? "active" : "")"><a asp-area="Identity" asp-controller="IdentityUsers" asp-action="Index"><i class="fa fa-circle-o"></i> Users</a></li>
+                            <li class="@(ViewData["Site"].Equals("Roles") ? "active" : "")"><a asp-area="Identity" asp-controller="IdentityRoles" asp-action="Index"><i class="fa fa-circle-o"></i> Roles</a></li>
+                            <li class="@(ViewData["Site"].Equals("User roles") ? "active" : "")"><a asp-area="Identity" asp-controller="IdentityUserRoles" asp-action="Index"><i class="fa fa-circle-o"></i> User roles</a></li>
                         </ul>
                     </li>
                 </ul>
