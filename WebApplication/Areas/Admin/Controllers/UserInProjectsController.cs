@@ -118,6 +118,10 @@ namespace WebApplication.Areas.Admin.Controllers
             var vm = new UserInProjectsViewModel()
             {
                 UserInProject = userInProject,
+                UserSelectList = new SelectList(
+                    items: await _uow.ApplicationUsers.AllAsync(),
+                    dataValueField: nameof(ApplicationUser.IdentityUserId),
+                    dataTextField: nameof(ApplicationUser.UserName)),
                 TitleSelectList = new SelectList(
                     items: await _uow.UserTitleInProjects.AllProjectsAsync(userInProject.ProjectId),
                     dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),
@@ -159,6 +163,10 @@ namespace WebApplication.Areas.Admin.Controllers
                 }
                 return RedirectToAction("Index");
             }
+            vm.UserSelectList = new SelectList(
+                items: await _uow.ApplicationUsers.AllAsync(),
+                dataValueField: nameof(ApplicationUser.IdentityUserId),
+                dataTextField: nameof(ApplicationUser.UserName));
             vm.TitleSelectList = new SelectList(
                 items: await _uow.UserTitleInProjects.AllProjectsAsync(vm.UserInProject.ProjectId),
                 dataValueField: nameof(UserTitleInProject.UserTitleInProjectId),

@@ -14,5 +14,6 @@ namespace Interfaces
         Task<List<ProjectTask>> AllInProjectWithUser(int projectId, int userId);
         Task<ProjectTask> FindAsyncWithIncludesAndUser(int taskId, int userId);
         Task<ProjectTask> FindWithUserAsync(int taskId, int userId);
+        Task<ProjectTask> FindWithIncludesAsync(int taskId);
     }
 }

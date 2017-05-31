@@ -51,7 +51,7 @@ namespace WebApplication.Controllers
             }
 
             var projectTask = User.IsInRole("Admin") ? 
-                await _uow.ProjectTasks.FindAsync(id.Value) : 
+                await _uow.ProjectTasks.FindWithIncludesAsync(id.Value) : 
                 await _uow.ProjectTasks.FindAsyncWithIncludesAndUser(id.Value, User.GetUserId<int>());
             if (projectTask == null)
             {
@@ -84,7 +84,7 @@ namespace WebApplication.Controllers
                     dataValueField: nameof(StatusInProject.StatusInProjectId),
                     dataTextField: nameof(StatusInProject.Status) + "." + nameof(Status.Name)),
                 AssignedToSelectList = new SelectList(
-                    await _uow.UserInProjects.AllAsyncWithIncludes(),
+                    await _uow.UserInProjects.AllInProject(projectId.Value),
                     nameof(UserInProject.UserId),
                     nameof(UserInProject.User) + "." + nameof(ApplicationUser.UserName)),
                 PrioritySelectList = new SelectList(
@@ -149,7 +149,7 @@ namespace WebApplication.Controllers
                 dataValueField: nameof(StatusInProject.StatusId),
                 dataTextField: nameof(StatusInProject.Status) + "." + nameof(Status.Name));
             vm.AssignedToSelectList = new SelectList(
-                await _uow.UserInProjects.AllAsyncWithIncludes(),
+                await _uow.UserInProjects.AllInProject(projectId.Value),
                 nameof(UserInProject.UserId),
                 nameof(UserInProject.User) + "." + nameof(ApplicationUser.UserName));
             vm.PrioritySelectList = new SelectList(
@@ -184,7 +184,7 @@ namespace WebApplication.Controllers
                     dataValueField: nameof(StatusInProject.StatusId),
                     dataTextField: nameof(StatusInProject.Status) + "." + nameof(Status.Name)),
                 AssignedToSelectList = new SelectList(
-                    await _uow.UserInProjects.AllAsyncWithIncludes(),
+                    await _uow.UserInProjects.AllInProject(projectTask.ProjectId),
                     nameof(UserInProject.UserId),
                     nameof(UserInProject.User) + "." + nameof(ApplicationUser.UserName)),
                 PrioritySelectList = new SelectList(
@@ -214,45 +214,115 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
+            var changeSet = new ChangeSet
+            {
+                ProjectTaskId = prevTask.ProjectTaskId,
+                ChangerId = User.GetUserId<int>(),
+                Comment = "",
+                Time = DateTime.Now,
+                Changes = new List<Change>()
+            };
+
+            if (prevTask.AssignedToId != vm.ProjectTask.AssignedToId)
+            {
+                changeSet.Changes.Add(new Change{ Before = prevTask.AssignedTo.UserName});
+            }
             prevTask.AssignedToId = vm.ProjectTask.AssignedToId;
+
+            if (prevTask.Description != vm.ProjectTask.Description)
+            {
+                changeSet.Changes.Add(new Change { Before = prevTask.Description});
+            }
             prevTask.Description = vm.ProjectTask.Description;
+
+            if (prevTask.Name != vm.ProjectTask.Name)
+            {
+                changeSet.Changes.Add(new Change { Before = prevTask.Name });
+            }
             prevTask.Name = vm.ProjectTask.Name;
+
+            if (prevTask.DueDate != vm.ProjectTask.DueDate)
+            {
+                changeSet.Changes.Add(new Change { Before = prevTask.DueDate.ToString() });
+            }
             prevTask.DueDate = vm.ProjectTask.DueDate;
+
+            if (prevTask.PriorityId != vm.ProjectTask.PriorityId)
+            {
+                changeSet.Changes.Add(new Change { Before = prevTask.Priority.Name });
+            }
             prevTask.PriorityId = vm.ProjectTask.PriorityId;
+
+            if (prevTask.StatusId != vm.ProjectTask.StatusId)
+            {
+                changeSet.Changes.Add(new Change { Before = prevTask.Status.Status.Name });
+            }
             prevTask.StatusId = vm.ProjectTask.StatusId;
 
             for (var i = 0; i < prevTask.CustomFieldValue.Count; i++)
             {
                 //TODO logic when position changes
+                if (prevTask.CustomFieldValue[i].FieldValue != vm.ProjectTask.CustomFieldValue[i].FieldValue)
+                {
+                    changeSet.Changes.Add(new Change { Before = prevTask.CustomFieldValue[i].FieldValue });
+                }
                 prevTask.CustomFieldValue[i].FieldValue = vm.ProjectTask.CustomFieldValue[i].FieldValue;
             }
 
-            var same = !prevTask.Attachments.Where((t, i) => !t.Location.Equals(files[i].FileName)).Any();
-            
-            /*
-            var same = true;
-            for (var i = 0; i < prevTask.Attachments.Count; i++)
-            {
-                if (!prevTask.Attachments[i].Location.Equals(files[i].FileName))
-                {
-                    same = false;
-                    break;
-                }
-            }*/
+            var oldAttachments = prevTask.Attachments;
 
-            if (same)
+            var newAttachments = new List<string>();
+
+            foreach (var file in files)
             {
-                prevTask.Attachments = vm.ProjectTask.Attachments;
-            }
-            else
-            {
-                //TODO attachment logic
+                var exists = false;
+                //remove existing items from delete array
+                foreach (var attachment in prevTask.Attachments)
+                {
+                    if (attachment.Location.Equals(file.FileName))
+                    {
+                        oldAttachments.Remove(attachment);
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists)
+                {
+                    newAttachments.Add(file.FileName);
+                }
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (oldAttachments.Count == 0)
+                    {
+                        prevTask.Attachments = vm.ProjectTask.Attachments;
+                    }
+                    else
+                    {
+                        //delete removed attachments
+                        foreach (var attachment in oldAttachments)
+                        {
+                            _uow.Attachments.Remove(attachment);
+                            changeSet.Changes.Add(new Change { Before = attachment.Location });
+                            //TODO remove from disk
+                        }
+
+                        //add new attachments
+                        foreach (var attachment in newAttachments)
+                        {
+                            _uow.Attachments.Add(new Attachment
+                            {
+                                Location = attachment,
+                                ProjectTaskId = prevTask.ProjectTaskId,
+                                UploadedOn = DateTime.Now
+                            });
+                            changeSet.Changes.Add(new Change { Before = attachment });
+                        }
+                    }
+                    _uow.ChangeSets.Add(changeSet);
                     prevTask.Changed = DateTime.Now;
                     _uow.ProjectTasks.Update(prevTask);
                     await _uow.SaveChangesAsync();
@@ -276,7 +346,7 @@ namespace WebApplication.Controllers
                 dataValueField: nameof(StatusInProject.StatusId),
                 dataTextField: nameof(StatusInProject.Status) + "." + nameof(Status.Name));
             vm.AssignedToSelectList = new SelectList(
-                await _uow.UserInProjects.AllAsyncWithIncludes(),
+                await _uow.UserInProjects.AllInProject(prevTask.ProjectId),
                 nameof(UserInProject.UserId),
                 nameof(UserInProject.User) + "." + nameof(ApplicationUser.UserName));
             vm.PrioritySelectList = new SelectList(
@@ -310,11 +380,27 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var projectTask = await _uow.ProjectTasks.FindWithUserAsync(id, User.GetUserId<int>());
+            var projectTask = await _uow.ProjectTasks.FindAsyncWithIncludesAndUser(id, User.GetUserId<int>());
             if (projectTask == null)
             {
                 return NotFound();
             }
+            //delete related attachments
+            foreach (var attachment in projectTask.Attachments)
+            {
+                _uow.Attachments.Remove(attachment);
+            }
+
+            //delete related changes
+            foreach (var changeset in projectTask.ChangeSets)
+            {
+                foreach (var change in changeset.Changes)
+                {
+                    _uow.Changes.Remove(change);
+                }
+                _uow.ChangeSets.Remove(changeset);
+            }
+
             _uow.ProjectTasks.Remove(projectTask);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");

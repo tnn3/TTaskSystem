@@ -40,31 +40,33 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Priority.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AssignedTo.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status.Status.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            <td>
-                @(item.Changed == null ? Html.DisplayFor(modelItem => item.Created) : Html.DisplayFor(modelItem => item.Changed))
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProjectTaskId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProjectTaskId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProjectTaskId">Delete</a>
-            </td>
-        </tr>
+    <tr>
+        <td>
+            <a asp-action="Details" asp-route-id="@item.ProjectTaskId">@Html.DisplayFor(modelItem => item.Name)</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Priority.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssignedTo.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status.Status.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DueDate)
+        </td>
+        <td>
+            @(item.Changed == null ? Html.DisplayFor(modelItem => item.Created) : Html.DisplayFor(modelItem => item.Changed))
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.ProjectTaskId">Edit</a> |
+            <a asp-action="Delete" asp-route-id="@item.ProjectTaskId">Delete</a>
+        </td>
+    </tr>
 }
     </tbody>
 </table>

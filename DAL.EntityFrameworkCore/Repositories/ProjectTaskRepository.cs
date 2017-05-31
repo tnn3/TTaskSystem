@@ -56,6 +56,10 @@ namespace DAL.EntityFrameworkCore.Repositories
                 .Include(p => p.Project.UsersInProject)
                 .Include(p => p.CustomFieldValue)
                 .Include(p => p.Attachments)
+                .Include(p => p.AssignedTo)
+                .Include(p => p.Priority)
+                .Include(p => p.Status)
+                .Include(p => p.Status.Status)
                 .Where(p => p.Project.UsersInProject.Any(o => o.UserId == userId && o.ProjectId == p.ProjectId))
                 .SingleOrDefaultAsync(m => m.ProjectTaskId == taskId);
         }
@@ -66,6 +70,23 @@ namespace DAL.EntityFrameworkCore.Repositories
                 .Include(p => p.Project)
                 .Include(p => p.Project.UsersInProject)
                 .Where(p => p.Project.UsersInProject.Any(o => o.UserId == userId && o.ProjectId == p.ProjectId))
+                .SingleOrDefaultAsync(p => p.ProjectTaskId == taskId);
+        }
+
+        public Task<ProjectTask> FindWithIncludesAsync(int taskId)
+        {
+            return RepositoryDbSet
+                .Include(p => p.Project)
+                .Include(p => p.Project.UsersInProject)
+                .Include(p => p.CustomFieldValue)
+                .Include(p => p.Attachments)
+                .Include(p => p.AssignedTo)
+                .Include(p => p.Priority)
+                .Include(p => p.Status)
+                .Include(p => p.Status.Status)
+                .Include(p => p.Author)
+                .Include(p => p.ChangeSets)
+                    .ThenInclude(a => a.Changes)
                 .SingleOrDefaultAsync(p => p.ProjectTaskId == taskId);
         }
     }
