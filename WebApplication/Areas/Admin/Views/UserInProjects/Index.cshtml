@@ -17,9 +17,6 @@
                 @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.TitleInProject)
             </th>
             <th></th>
@@ -30,9 +27,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TitleInProject.Title.Title)

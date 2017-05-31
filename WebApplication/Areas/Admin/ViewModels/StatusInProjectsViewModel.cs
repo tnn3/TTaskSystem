@@ -16,6 +16,5 @@ namespace WebApplication.Areas.Admin.ViewModels
     {
         public StatusInProject StatusInProject { get; set; }
         public SelectList StatusSelectList { get; set; }
-        public SelectList ProjectSelectList { get; set; }
     }
 }

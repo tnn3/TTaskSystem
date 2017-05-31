@@ -72,7 +72,7 @@
                         </ul>
                     </li>
                     <li class=@(ViewData["Site"].Equals("Priorities") ? "active" : "")><a asp-area="Admin" asp-controller="Priorities" asp-action="Index"><i class="fa fa-circle-o"></i> <span>Priorities</span></a></li>
-                    <li class="treeview @(ViewData["Site"].Equals("Projects") || ViewData["Site"].Equals("Project statuses") || ViewData["Site"].Equals("Titles in project") ? "active" : "")">
+                    <li class="treeview @(ViewData["Site"].Equals("Projects") || ViewData["Site"].Equals("Tasks") || ViewData["Site"].Equals("Project statuses") || ViewData["Site"].Equals("Titles in project") || ViewData["Site"].Equals("Custom fields") || ViewData["Site"].Equals("Project users") ? "active" : "")">
                         <a href="#">
                             <i class="fa fa-pie-chart"></i>
                             <span>Project</span>
@@ -82,8 +82,11 @@
                         </a>
                         <ul class="treeview-menu" >
                             <li class=@(ViewData["Site"].Equals("Projects") ? "active" : "")><a asp-area="Admin" asp-controller="Projects" asp-action="Index"><i class="fa fa-circle-o"></i> Projects</a></li>
+                            <li class=@(ViewData["Site"].Equals("Tasks") ? "active" : "")><a asp-area="" asp-controller="ProjectTasks" asp-action="Index"><i class="fa fa-circle-o"></i> Tasks</a></li>
                             <li class=@(ViewData["Site"].Equals("Project statuses") ? "active" : "")><a asp-area="Admin" asp-controller="StatusInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> Statuses</a></li>
                             <li class=@(ViewData["Site"].Equals("Titles in project") ? "active" : "")><a asp-area="Admin" asp-controller="UserTitleInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> User titles</a></li>
+                            <li class=@(ViewData["Site"].Equals("Custom fields") ? "active" : "")><a asp-area="Admin" asp-controller="CustomFields" asp-action="Index"><i class="fa fa-circle-o"></i> Custom Fields</a></li>
+                            <li class=@(ViewData["Site"].Equals("Project users") ? "active" : "")><a asp-area="Admin" asp-controller="UserInProjects" asp-action="Index"><i class="fa fa-circle-o"></i> Users</a></li>
                         </ul>
                     </li>
                     <li class=@(ViewData["Site"].Equals("Statuses") ? "active" : "")><a asp-area="Admin" asp-controller="Status" asp-action="Index"><i class="fa fa-circle-o"></i><span> Statuses</span></a></li>

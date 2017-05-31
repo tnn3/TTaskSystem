@@ -15,7 +15,6 @@ namespace WebApplication.Areas.Admin.ViewModels
     public class UserTitleInProjectCreateEditViewModel
     {
         public UserTitleInProject UserTitleInProject { get; set; }
-        public SelectList ProjectSelectList { get; set; }
         public SelectList TitleSelectList { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace WebApplication.Areas.Admin.Controllers
         {
             if (projectId == null)
             {
-                return NotFound();
+                return RedirectToAction("Index", "Projects");
             }
             return View(await _uow.CustomFields.AllInProject(projectId.Value));
         }

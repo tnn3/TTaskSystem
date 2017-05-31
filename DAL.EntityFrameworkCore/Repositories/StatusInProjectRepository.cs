@@ -39,5 +39,14 @@ namespace DAL.EntityFrameworkCore.Repositories
                 .Include(s => s.Status)
                 .Where(s => s.ProjectId == projectId).ToListAsync();
         }
+
+        public Task<List<StatusInProject>> AllInProject(int projectId)
+        {
+            return RepositoryDbSet
+                .Include(u => u.Project)
+                .Include(u => u.Status)
+                .Where(u => u.ProjectId == projectId)
+                .ToListAsync();
+        }
     }
 }

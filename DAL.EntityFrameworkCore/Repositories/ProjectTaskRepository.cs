@@ -37,12 +37,36 @@ namespace DAL.EntityFrameworkCore.Repositories
                 .ToListAsync();
         }
 
-        public Task<ProjectTask> FindAsyncWithIncludes(int id)
+        public Task<List<ProjectTask>> AllInProjectWithUser(int projectId, int userId)
         {
             return RepositoryDbSet
+                .Include(p => p.Project)
+                .Include(p => p.Project.UsersInProject)
+                .Include(p => p.Status.Status)
+                .Include(p => p.Priority)
+                .Include(p => p.AssignedTo)
+                .Where(p => p.ProjectId == projectId && p.Project.UsersInProject.Any(o => o.UserId == userId))
+                .ToListAsync();
+        }
+
+        public Task<ProjectTask> FindAsyncWithIncludesAndUser(int taskId, int userId)
+        {
+            return RepositoryDbSet
+                .Include(p => p.Project)
+                .Include(p => p.Project.UsersInProject)
                 .Include(p => p.CustomFieldValue)
                 .Include(p => p.Attachments)
-                .SingleOrDefaultAsync(m => m.ProjectTaskId == id);
+                .Where(p => p.Project.UsersInProject.Any(o => o.UserId == userId && o.ProjectId == p.ProjectId))
+                .SingleOrDefaultAsync(m => m.ProjectTaskId == taskId);
+        }
+
+        public Task<ProjectTask> FindWithUserAsync(int taskId, int userId)
+        {
+            return RepositoryDbSet
+                .Include(p => p.Project)
+                .Include(p => p.Project.UsersInProject)
+                .Where(p => p.Project.UsersInProject.Any(o => o.UserId == userId && o.ProjectId == p.ProjectId))
+                .SingleOrDefaultAsync(p => p.ProjectTaskId == taskId);
         }
     }
 }

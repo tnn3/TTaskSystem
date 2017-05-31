@@ -24,9 +24,13 @@ namespace WebApplication.Areas.Admin.Controllers
         }
 
         // GET: Admin/StatusInProjects
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? projectId)
         {
-            return View(await _uow.StatusInProjects.AllAsyncWithIncludes());
+            if (projectId == null)
+            {
+                return RedirectToAction("Index", "Projects");
+            }
+            return View(await _uow.StatusInProjects.AllInProject(projectId.Value));
         }
 
         // GET: Admin/StatusInProjects/Details/5
@@ -51,10 +55,6 @@ namespace WebApplication.Areas.Admin.Controllers
         {
             var vm = new StatusInProjectsCreateEditViewModel()
             {
-                ProjectSelectList = new SelectList(
-                    items: await _uow.Projects.AllAsync(),
-                    dataValueField: nameof(Project.ProjectId),
-                    dataTextField: nameof(Project.Name)),
                 StatusSelectList = new SelectList(
                     items: await _uow.Statuses.AllAsync(),
                     dataValueField: nameof(Status.StatusId),
@@ -68,18 +68,19 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(StatusInProjectsCreateEditViewModel vm)
+        public async Task<IActionResult> Create(StatusInProjectsCreateEditViewModel vm, int? projectId)
         {
+            if (projectId == null || !_uow.Projects.Exists(projectId.Value))
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
+                vm.StatusInProject.ProjectId = projectId.Value;
                 _uow.StatusInProjects.Add(vm.StatusInProject);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            vm.ProjectSelectList = new SelectList(
-                items: await _uow.Projects.AllAsync(),
-                dataValueField: nameof(Project.ProjectId),
-                dataTextField: nameof(Project.Name));
             vm.StatusSelectList = new SelectList(
                 items: await _uow.Statuses.AllAsync(),
                 dataValueField: nameof(Status.StatusId),
@@ -105,10 +106,6 @@ namespace WebApplication.Areas.Admin.Controllers
             {
                 StatusInProject = statusInProject,
 
-                ProjectSelectList = new SelectList(
-                    items: await _uow.Projects.AllAsync(),
-                    dataValueField: nameof(Project.ProjectId),
-                    dataTextField: nameof(Project.Name)),
                 StatusSelectList = new SelectList(
                     items: await _uow.Statuses.AllAsync(),
                     dataValueField: nameof(Status.StatusId),
@@ -122,9 +119,9 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, StatusInProjectsCreateEditViewModel vm)
+        public async Task<IActionResult> Edit(int id, StatusInProjectsCreateEditViewModel vm, int? projectId)
         {
-            if (id != vm.StatusInProject.StatusInProjectId)
+            if (id != vm.StatusInProject.StatusInProjectId || projectId == null)
             {
                 return NotFound();
             }
@@ -133,6 +130,7 @@ namespace WebApplication.Areas.Admin.Controllers
             {
                 try
                 {
+                    vm.StatusInProject.ProjectId = projectId.Value;
                     _uow.StatusInProjects.Update(vm.StatusInProject);
                     await _uow.SaveChangesAsync();
                 }
@@ -150,10 +148,6 @@ namespace WebApplication.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            vm.ProjectSelectList = new SelectList(
-                items: await _uow.Projects.AllAsync(),
-                dataValueField: nameof(Project.ProjectId),
-                dataTextField: nameof(Project.Name));
             vm.StatusSelectList = new SelectList(
                 items: await _uow.Statuses.AllAsync(),
                 dataValueField: nameof(Status.StatusId),

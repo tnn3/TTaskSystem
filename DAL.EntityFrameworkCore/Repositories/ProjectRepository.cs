@@ -32,12 +32,17 @@ namespace DAL.EntityFrameworkCore.Repositories
                 .SingleOrDefaultAsync(m => m.ProjectId == id);
         }
 
-        public Task<Project> FindUserProjectAsync(int id, int userId)
+        public Task<Project> FindUserProjectAsync(int projectId, int userId)
         {
             return RepositoryDbSet
-                .Include(s => s.CustomFields)
+                .Include(p => p.CustomFields)
                 .Include(p => p.UsersInProject)
-                .SingleOrDefaultAsync(m => m.ProjectId == id && m.UsersInProject.Any(o => o.UserId == userId));
+                .SingleOrDefaultAsync(m => m.ProjectId == projectId && m.UsersInProject.Any(o => o.UserId == userId));
+        }
+
+        public bool Exists(int projectId)
+        {
+            return RepositoryDbSet.Find(projectId) != null;
         }
     }
 }

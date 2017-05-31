@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,9 +29,17 @@ namespace WebApplication.Controllers
         }
 
         // GET: ProjectTasks
-        public async Task<IActionResult> Index(int projectId)
+        public async Task<IActionResult> Index(int? projectId)
         {
-            return View(await _uow.ProjectTasks.AllInProject(projectId));
+            if (projectId == null)
+            {
+                return User.IsInRole("Admin") ?
+                 RedirectToAction("Index", "Projects", new {area = "Admin"}) :
+                    RedirectToAction("Index", "Projects");
+            }
+            return User.IsInRole("Admin") ? 
+                View(await _uow.ProjectTasks.AllInProject(projectId.Value)) : 
+                View(await _uow.ProjectTasks.AllInProjectWithUser(projectId.Value, User.GetUserId<int>()));
         }
 
         // GET: ProjectTasks/Details/5
@@ -41,7 +50,9 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var projectTask = await _uow.ProjectTasks.FindAsync(id.Value);
+            var projectTask = User.IsInRole("Admin") ? 
+                await _uow.ProjectTasks.FindAsync(id.Value) : 
+                await _uow.ProjectTasks.FindAsyncWithIncludesAndUser(id.Value, User.GetUserId<int>());
             if (projectTask == null)
             {
                 return NotFound();
@@ -57,9 +68,12 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
+
+            //TODO optimize
             var projectStatuses = await _uow.StatusInProjects.GetProjectStatuses(projectId.Value);
-            var project = await _uow.Projects.FindAsyncWithIncludes(projectId.Value);
-            if (projectStatuses == null)
+            var project = await _uow.Projects.FindUserProjectAsync(projectId.Value, User.GetUserId<int>());
+
+            if (projectStatuses == null || project == null)
             {
                 return NotFound();
             }
@@ -93,8 +107,12 @@ namespace WebApplication.Controllers
             {
                 return NotFound();
             }
-            
-            //TODO check projectId valid
+            var project = await _uow.Projects.FindUserProjectAsync(projectId.Value, User.GetUserId<int>());
+            if (project == null)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
                 vm.ProjectTask.AuthorId = int.Parse(User.GetUserId());
@@ -125,7 +143,7 @@ namespace WebApplication.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            var project = await _uow.Projects.FindAsyncWithIncludes(projectId.Value);
+            
             vm.StatusSelectList = new SelectList(
                 items: await _uow.StatusInProjects.GetProjectStatuses(vm.ProjectTask.ProjectId),
                 dataValueField: nameof(StatusInProject.StatusId),
@@ -151,11 +169,12 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var projectTask = await _uow.ProjectTasks.FindAsyncWithIncludes(id.Value);
+            var projectTask = await _uow.ProjectTasks.FindAsyncWithIncludesAndUser(id.Value, User.GetUserId<int>());
             if (projectTask == null)
             {
                 return NotFound();
             }
+
             var project = await _uow.Projects.FindAsyncWithIncludes(projectTask.ProjectId);
             var vm = new ProjectTaskViewModel
             {
@@ -189,7 +208,12 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var prevTask = await _uow.ProjectTasks.FindAsyncWithIncludes(id);
+            var prevTask = await _uow.ProjectTasks.FindAsyncWithIncludesAndUser(id, User.GetUserId<int>());
+            if (prevTask == null)
+            {
+                return NotFound();
+            }
+
             prevTask.AssignedToId = vm.ProjectTask.AssignedToId;
             prevTask.Description = vm.ProjectTask.Description;
             prevTask.Name = vm.ProjectTask.Name;
@@ -203,6 +227,9 @@ namespace WebApplication.Controllers
                 prevTask.CustomFieldValue[i].FieldValue = vm.ProjectTask.CustomFieldValue[i].FieldValue;
             }
 
+            var same = !prevTask.Attachments.Where((t, i) => !t.Location.Equals(files[i].FileName)).Any();
+            
+            /*
             var same = true;
             for (var i = 0; i < prevTask.Attachments.Count; i++)
             {
@@ -211,7 +238,7 @@ namespace WebApplication.Controllers
                     same = false;
                     break;
                 }
-            }
+            }*/
 
             if (same)
             {
@@ -269,7 +296,7 @@ namespace WebApplication.Controllers
                 return NotFound();
             }
 
-            var projectTask = await _uow.ProjectTasks.FindAsync(id.Value);
+            var projectTask = await _uow.ProjectTasks.FindWithUserAsync(id.Value, User.GetUserId<int>());
             if (projectTask == null)
             {
                 return NotFound();
@@ -283,7 +310,11 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var projectTask = await _uow.ProjectTasks.FindAsync(id);
+            var projectTask = await _uow.ProjectTasks.FindWithUserAsync(id, User.GetUserId<int>());
+            if (projectTask == null)
+            {
+                return NotFound();
+            }
             _uow.ProjectTasks.Remove(projectTask);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");

@@ -113,7 +113,7 @@ namespace WebApplication.Areas.Admin.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExistsAsync(project.ProjectId))
+                    if (!_uow.Projects.Exists(project.ProjectId))
                     {
                         return NotFound();
                     }
@@ -155,11 +155,6 @@ namespace WebApplication.Areas.Admin.Controllers
             _uow.Projects.Remove(project);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        private bool ProjectExistsAsync(int id)
-        {
-            return _uow.Projects.Find(id) != null;
         }
     }
 

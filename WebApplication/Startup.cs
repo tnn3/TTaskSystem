@@ -167,6 +167,16 @@ namespace WebApplication
                     defaults: new { area = "Admin", controller = "UserInProjects", action = "Index" });
 
                 routes.MapRoute(
+                    name: "areaAdminStatusInProjectsroute",
+                    template: "Admin/Projects/{projectId:int}/Statuses/{action}/{id?}",
+                    defaults: new { area = "Admin", controller = "StatusInProjects", action = "Index" });
+
+                routes.MapRoute(
+                    name: "areaAdminUserTitleInProjectsroute",
+                    template: "Admin/Projects/{projectId:int}/Titles/{action}/{id?}",
+                    defaults: new { area = "Admin", controller = "UserTitleInProjects", action = "Index" });
+
+                routes.MapRoute(
                     name: "areaAdminCustomFieldsroute",
                     template: "Admin/Projects/{projectId:int}/Fields/{action}/{id?}",
                     defaults: new { area = "Admin", controller = "CustomFields", action = "Index" });

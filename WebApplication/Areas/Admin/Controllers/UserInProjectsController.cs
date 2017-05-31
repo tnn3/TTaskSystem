@@ -28,7 +28,7 @@ namespace WebApplication.Areas.Admin.Controllers
         {
             if (projectId == null)
             {
-                return NotFound();
+                return RedirectToAction("Index", "Projects");
             }
             return View(await _uow.UserInProjects.AllInProject(projectId.Value));
         }
@@ -78,7 +78,7 @@ namespace WebApplication.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserInProjectsViewModel vm, int? projectId)
         {
-            if (projectId == null)
+            if (projectId == null || !_uow.Projects.Exists(projectId.Value))
             {
                 return NotFound();
             }
@@ -131,9 +131,9 @@ namespace WebApplication.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UserInProjectsViewModel vm)
+        public async Task<IActionResult> Edit(int id, UserInProjectsViewModel vm, int? projectId)
         {
-            if (id != vm.UserInProject.UserInProjectId)
+            if (id != vm.UserInProject.UserInProjectId || projectId == null)
             {
                 return NotFound();
             }
@@ -142,6 +142,7 @@ namespace WebApplication.Areas.Admin.Controllers
             {
                 try
                 {
+                    vm.UserInProject.ProjectId = projectId.Value;
                     _uow.UserInProjects.Update(vm.UserInProject);
                     await _uow.SaveChangesAsync();
                 }
