@@ -10,12 +10,16 @@ namespace Domain
 
         [Required]
         [MaxLength(50)]
+        [Display(ResourceType = typeof(Resources.Misc), Name = "ProjectName")]
         public string Name { get; set; }
 
         [MaxLength(300)]
+        [Display(ResourceType = typeof(Resources.Misc), Name = "Description")]
         public string Description { get; set; }
 
+        [Display(ResourceType = typeof(Resources.Misc), Name = "Created")]
         public DateTime CreatedOn { get; set; }
+        [Display(ResourceType = typeof(Resources.Misc), Name = "Changed")]
         public DateTime? UpdatedOn { get; set; }
 
 

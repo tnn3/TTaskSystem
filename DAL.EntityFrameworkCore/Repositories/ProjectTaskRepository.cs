@@ -60,6 +60,9 @@ namespace DAL.EntityFrameworkCore.Repositories
                 .Include(p => p.Priority)
                 .Include(p => p.Status)
                 .Include(p => p.Status.Status)
+                .Include(p => p.Author)
+                .Include(p => p.ChangeSets)
+                    .ThenInclude(a => a.Changes)
                 .Where(p => p.Project.UsersInProject.Any(o => o.UserId == userId && o.ProjectId == p.ProjectId))
                 .SingleOrDefaultAsync(m => m.ProjectTaskId == taskId);
         }

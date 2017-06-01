@@ -35,6 +35,7 @@ namespace AspNetCore.Identity.Uow.Models
         /// Gets or sets the user name for this user.
         /// </summary>
         [MaxLength(length: 255)]
+        [Display(ResourceType = typeof(Resources.Identity), Name = "Username")]
         public virtual string UserName { get; set; }
 
         /// <summary>
@@ -47,6 +48,7 @@ namespace AspNetCore.Identity.Uow.Models
         /// Gets or sets the email address for this user.
         /// </summary>
         [MaxLength(length: 255)]
+        [Display(ResourceType = typeof(Resources.Identity), Name = "Email")]
         public virtual string Email { get; set; }
 
         /// <summary>
@@ -79,6 +81,7 @@ namespace AspNetCore.Identity.Uow.Models
         /// <summary>
         /// Gets or sets a telephone number for the user.
         /// </summary>
+        [Display(ResourceType = typeof(Resources.Identity), Name = "PhoneNumber")]
         public virtual string PhoneNumber { get; set; }
 
         /// <summary>
@@ -99,22 +102,26 @@ namespace AspNetCore.Identity.Uow.Models
         /// <remarks>
         /// A value in the past means the user is not locked out.
         /// </remarks>
+        [Display(ResourceType = typeof(Resources.Identity), Name = "LockoutEnd")]
         public virtual DateTimeOffset? LockoutEnd { get; set; }
 
         /// <summary>
         /// Gets or sets a flag indicating if the user could be locked out.
         /// </summary>
         /// <value>True if the user could be locked out, otherwise false.</value>
+        [Display(ResourceType = typeof(Resources.Identity), Name = "LockoutEnabled")]
         public virtual bool LockoutEnabled { get; set; }
 
         /// <summary>
         /// Gets or sets the number of failed login attempts for the current user.
         /// </summary>
+        [Display(ResourceType = typeof(Resources.Identity), Name = "AccessFailedCount")]
         public virtual int AccessFailedCount { get; set; }
 
         /// <summary>
         /// Navigation property for the roles this user belongs to.
         /// </summary>
+        [Display(ResourceType = typeof(Resources.Identity), Name = "Roles")]
         public virtual ICollection<IdentityUserRole> Roles { get; } = new List<IdentityUserRole>();
 
         /// <summary>

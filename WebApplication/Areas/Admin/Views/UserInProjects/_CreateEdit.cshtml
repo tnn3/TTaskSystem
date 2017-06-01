@@ -1,6 +1,6 @@
 @model WebApplication.Areas.Admin.ViewModels.UserInProjectsViewModel
 <div class="form-group">
-    <label asp-for="UserInProject.User.UserName" class="col-md-2 control-label"></label>
+    <label asp-for="UserInProject.User" class="col-md-2 control-label"></label>
     <div class="col-md-10">
         <select asp-for="UserInProject.UserId" class="form-control" asp-items="Model.UserSelectList"></select>
     </div>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Domain
@@ -7,6 +8,7 @@ namespace Domain
     public class CustomFieldValue
     {
         public int CustomFieldValueId { get; set; }
+        [Display(ResourceType = typeof(Resources.Misc), Name = "CustomFieldValue")]
         public string FieldValue { get; set; }
 
         public int CustomFieldId { get; set; }

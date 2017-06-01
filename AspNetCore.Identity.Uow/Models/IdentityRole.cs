@@ -25,6 +25,7 @@ namespace AspNetCore.Identity.Uow.Models
         /// Gets or sets the name for this role.
         /// </summary>
         [MaxLength(length: 255)]
+        [Display(ResourceType = typeof(Resources.Identity), Name = "Name")]
         public virtual string Name { get; set; }
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace AspNetCore.Identity.Uow.Models
         /// <summary>
         /// Navigation property for the users in this role.
         /// </summary>
+        [Display(ResourceType = typeof(Resources.Identity), Name = "Users")]
         public virtual ICollection<IdentityUserRole> Users { get; } = new List<IdentityUserRole>();
 
         /// <summary>

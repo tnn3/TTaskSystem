@@ -10,6 +10,7 @@ namespace Domain
         public int UserTitleId { get; set; }
         [Required]
         [MaxLength(30)]
+        [Display(ResourceType = typeof(Resources.Misc), Name = "Title")]
         public string Title { get; set; }
 
         public List<UserTitleInProject> TitlesInProjects { get; set; }

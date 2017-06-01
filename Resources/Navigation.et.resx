@@ -117,67 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AssignedTo" xml:space="preserve">
-    <value>Assigned to</value>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Kohandatud väljad</value>
   </data>
-  <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+  <data name="Identity" xml:space="preserve">
+    <value>Identiteet</value>
   </data>
-  <data name="Author" xml:space="preserve">
-    <value>Author</value>
-  </data>
-  <data name="Changed" xml:space="preserve">
-    <value>Changed</value>
-  </data>
-  <data name="ChangeSets" xml:space="preserve">
-    <value>Changes</value>
-  </data>
-  <data name="Created" xml:space="preserve">
-    <value>Created</value>
-  </data>
-  <data name="CustomFieldName" xml:space="preserve">
-    <value>Field name</value>
-  </data>
-  <data name="CustomFieldPossibleValues" xml:space="preserve">
-    <value>Possible values</value>
-  </data>
-  <data name="CustomFieldType" xml:space="preserve">
-    <value>Field type</value>
-  </data>
-  <data name="CustomFieldValue" xml:space="preserve">
-    <value>Field value</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="DueDate" xml:space="preserve">
-    <value>Due Date</value>
-  </data>
-  <data name="IsRequired" xml:space="preserve">
-    <value>Field required</value>
-  </data>
-  <data name="MaxLength" xml:space="preserve">
-    <value>Field maximum length</value>
-  </data>
-  <data name="MinLength" xml:space="preserve">
-    <value>Field minimal length</value>
-  </data>
-  <data name="Priority" xml:space="preserve">
-    <value>Priority</value>
+  <data name="Priorities" xml:space="preserve">
+    <value>Prioriteedid</value>
   </data>
   <data name="Project" xml:space="preserve">
-    <value>Project</value>
+    <value>Projekt</value>
   </data>
-  <data name="ProjectName" xml:space="preserve">
-    <value>Name</value>
+  <data name="Projects" xml:space="preserve">
+    <value>Projektid</value>
   </data>
-  <data name="Status" xml:space="preserve">
-    <value>Status</value>
+  <data name="Roles" xml:space="preserve">
+    <value>Rollid</value>
   </data>
-  <data name="Title" xml:space="preserve">
-    <value>Title</value>
+  <data name="Statuses" xml:space="preserve">
+    <value>Staatused</value>
   </data>
-  <data name="Username" xml:space="preserve">
-    <value>Username</value>
+  <data name="Tasks" xml:space="preserve">
+    <value>Ülesanded</value>
+  </data>
+  <data name="UserRoles" xml:space="preserve">
+    <value>Kasutajate rollid</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Kasutajad</value>
+  </data>
+  <data name="UserTitles" xml:space="preserve">
+    <value>Kasutajate tiitlid</value>
   </data>
 </root>

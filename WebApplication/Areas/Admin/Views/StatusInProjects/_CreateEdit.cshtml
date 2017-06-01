@@ -1,7 +1,7 @@
 ﻿@model WebApplication.Areas.Admin.ViewModels.StatusInProjectsCreateEditViewModel
 
 <div class="form-group">
-    <label asp-for="StatusInProject.StatusId" class="col-md-2 control-label"></label>
+    <label asp-for="StatusInProject.Status" class="col-md-2 control-label"></label>
     <div class="col-md-10">
         <select asp-for="StatusInProject.StatusId" class ="form-control" asp-items="Model.StatusSelectList"></select>
     </div>

@@ -10,7 +10,7 @@ namespace Domain
         public int StatusId { get; set; }
         [Required]
         [MaxLength(30)]
-        [Display(Name = "Status")]
+        [Display(ResourceType = typeof(Resources.Misc), Name = "Status")]
         public string Name { get; set; }
 
         public List<StatusInProject> StatusInProjects { get; set; }

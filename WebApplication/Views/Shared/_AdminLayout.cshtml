@@ -61,16 +61,6 @@
             <section class="sidebar">
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
-                    <li class="treeview @(ViewData["Site"].Equals("Changes") || ViewData["Site"].Equals("ChangeSets") ? "active" : "")">
-                        <a href="#">
-                            <i class="fa fa-files-o"></i>
-                            <span>Changes</span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li class=@(ViewData["Site"].Equals("Changes") ? "active" : "")><a asp-area="Admin" asp-controller="Changes" asp-action="Index"><i class="fa fa-circle-o"></i> Changes</a></li>
-                            <li class=@(ViewData["Site"].Equals("ChangeSets") ? "active" : "")><a asp-area="Admin" asp-controller="ChangeSets" asp-action="Index"><i class="fa fa-circle-o"></i> ChangeSets</a></li>
-                        </ul>
-                    </li>
                     <li class=@(ViewData["Site"].Equals("Priorities") ? "active" : "")><a asp-area="Admin" asp-controller="Priorities" asp-action="Index"><i class="fa fa-circle-o"></i> <span>Priorities</span></a></li>
                     <li class="treeview @(ViewData["Site"].Equals("Projects") || ViewData["Site"].Equals("Tasks") || ViewData["Site"].Equals("Project statuses") || ViewData["Site"].Equals("Titles in project") || ViewData["Site"].Equals("Custom fields") || ViewData["Site"].Equals("Project users") ? "active" : "")">
                         <a href="#">
@@ -153,7 +143,7 @@
     <script src="~/lib/globalize/dist/globalize/relative-time.js"></script>
     <script src="~/lib/globalize/dist/globalize/unit.js"></script>
 
-    <script src="~/lib/moment/min/moment-with-locales.js"></script>
+    <script src="~/lib/moment/min/moment-with-locales.min.js"></script>
         
     <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <!-- AdminLTE App -->
