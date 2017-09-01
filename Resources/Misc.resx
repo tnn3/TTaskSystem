@@ -180,4 +180,7 @@
   <data name="Username" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="TextField" xml:space="preserve">
+    <value>Text field</value>
+  </data>
 </root>

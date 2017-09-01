@@ -180,4 +180,7 @@
   <data name="Username" xml:space="preserve">
     <value>Kasutajanimi</value>
   </data>
+  <data name="TextField" xml:space="preserve">
+    <value>Teksti väli</value>
+  </data>
 </root>

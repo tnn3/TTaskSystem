@@ -248,7 +248,9 @@ namespace DAL.EntityFrameworkCore.Migrations
                     b.Property<int>("CustomFieldId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FieldName");
+                    b.Property<string>("FieldName")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.Property<int>("FieldType");
 
@@ -258,7 +260,8 @@ namespace DAL.EntityFrameworkCore.Migrations
 
                     b.Property<int>("MinLength");
 
-                    b.Property<string>("PossibleValues");
+                    b.Property<string>("PossibleValues")
+                        .HasMaxLength(50);
 
                     b.Property<int>("ProjectId");
 

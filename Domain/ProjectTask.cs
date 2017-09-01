@@ -50,11 +50,11 @@ namespace Domain
         [Display(ResourceType = typeof(Resources.Misc), Name = "Project")]
         public Project Project { get; set; }
 
-        public List<CustomFieldValue> CustomFieldValue { get; set; }
+        public List<CustomFieldValue> CustomFieldValue { get; set; } = new List<CustomFieldValue>();
         [Display(ResourceType = typeof(Resources.Misc), Name = "Attachments")]
-        public List<Attachment> Attachments { get; set; }
+        public List<Attachment> Attachments { get; set; } = new List<Attachment>();
         [Display(ResourceType = typeof(Resources.Misc), Name = "ChangeSets")]
-        public List<ChangeSet> ChangeSets { get; set; }
+        public List<ChangeSet> ChangeSets { get; set; } = new List<ChangeSet>();
         #endregion
     }
 }

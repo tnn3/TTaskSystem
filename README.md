@@ -1,29 +1,21 @@
-# This is a project for a project management system.
-## Must have functionality:
+# Project management system
+### Functionality:
 
-Admin can CRUD projects.
+Admin can manage projects:
+ * Create/edit/delete projects
+ * Manage users and their titles in project
+ * Manage statuses in project for tasks
+ * Manage priorities in project for tasks
+ * Manage custom fields
 
-Users can post tasks:
+Users can manage tasks:
+* what needs to be done
+* who is doing it (at creation or someone adds later)
+* suggestions on how to do it / describe the problem
+* task status
+* task priority
+* task deadline
+* add files
+* see task change history
 
-    -what needs to be done
-    -who is doing it (at creation or someone adds later)
-    -suggestions on how to do it / describe the problem
-    -task priority
-    -task deadline
-    -add files/pictures
-    
-Users can task CRUD with history.
-
-Users can filter tasks.
-
-Users can see task changes history.
-
-Users have titles.
-
-Admin can add new fields to task creation template.
-
-## Nice to have:
-
-Notification system.
-
-Admin can see statistics of previous months.
+Project is made in .NET Core and is based on [AspNetCore-BaseWebApp](https://github.com/akaver/AspNetCore-BaseWebApp)

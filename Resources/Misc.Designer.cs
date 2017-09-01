@@ -233,6 +233,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Text field.
+        /// </summary>
+        public static string TextField {
+            get {
+                return ResourceManager.GetString("TextField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         public static string Title {
